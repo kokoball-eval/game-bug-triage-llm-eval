@@ -1,0 +1,10 @@
+{
+  "model": "llama3.1:8b",
+  "prompt": "다음 인게임 버그 리포트를 분석하여 아래 규격에 맞게 3줄로 요약하세요.\n1. 결함 카테고리 (Crash/Freeze, Balance, UI/Graphic, Quest 중 택1)\n2. 심각도 (Blocker, Critical, Major, Minor 중 택1)\n3. 1줄 요약\n\n[리포트 내용]\n스피릿 아일랜드 보스 레이드 3페이즈 진입 컷씬에서 파티원 전원의 클라이언트가 비정상 종료(튕김)됩니다. \n재접속 시도 시 캐릭터가 던전 외부로 튕겨나가며 레이드 티켓이 복구되지 않습니다.",
+  "response_text": "다음은 분석된 버그 리포트 요약입니다.\n\n1. 결함 카테고리: Crash/Freeze\n2. 심각도: Critical\n3. 1줄 요약: 스피릿 아일랜드 보스 레이드 3페이즈 진입 컷씬에서 파티원 클라이언트가 비정상 종료되며, 재접속 시 캐릭터가 던전 외부로 튕겨나가며 레이드 티켓이 복구되지 않는다.",
+  "elapsed_sec": 5.06,
+  "load_duration_sec": 3.198,
+  "eval_count": 115,
+  "tokens_per_sec": 66.51,
+  "vram_mib": 5027.5
+}

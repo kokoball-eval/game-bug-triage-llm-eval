@@ -1,0 +1,91 @@
+{
+  "metadata": {
+    "project": "Aether Raid Bug Triage LLM Eval",
+    "model": "gpt-5.6-luna",
+    "executed_at": "2026-09-14T11:49:51.453427",
+    "sample_size": 5,
+    "note": "Cloud API는 공통 질문 5건에 대해 1회 실행 (로컬 2회 반복과 n 차이 명시)"
+  },
+  "results": [
+    {
+      "eval_id": "cloud_luna_Q01",
+      "model": "gpt-5.6-luna",
+      "model_type": "cloud_api",
+      "question_id": "Q01",
+      "question_type": "normal",
+      "run_index": 1,
+      "timestamp": "2026-09-14T11:49:35.984463",
+      "success": true,
+      "response_text": "[요약]: 챕터 5 보스가 체력 30% 이하에서 3단계 패턴을 시작하면 앱이 100% 강제 종료됨\n[모듈]: 전투, 시스템\n[심각도]: Critical\n[재현 여부]: 발생(100%)\n[누락 정보 및 권장 조치]: 기기 모델, 메모리 및 크래시 로그, 발생 시점의 상세 전투 조건과 직전 입력을 추가 확인. iOS 17.4 및 v2.3.1에서 우선 회귀 테스트하고 다른 iOS 버전·기기에서도 재현 여부를 확인한 뒤 크래시 스택 분석 및 보스 3단계 진입 로직 수정을 권장.",
+      "elapsed_sec": 4.925,
+      "input_tokens": 292,
+      "output_tokens": 165,
+      "total_tokens": 457,
+      "error_message": null
+    },
+    {
+      "eval_id": "cloud_luna_Q02",
+      "model": "gpt-5.6-luna",
+      "model_type": "cloud_api",
+      "question_id": "Q02",
+      "question_type": "normal",
+      "run_index": 1,
+      "timestamp": "2026-09-14T11:49:39.743927",
+      "success": true,
+      "response_text": "[요약]: 결제 영수증은 정상 발급되었으나 다이아가 지급되지 않음  \n[모듈]: 결제  \n[심각도]: Critical  \n[재현 여부]: 불명확  \n[누락 정보 및 권장 조치]: 기기/OS, 결제 플랫폼 및 국가, 결제 시각·거래 ID·영수증 원문, 재현 절차와 발생 범위가 필요함. 결제 검증 서버 로그 및 재화 지급 이력을 대조하고, 동일 거래의 재지급·복구 처리를 우선 확인할 것을 권장함.",
+      "elapsed_sec": 3.76,
+      "input_tokens": 253,
+      "output_tokens": 247,
+      "total_tokens": 500,
+      "error_message": null
+    },
+    {
+      "eval_id": "cloud_luna_Q06",
+      "model": "gpt-5.6-luna",
+      "model_type": "cloud_api",
+      "question_id": "Q06",
+      "question_type": "boundary",
+      "run_index": 1,
+      "timestamp": "2026-09-14T11:49:43.928968",
+      "success": true,
+      "response_text": "[요약]: 로그인 화면에서 앱이 튕기고 상점 아이콘 및 친구 초대 보상 기능이 정상 작동하지 않음  \n[모듈]: 시스템, UI  \n[심각도]: Blocker  \n[재현 여부]: 불명확  \n[누락 정보 및 권장 조치]: 기기 모델, OS 및 앱 버전, 네트워크 환경, 각 증상의 구체적인 재현 절차와 발생 빈도, 크래시 로그 및 영상 확보. 로그인 크래시를 최우선으로 재현하고, 상점 아이콘의 입력 인식 여부 및 친구 초대 보상의 지급 조건·서버 지급 로그를 각각 분리하여 확인할 것을 권장.",
+      "elapsed_sec": 4.184,
+      "input_tokens": 251,
+      "output_tokens": 337,
+      "total_tokens": 588,
+      "error_message": null
+    },
+    {
+      "eval_id": "cloud_luna_Q08",
+      "model": "gpt-5.6-luna",
+      "model_type": "cloud_api",
+      "question_id": "Q08",
+      "question_type": "fallback",
+      "run_index": 1,
+      "timestamp": "2026-09-14T11:49:47.905980",
+      "success": true,
+      "response_text": "[요약]: 게임 실행 또는 플레이 중 크래시 발생\n[모듈]: 시스템\n[심각도]: 판단보류\n[재현 여부]: 불명확\n[누락 정보 및 권장 조치]: 발생 시점, 재현 절차, 크래시 로그·덤프, 기기 및 OS 버전, 게임 버전, 발생 빈도 확인 필요; 동일 조건에서 재현 테스트 및 로그 수집 권장",
+      "elapsed_sec": 3.977,
+      "input_tokens": 222,
+      "output_tokens": 145,
+      "total_tokens": 367,
+      "error_message": null
+    },
+    {
+      "eval_id": "cloud_luna_Q10",
+      "model": "gpt-5.6-luna",
+      "model_type": "cloud_api",
+      "question_id": "Q10",
+      "question_type": "normal",
+      "run_index": 1,
+      "timestamp": "2026-09-14T11:49:51.453427",
+      "success": true,
+      "response_text": "[요약]: 챕터 5 보스 3단계 진행 중 게임이 강제 종료됨.\n[모듈]: 전투/시스템\n[심각도]: Major\n[재현 여부]: 불명확\n[누락 정보 및 권장 조치]: 기기 및 OS, 게임 버전, 발생 빈도, 상세 재현 절차, 전투 조건과 크래시 로그가 필요함. 챕터 5 보스룸 관련 기존 신고와 중복 여부를 확인하고 동일 조건에서 재현 테스트 및 크래시 로그 분석을 권장함.",
+      "elapsed_sec": 3.547,
+      "input_tokens": 259,
+      "output_tokens": 273,
+      "total_tokens": 532,
+      "error_message": null
+    }
+  ]
+}

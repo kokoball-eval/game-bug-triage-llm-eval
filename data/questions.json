@@ -1,0 +1,175 @@
+{
+  "project": "Aether Raid Bug Triage LLM Eval",
+  "version": "1.0",
+  "description": "가상 게임 'Aether Raid' 버그 리포트 1차 트리아지 평가 데이터셋 (10건)",
+  "required_fields": [
+    "요약",
+    "모듈",
+    "심각도",
+    "재현 여부",
+    "누락 정보 및 권장 조치"
+  ],
+  "questions": [
+    {
+      "id": "Q01",
+      "type": "normal",
+      "cloud_eval": true,
+      "title": "챕터5 보스 패턴 3단계 크래시",
+      "report_text": "전투 중 보스 패턴 3단계 진입 시 100% 크래시 발생. 재현: 챕터5 보스룸 입장 → 보스 체력 30% 이하 → 3단계 패턴 시작 즉시 앱 강제 종료. iOS 17.4, v2.3.1에서 확인.",
+      "ground_truth": {
+        "expected_module": "전투",
+        "expected_severity": "Blocker",
+        "expected_reproducibility": "발생(100%)",
+        "key_points": [
+          "심각도 Blocker 또는 Critical 판정",
+          "모듈을 전투로 정확히 분류",
+          "재현 절차와 환경(iOS 17.4, v2.3.1) 보존"
+        ]
+      }
+    },
+    {
+      "id": "Q02",
+      "type": "normal",
+      "cloud_eval": true,
+      "title": "결제 후 다이아 미지급",
+      "report_text": "결제 후 다이아가 지급되지 않음. 영수증은 있는데 재화가 반영 안 됨. 3명 유저가 동일 신고.",
+      "ground_truth": {
+        "expected_module": "결제",
+        "expected_severity": "Critical",
+        "expected_reproducibility": "불명확",
+        "key_points": [
+          "재화/매출 직결 결함으로 최상위 심각도(Critical/Blocker) 판정",
+          "누락 정보로 유저 계정(UID), 주문 번호(영수증 번호) 확인 요청"
+        ]
+      }
+    },
+    {
+      "id": "Q03",
+      "type": "normal",
+      "cloud_eval": false,
+      "title": "설정 메뉴 사운드 오타",
+      "report_text": "설정 메뉴에서 '사운드' 텍스트가 '사운드ㄷ'로 오타 표시됨. 기능엔 영향 없음.",
+      "ground_truth": {
+        "expected_module": "UI",
+        "expected_severity": "Trivial",
+        "expected_reproducibility": "발생(100%)",
+        "key_points": [
+          "단순 텍스트 오류이므로 최하위 심각도(Trivial 또는 Minor) 판정",
+          "게임 플레이 및 사운드 기능에 지장 없음을 인지"
+        ]
+      }
+    },
+    {
+      "id": "Q04",
+      "type": "normal",
+      "cloud_eval": false,
+      "title": "특정 기종 로딩화면 텍스처 깨짐",
+      "report_text": "특정 갤럭시 기종(S21)에서만 로딩화면 텍스처가 깨져 보임. 다른 기종은 정상.",
+      "ground_truth": {
+        "expected_module": "그래픽",
+        "expected_severity": "Minor",
+        "expected_reproducibility": "발생(특정 기기)",
+        "key_points": [
+          "특정 기기(갤럭시 S21) 한정 결함임을 요약/누락정보에 명시",
+          "심각도를 Minor 수준으로 적절히 통제"
+        ]
+      }
+    },
+    {
+      "id": "Q05",
+      "type": "normal",
+      "cloud_eval": false,
+      "title": "간헐적 프레임 드랍",
+      "report_text": "가끔 전투 중 프레임이 뚝뚝 끊기는데 항상 그런 건 아니고 특정 스킬 쓸 때만 그런 것 같기도 함. 재현이 잘 안 됨.",
+      "ground_truth": {
+        "expected_module": "전투",
+        "expected_severity": "Major",
+        "expected_reproducibility": "간헐적",
+        "key_points": [
+          "재현 여부를 '간헐적' 또는 '불명확'으로 올바르게 처리",
+          "재현이 어려운 상태에서 심각도를 과대평가(Blocker)하지 않음",
+          "의심되는 '특정 스킬명'과 플레이 기기 정보 요청"
+        ]
+      }
+    },
+    {
+      "id": "Q06",
+      "type": "boundary",
+      "cloud_eval": true,
+      "title": "한 리포트에 3개 이슈 혼재",
+      "report_text": "로그인 화면에서 튕기는 버그가 있고, 그리고 상점 아이콘도 안 눌리고, 친구 초대 보상도 안 옴.",
+      "ground_truth": {
+        "expected_module": "복합 (로그인, 상점, 소셜)",
+        "expected_severity": "Critical",
+        "expected_reproducibility": "불명확",
+        "key_points": [
+          "3가지 개별 이슈(로그인 튕김, 상점 UI 먹통, 초대 보상 누락)를 분리 식별",
+          "가장 위험도가 높은 로그인 튕김을 기준으로 우선순위 판정하거나 티켓 분할 권고"
+        ]
+      }
+    },
+    {
+      "id": "Q07",
+      "type": "boundary",
+      "cloud_eval": false,
+      "title": "업데이트 후 모호한 성능 불만",
+      "report_text": "업데이트 이후로 게임이 예전보다 뭔가 이상해요. 뭔가 버벅이고 이상합니다.",
+      "ground_truth": {
+        "expected_module": "시스템",
+        "expected_severity": "판단보류",
+        "expected_reproducibility": "불명확",
+        "key_points": [
+          "구체적 증상이 없으므로 심각도 판단을 억지로 단정하지 않고 '판단보류/불명확' 처리",
+          "발생 기기, OS, 버벅임이 발생하는 특정 콘텐츠 구간 정보 요청"
+        ]
+      }
+    },
+    {
+      "id": "Q08",
+      "type": "fallback",
+      "cloud_eval": true,
+      "title": "단문 신고 (크래시남)",
+      "report_text": "크래시남",
+      "ground_truth": {
+        "expected_module": "시스템",
+        "expected_severity": "판단보류",
+        "expected_reproducibility": "불명확",
+        "key_points": [
+          "원인과 상황을 임의로 날조(환각)하지 않음",
+          "누락 정보 항목에 발생 화면, 재현 절차, 단말기 모델, OS 버전 등을 전면 요청"
+        ]
+      }
+    },
+    {
+      "id": "Q09",
+      "type": "fallback",
+      "cloud_eval": false,
+      "title": "진행 데이터 저장 실패",
+      "report_text": "저장이 안 돼요. 분명히 세이브 눌렀는데 다음에 켜니까 진행상황이 없어졌어요.",
+      "ground_truth": {
+        "expected_module": "시스템",
+        "expected_severity": "Critical",
+        "expected_reproducibility": "불명확",
+        "key_points": [
+          "데이터 유실 이슈이므로 높은 심각도(Critical/Major)로 인지",
+          "상세 환경 정보(로컬 세이브인지 클라우드 계정인지, 기기명, 네트워크 상태) 필수 요청"
+        ]
+      }
+    },
+    {
+      "id": "Q10",
+      "type": "normal",
+      "cloud_eval": true,
+      "title": "챕터5 보스룸 크래시 (Q01 중복 의심)",
+      "report_text": "챕터5 보스 3단계에서 게임이 꺼짐. 이전에도 비슷한 신고가 있었던 것 같음(챕터5 보스룸 크래시).",
+      "ground_truth": {
+        "expected_module": "전투",
+        "expected_severity": "Blocker",
+        "expected_reproducibility": "발생",
+        "key_points": [
+          "기존 신고(Q01)와의 유사성 및 '중복 의심(Duplicate)' 코멘트를 요약 또는 권장 조치에 포함하는지 여부"
+        ]
+      }
+    }
+  ]
+}

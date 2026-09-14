@@ -1,0 +1,16 @@
+# Python & 가상환경
+__pycache__/
+*.py[cod]
+.venv/
+.python-version
+
+# 환경 변수 및 보안 키
+.env
+*.key
+*.pem
+
+# IDE & OS 설정
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
