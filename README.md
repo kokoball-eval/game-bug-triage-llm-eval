@@ -123,23 +123,32 @@ game-bug-triage-llm-eval/
   ```powershell
   ollama pull qwen2.5:7b
   ollama pull llama3.1:8b
+  ```
 
-2) 프로젝트 클론 및 가상환경 동기화
+### 2) 프로젝트 클론 및 가상환경 동기화
+```powershell
 git clone https://github.com/<your-username>/game-bug-triage-llm-eval.git
 cd game-bug-triage-llm-eval
 uv sync
+```
 
-3) 로컬 40회 벤치마크 실행
+### 3) 로컬 40회 벤치마크 실행
+```powershell
 # 워밍업 2회 자동 분리 및 10개 질문 x 2개 모델 x 2회 반복 = 40회 실행
 uv run python src/run_eval.py
+```
 
-4) Cloud API 대조군 실행 (선택 사항)
+### 4) Cloud API 대조군 실행 (선택 사항)
+```powershell
 # 실행 후 프롬프트에 OpenAI API Key 입력 (화면 미노출)
 uv run python src/02_luna_chat.py
+```
 
-5) 4일차 Few-Shot 단문 결함 교정 재실험
+### 5) 4일차 Few-Shot 단문 결함 교정 재실험
+```powershell
 # Q08 단문 리포트 결함 교정 실측 검증 (소극적 태도 -> 역질문 정상화)
 uv run python src/test_fewshot.py
+```
 
 ## 6. 프로덕션 도입 로드맵 (Production Action Items)
 
