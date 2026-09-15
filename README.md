@@ -97,6 +97,7 @@
 
 ```text
 game-bug-triage-llm-eval/
+├── .gitattributes                # 줄바꿈(EOL) 정규화 규칙
 ├── .python-version               # Python 3.12 고정
 ├── pyproject.toml                # uv 기반 의존성 명세 (ollama, openai)
 ├── uv.lock                       # 의존성 잠금 파일 (재현 가능한 환경 구성)
@@ -163,7 +164,8 @@ uv run python src/02_luna_chat.py
 uv run python src/test_fewshot.py
 ```
 
-### 6) 검증 스크립트 재실행 (재현성 확인)
+## 6. 재실행 검증 (Reproducibility Check)
+
 본 실험 로그를 수정하지 않고 산출물을 다시 만들어 검증하는 스크립트입니다. 모두 읽기 전용이거나 결과 파일만 덮어쓰므로, 40회 본 실험 결과에는 영향을 주지 않습니다.
 
 ```powershell

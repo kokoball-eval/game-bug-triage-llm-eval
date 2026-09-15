@@ -33,7 +33,7 @@
 | **최대 생성 길이** | 8,192 토큰 (Model Card 기준) | - | - |
 | **실험 Context 설정 (`num_ctx`)** | **실측 4,096 토큰**<br>`run_eval.py`에서 미지정 → Ollama 기본값이 적용된 결과 | **실측 4,096 토큰**<br>`run_eval.py`에서 미지정 → Ollama 기본값이 적용된 결과 | 가변 세션 Context |
 | **모델 적재 메모리 (VRAM / 시스템 RAM 구분)** | 4,528.1 MiB / **0 MiB**<br>GPU 오프로드 100% | 5,027.5 MiB / **0 MiB**<br>GPU 오프로드 100% | N/A (서버리스) |
-| **생성 하이퍼파라미터** | `temperature: 0.2`, `top_p: 0.9` | `temperature: 0.2`, `top_p: 0.9` | `temperature: 0.2` |
+| **생성 하이퍼파라미터** | 코드 지정: `temperature: 0.2`, `num_predict: 350`<br>그 외 샘플링 파라미터(`top_p`, `top_k`, `seed` 등)는 미지정 → Ollama 기본값 적용 | 코드 지정: `temperature: 0.2`, `num_predict: 350`<br>그 외 샘플링 파라미터는 미지정 → Ollama 기본값 적용 (로컬 2종 동일 조건) | 코드에서 생성 파라미터를 별도 지정하지 않음 → API 기본값 적용 |
 | **라이선스 (License)** | **Apache 2.0** (완전 상업적 이용 가능) | **Llama 3.1 Community** (상업적 제약 있음) | Commercial API Terms |
 
 > **자원 점유 및 Context 실측 안내**: 40회 본 실험 로그(`local_eval_results.json`)에는 `ollama ps`의 `size_vram`만 기록되어 있어, 발제문이 요구하는 **시스템 RAM / VRAM 구분 기록**과 **실제 적용된 context length**는 `src/capture_env.py`로 사후 실측해 보완했습니다 (동일 모델 태그·동일 양자화 조건, 읽기 전용 측정이므로 본 실험 집계 결과는 불변). 측정 결과 전문은 [`report/environment.md`](environment.md), 원본은 `data/results/environment.json`에 있습니다.
