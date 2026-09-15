@@ -1,0 +1,1105 @@
+{
+  "metadata": {
+    "description": "포맷 계약(5개 필드) 준수율 자동 채점 결과",
+    "rules": {
+      "R1_no_preamble": "응답이 '[요약]:'으로 즉시 시작 (서두 사족 없음)",
+      "R2_all_fields": "5개 필드 라벨 전부 존재",
+      "R3_field_order": "필드 순서가 규격과 일치",
+      "R4_no_blank_line": "필드 사이 빈 줄 없음",
+      "R5_no_stray_text": "필드 라벨이 아닌 줄이 중간에 끼어들지 않음",
+      "R6_enum_valid": "[심각도]/[재현 여부] 값이 지정된 선택지에 포함"
+    },
+    "severity_enum": [
+      "Blocker",
+      "Critical",
+      "Major",
+      "Minor",
+      "Trivial",
+      "판단보류"
+    ],
+    "reproducibility_enum": [
+      "간헐적",
+      "발생(100%)",
+      "불명확",
+      "재현 불가"
+    ],
+    "criteria": {
+      "STRICT": "R1~R6 전부 통과",
+      "PARSABLE": "R4(빈 줄 없음)를 제외한 전 규칙 통과"
+    }
+  },
+  "summary": {
+    "qwen2.5:7b": {
+      "n": 20,
+      "strict_pass": 20,
+      "strict_rate": 100.0,
+      "parsable_pass": 20,
+      "parsable_rate": 100.0,
+      "rule_failures": {}
+    },
+    "llama3.1:8b": {
+      "n": 20,
+      "strict_pass": 1,
+      "strict_rate": 5.0,
+      "parsable_pass": 20,
+      "parsable_rate": 100.0,
+      "rule_failures": {
+        "R4_no_blank_line": 19
+      }
+    },
+    "gpt-5.6-luna": {
+      "n": 5,
+      "strict_pass": 5,
+      "strict_rate": 100.0,
+      "parsable_pass": 5,
+      "parsable_rate": 100.0,
+      "rule_failures": {}
+    }
+  },
+  "summary_cloud_subset": {
+    "qwen2.5:7b": {
+      "n": 10,
+      "strict_pass": 10,
+      "strict_rate": 100.0,
+      "parsable_pass": 10,
+      "parsable_rate": 100.0
+    },
+    "llama3.1:8b": {
+      "n": 10,
+      "strict_pass": 0,
+      "strict_rate": 0.0,
+      "parsable_pass": 10,
+      "parsable_rate": 100.0
+    },
+    "gpt-5.6-luna": {
+      "n": 5,
+      "strict_pass": 5,
+      "strict_rate": 100.0,
+      "parsable_pass": 5,
+      "parsable_rate": 100.0
+    }
+  },
+  "per_response": [
+    {
+      "eval_id": "qwen2.5_7b_Q01_run1",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q01",
+      "run_index": 1,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "qwen2.5_7b_Q02_run1",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q02",
+      "run_index": 1,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "qwen2.5_7b_Q03_run1",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q03",
+      "run_index": 1,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "qwen2.5_7b_Q04_run1",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q04",
+      "run_index": 1,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "qwen2.5_7b_Q05_run1",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q05",
+      "run_index": 1,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "qwen2.5_7b_Q06_run1",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q06",
+      "run_index": 1,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "qwen2.5_7b_Q07_run1",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q07",
+      "run_index": 1,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "qwen2.5_7b_Q08_run1",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q08",
+      "run_index": 1,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "qwen2.5_7b_Q09_run1",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q09",
+      "run_index": 1,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "qwen2.5_7b_Q10_run1",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q10",
+      "run_index": 1,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "qwen2.5_7b_Q01_run2",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q01",
+      "run_index": 2,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "qwen2.5_7b_Q02_run2",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q02",
+      "run_index": 2,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "qwen2.5_7b_Q03_run2",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q03",
+      "run_index": 2,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "qwen2.5_7b_Q04_run2",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q04",
+      "run_index": 2,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "qwen2.5_7b_Q05_run2",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q05",
+      "run_index": 2,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "qwen2.5_7b_Q06_run2",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q06",
+      "run_index": 2,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "qwen2.5_7b_Q07_run2",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q07",
+      "run_index": 2,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "qwen2.5_7b_Q08_run2",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q08",
+      "run_index": 2,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "qwen2.5_7b_Q09_run2",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q09",
+      "run_index": 2,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "qwen2.5_7b_Q10_run2",
+      "model": "qwen2.5:7b",
+      "source": "local",
+      "question_id": "Q10",
+      "run_index": 2,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q01_run1",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q01",
+      "run_index": 1,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": false,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [
+        "R4_no_blank_line"
+      ],
+      "reasons": {
+        "R4_no_blank_line": "빈 줄 4개 (줄번호 [1, 3, 5, 7])"
+      },
+      "strict_pass": false,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q02_run1",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q02",
+      "run_index": 1,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": false,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [
+        "R4_no_blank_line"
+      ],
+      "reasons": {
+        "R4_no_blank_line": "빈 줄 4개 (줄번호 [1, 3, 5, 7])"
+      },
+      "strict_pass": false,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q03_run1",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q03",
+      "run_index": 1,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": false,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [
+        "R4_no_blank_line"
+      ],
+      "reasons": {
+        "R4_no_blank_line": "빈 줄 4개 (줄번호 [1, 3, 5, 7])"
+      },
+      "strict_pass": false,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q04_run1",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q04",
+      "run_index": 1,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": false,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [
+        "R4_no_blank_line"
+      ],
+      "reasons": {
+        "R4_no_blank_line": "빈 줄 4개 (줄번호 [1, 3, 5, 7])"
+      },
+      "strict_pass": false,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q05_run1",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q05",
+      "run_index": 1,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": false,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [
+        "R4_no_blank_line"
+      ],
+      "reasons": {
+        "R4_no_blank_line": "빈 줄 4개 (줄번호 [1, 3, 5, 7])"
+      },
+      "strict_pass": false,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q06_run1",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q06",
+      "run_index": 1,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": false,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [
+        "R4_no_blank_line"
+      ],
+      "reasons": {
+        "R4_no_blank_line": "빈 줄 4개 (줄번호 [1, 3, 5, 7])"
+      },
+      "strict_pass": false,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q07_run1",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q07",
+      "run_index": 1,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": false,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [
+        "R4_no_blank_line"
+      ],
+      "reasons": {
+        "R4_no_blank_line": "빈 줄 4개 (줄번호 [1, 3, 5, 7])"
+      },
+      "strict_pass": false,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q08_run1",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q08",
+      "run_index": 1,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": false,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [
+        "R4_no_blank_line"
+      ],
+      "reasons": {
+        "R4_no_blank_line": "빈 줄 4개 (줄번호 [1, 3, 5, 7])"
+      },
+      "strict_pass": false,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q09_run1",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q09",
+      "run_index": 1,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": false,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [
+        "R4_no_blank_line"
+      ],
+      "reasons": {
+        "R4_no_blank_line": "빈 줄 4개 (줄번호 [1, 3, 5, 7])"
+      },
+      "strict_pass": false,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q10_run1",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q10",
+      "run_index": 1,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": false,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [
+        "R4_no_blank_line"
+      ],
+      "reasons": {
+        "R4_no_blank_line": "빈 줄 4개 (줄번호 [1, 3, 5, 7])"
+      },
+      "strict_pass": false,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q01_run2",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q01",
+      "run_index": 2,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": false,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [
+        "R4_no_blank_line"
+      ],
+      "reasons": {
+        "R4_no_blank_line": "빈 줄 4개 (줄번호 [1, 3, 5, 7])"
+      },
+      "strict_pass": false,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q02_run2",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q02",
+      "run_index": 2,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": false,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [
+        "R4_no_blank_line"
+      ],
+      "reasons": {
+        "R4_no_blank_line": "빈 줄 4개 (줄번호 [1, 3, 5, 7])"
+      },
+      "strict_pass": false,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q03_run2",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q03",
+      "run_index": 2,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": false,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [
+        "R4_no_blank_line"
+      ],
+      "reasons": {
+        "R4_no_blank_line": "빈 줄 4개 (줄번호 [1, 3, 5, 7])"
+      },
+      "strict_pass": false,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q04_run2",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q04",
+      "run_index": 2,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": false,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [
+        "R4_no_blank_line"
+      ],
+      "reasons": {
+        "R4_no_blank_line": "빈 줄 4개 (줄번호 [1, 3, 5, 7])"
+      },
+      "strict_pass": false,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q05_run2",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q05",
+      "run_index": 2,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q06_run2",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q06",
+      "run_index": 2,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": false,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [
+        "R4_no_blank_line"
+      ],
+      "reasons": {
+        "R4_no_blank_line": "빈 줄 4개 (줄번호 [1, 3, 5, 7])"
+      },
+      "strict_pass": false,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q07_run2",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q07",
+      "run_index": 2,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": false,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [
+        "R4_no_blank_line"
+      ],
+      "reasons": {
+        "R4_no_blank_line": "빈 줄 4개 (줄번호 [1, 3, 5, 7])"
+      },
+      "strict_pass": false,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q08_run2",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q08",
+      "run_index": 2,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": false,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [
+        "R4_no_blank_line"
+      ],
+      "reasons": {
+        "R4_no_blank_line": "빈 줄 4개 (줄번호 [1, 3, 5, 7])"
+      },
+      "strict_pass": false,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q09_run2",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q09",
+      "run_index": 2,
+      "cloud_eval": false,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": false,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [
+        "R4_no_blank_line"
+      ],
+      "reasons": {
+        "R4_no_blank_line": "빈 줄 4개 (줄번호 [1, 3, 5, 7])"
+      },
+      "strict_pass": false,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "llama3.1_8b_Q10_run2",
+      "model": "llama3.1:8b",
+      "source": "local",
+      "question_id": "Q10",
+      "run_index": 2,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": false,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [
+        "R4_no_blank_line"
+      ],
+      "reasons": {
+        "R4_no_blank_line": "빈 줄 4개 (줄번호 [1, 3, 5, 7])"
+      },
+      "strict_pass": false,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "cloud_luna_Q01",
+      "model": "gpt-5.6-luna",
+      "source": "cloud",
+      "question_id": "Q01",
+      "run_index": 1,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "cloud_luna_Q02",
+      "model": "gpt-5.6-luna",
+      "source": "cloud",
+      "question_id": "Q02",
+      "run_index": 1,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "cloud_luna_Q06",
+      "model": "gpt-5.6-luna",
+      "source": "cloud",
+      "question_id": "Q06",
+      "run_index": 1,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "cloud_luna_Q08",
+      "model": "gpt-5.6-luna",
+      "source": "cloud",
+      "question_id": "Q08",
+      "run_index": 1,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    },
+    {
+      "eval_id": "cloud_luna_Q10",
+      "model": "gpt-5.6-luna",
+      "source": "cloud",
+      "question_id": "Q10",
+      "run_index": 1,
+      "cloud_eval": true,
+      "success": true,
+      "rules": {
+        "R1_no_preamble": true,
+        "R2_all_fields": true,
+        "R3_field_order": true,
+        "R4_no_blank_line": true,
+        "R5_no_stray_text": true,
+        "R6_enum_valid": true
+      },
+      "failed_rules": [],
+      "reasons": {},
+      "strict_pass": true,
+      "parsable_pass": true
+    }
+  ]
+}

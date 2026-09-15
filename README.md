@@ -4,7 +4,7 @@
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Package Manager: uv](https://img.shields.io/badge/uv-Fast%20Packaging-DE5FE9?logo=astral)](https://github.com/astral-sh/uv)
 [![Inference Engine: Ollama](https://img.shields.io/badge/Ollama-Local%20LLM-000000?logo=ollama)](https://ollama.ai/)
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 ---
 
@@ -15,7 +15,7 @@
 본 프로젝트는 가상 게임 **"Aether Raid"**의 버그 리포트 인입 파이프라인을 상정하여, 사내 폐쇄망 환경에서 안전하게 동작 가능한 경량 로컬 LLM 2종(`qwen2.5:7b`, `llama3.1:8b`)의 실무 트리아지 성능을 비교·검증했습니다. 워밍업 분리 및 40회 반복 실험(문항당 2회)과 상용 클라우드 모델(`gpt-5.6-luna`) 대조군 검증을 통해 **데이터 무결성(환각 방지), 포맷 계약 준수율, 온디바이스 리소스 마진**을 종합 분석했습니다.
 
 * **수행 형태**: 1인 단독 프로젝트 (환경 구성, 벤치마크 자동화 스크립트 작성, 정량/정성 평가 전 과정 수행)
-* **실행 환경**: Windows 11, 단일 외장 GPU (VRAM < 8GB), Ollama 런타임, Python 3.12 (`uv`)
+* **실행 환경**: Windows 11 (AMD64), NVIDIA GeForce RTX 5060 Laptop GPU (VRAM 8,151 MiB), 시스템 RAM 31.4 GB, Ollama 0.34.0, Python 3.12.13 (`uv`) — 실측 근거: [`report/environment.md`](report/environment.md)
 
 ### 📌 엔지니어링 의사결정 여정 (Decision Journey)
 * **1일차 (스모크 테스트)**: Llama-3.1이 고유명사 보존과 스키마 준수에서 우세 확인 → *"서두 사족만 가드레일로 잡으면 Llama가 승자"*라는 가설 수립
@@ -27,11 +27,13 @@
 ### 🏆 최종 선정 모델: Qwen2.5-7B-Instruct (`qwen2.5:7b`, Q4_K_M)
 * **데이터 무결성 확보**: Llama-3.1이 노출한 극단적 환각(단문 리포트에서 없는 결함 및 기기 사양 날조) 없이 원문 정보 왜곡 원천 방지
 * **엄격한 규격 준수**: 5개 필드 트리아지 계약(Contract) 준수율 100%로 후속 Jira API 파싱 에러 제로 달성
-* **하드웨어 효율성**: VRAM 4.42GB 점유(8GB 미만 환경 안전 마진 확보) 및 평균 응답 지연 1.39초(Llama 대비 23% 고속)
+* **하드웨어 효율성**: VRAM 4,528 MiB 점유로 Llama 대비 **499 MiB 절약**(두 모델 모두 시스템 RAM 오프로드 없이 100% GPU 적재) 및 평균 응답 지연 1.39초(Llama 대비 23% 고속)
 
 > 📑 **상세 기술 보고서 바로가기**  
 > * [1차·2일차 벤치마크 상세 비교 분석서 (`report/model_comparison.md`)](report/model_comparison.md)  
-> * [Qwen2.5 최종 선정 보고서 및 실무 배포 전략 (`report/final_selection.md`)](report/final_selection.md)
+> * [Qwen2.5 최종 선정 보고서 및 실무 배포 전략 (`report/final_selection.md`)](report/final_selection.md)  
+> * [포맷 준수율 채점 규칙 및 회차별 판정 근거 (`report/format_compliance.md`)](report/format_compliance.md)  
+> * [실행 환경 및 자원 점유 실측 (`report/environment.md`)](report/environment.md)
 
 ---
 
@@ -43,7 +45,7 @@
 | :--- | :---: | :---: | :---: |
 | **표본 수 ($n$)** | 20 (10문항 × 2회) | 20 (10문항 × 2회) | 5 (사전 지정 공통 문항) |
 | **호출 성공률** | **100% (20/20)** | **100% (20/20)** | **100% (5/5)** |
-| **포맷 준수율** | **100% (20/20)** | 75% (15/20) | **100% (5/5)** |
+| **포맷 준수율** (엄격 / 파서 호환) | **100% / 100% (20/20)** | 5% / 100% (1/20 · 20/20) | **100% / 100% (5/5)** |
 | **평균 응답 지연 (Latency)** | **1.390초** | 1.809초 | 4.079초 (Network RTT 포함) |
 | **평균 생성 토큰 속도** | 58.74 tokens/s | **66.52 tokens/s** | N/A (Serverless API) |
 | **평균 생성 토큰 수** | **76.5 tokens (핵심 압축)** | 117.6 tokens (다변 서술) | 233.4 tokens (상세 가이드) |
@@ -52,6 +54,8 @@
 | **모델 식별값 (Digest)** | `845dbda0ea48` | `46e0c10c039e` | N/A |
 | **양자화 레벨** | `Q4_K_M` | `Q4_K_M` | FP16/BF16 |
 | **실행 토큰 비용** | **$0.00 (온프레미스)** | **$0.00 (온프레미스)** | In: 1,277 / Out: 1,167 tokens |
+
+> **포맷 준수율 산출 기준**: `src/score_format.py`가 원본 응답 로그 45건을 6개 규칙(R1~R6)으로 자동 채점한 값입니다. **엄격** 기준은 필드 사이 빈 줄까지 금지, **파서 호환** 기준은 빈 줄을 허용합니다. Llama의 실패 사유는 전량 '필드 사이 빈 줄'이며, **서두 사족은 45건 전수에서 0건**이었습니다. 규칙 정의와 회차별 판정은 [`report/format_compliance.md`](report/format_compliance.md) 참조.
 
 ---
 
@@ -95,6 +99,7 @@
 game-bug-triage-llm-eval/
 ├── .python-version               # Python 3.12 고정
 ├── pyproject.toml                # uv 기반 의존성 명세 (ollama, openai)
+├── uv.lock                       # 의존성 잠금 파일 (재현 가능한 환경 구성)
 ├── README.md                     # 프로젝트 종합 대시보드 (본 문서)
 ├── data/
 │   ├── questions.json            # 고정 벤치마크 10건 (정상 6, 경계 2, 예외 2)
@@ -102,15 +107,22 @@ game-bug-triage-llm-eval/
 │       ├── qwen2.5_7b_verify.json       # 1일차 단일 호출 검증 로그
 │       ├── llama3.1_8b_verify.json      # 1일차 단일 호출 검증 로그
 │       ├── local_eval_results.json      # 2일차 로컬 40회 본 실험 원본 로그
-│       └── cloud_eval_results.json      # 3일차 Cloud 5회 비교 실험 원본 로그
+│       ├── cloud_eval_results.json      # 3일차 Cloud 5회 비교 실험 원본 로그
+│       ├── format_compliance.json       # 포맷 준수율 자동 채점 결과 (45건 회차별 판정)
+│       ├── environment.json             # 실행 환경/자원 점유 실측값 (capture_env.py 생성)
+│       └── fewshot_verify.json          # 4일차 Few-Shot 교정 검증 응답 및 판정 근거
 ├── report/
 │   ├── model_comparison.md      # 로컬 2종 vs Cloud 상세 정량/정성 분석서
-│   └── final_selection.md       # Qwen2.5 최종 선정 사유 및 배포 가드레일
+│   ├── final_selection.md       # Qwen2.5 최종 선정 사유 및 배포 가드레일
+│   ├── format_compliance.md     # 포맷 준수율 채점 규칙 및 회차별 판정 근거
+│   └── environment.md           # 시스템 RAM/VRAM 구분, 실측 context length 기록
 ├── src/
 │   ├── 01_ollama_chat.py         # 단일 모델 적재/VRAM 측정 스모크 테스트
 │   ├── 02_luna_chat.py           # OpenAI Responses API Cloud 비교 스크립트
 │   ├── run_eval.py               # 워밍업 분리 및 40회 로컬 자동 벤치마크 스크립트
-│   └── test_fewshot.py           # 4일차 Qwen 단문 결함 교정 Few-Shot 검증 스크립트
+│   ├── test_fewshot.py           # 4일차 Qwen 단문 결함 교정 Few-Shot 검증 스크립트
+│   ├── score_format.py           # 포맷 계약 준수율 자동 채점 (R1~R6 규칙)
+│   └── capture_env.py            # 실행 환경/자원 점유 실측 캡처
     
 ```
 
@@ -147,10 +159,30 @@ uv run python src/02_luna_chat.py
 ### 5) 4일차 Few-Shot 단문 결함 교정 재실험
 ```powershell
 # Q08 단문 리포트 결함 교정 실측 검증 (소극적 태도 -> 역질문 정상화)
+# 결과는 data/results/fewshot_verify.json 에 응답 원문과 판정 근거로 저장됨
 uv run python src/test_fewshot.py
 ```
 
-## 6. 프로덕션 도입 로드맵 (Production Action Items)
+### 6) 검증 스크립트 재실행 (재현성 확인)
+본 실험 로그를 수정하지 않고 산출물을 다시 만들어 검증하는 스크립트입니다. 모두 읽기 전용이거나 결과 파일만 덮어쓰므로, 40회 본 실험 결과에는 영향을 주지 않습니다.
+
+```powershell
+# 포맷 계약 준수율 재채점 (원본 응답 45건을 R1~R6 규칙으로 다시 채점)
+uv run python src/score_format.py
+
+# 실행 환경 및 자원 점유 재측정 (CLI/Python 경로 검증 포함)
+uv run python src/capture_env.py
+```
+
+| 스크립트 | 입력 | 산출물 | 재현 확인 방법 |
+| :--- | :--- | :--- | :--- |
+| `src/score_format.py` | `data/results/local_eval_results.json`, `cloud_eval_results.json` | `data/results/format_compliance.json`, `report/format_compliance.md` | 회차별 판정과 집계율이 보고서 수치와 일치하는지 대조 |
+| `src/capture_env.py` | 실행 중인 Ollama 런타임 | `data/results/environment.json`, `report/environment.md` | 산출 파일의 `captured_at` 으로 재실행 시점 확인 |
+| `src/test_fewshot.py` | 고정 프롬프트 (Q08 단문) | `data/results/fewshot_verify.json` | `verdict.corrected` 값으로 교정 성공 여부 확인 |
+
+> ⚠️ `src/run_eval.py` 는 재실행 시 40회 본 실험 로그(`local_eval_results.json`)를 덮어씁니다. 기존 기록을 보존하려면 실행 전 백업하세요.
+
+## 7. 프로덕션 도입 로드맵 (Production Action Items)
 
 * **Few-Shot 가드레일 주입**
   * Qwen2.5의 단문 입력 대응 취약점(`누락 정보: 없음` 출력)을 보완하기 위해 시스템 프롬프트에 역질문 템플릿 예시 1건 추가.
@@ -163,5 +195,7 @@ uv run python src/test_fewshot.py
 
 ---
 
-## 7. 라이선스 (License)
-본 프로젝트의 소스 코드와 데이터셋은 [Apache License 2.0](LICENSE)에 따라 자유롭게 수정, 배포 및 상업적 용도로 활용할 수 있습니다.
+## 8. 라이선스 (License)
+본 프로젝트의 소스 코드와 데이터셋은 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)에 따라 자유롭게 수정, 배포 및 상업적 용도로 활용할 수 있습니다.
+
+> 참고: 평가에 사용한 모델의 라이선스는 본 프로젝트 라이선스와 별개입니다. `qwen2.5:7b`는 Apache 2.0, `llama3.1:8b`는 Llama 3.1 Community License를 따르며, 상세 조건은 [`report/model_comparison.md`](report/model_comparison.md) 모델 제원표의 Model Card 링크를 참조하세요.

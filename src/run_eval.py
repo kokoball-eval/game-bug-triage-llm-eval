@@ -5,11 +5,17 @@ from pathlib import Path
 import ollama
 
 # 1. 설정 상수
+# [Context 설정 관련 주의]
+# 본 40회 실험은 num_ctx를 명시하지 않고 Ollama 기본값 그대로 실행되었다.
+# `src/capture_env.py` 실측 결과, 실제로 적용된 context length는 4,096 토큰이었다
+# (상세: report/environment.md). 재현성을 위해 아래 주석을 해제할 경우 반드시 4096을 유지할 것.
+# 다른 값으로 바꾸면 기존 로그(data/results/local_eval_results.json)와 실행 조건이 달라져 40회 재실험이 필요하다.
 MODELS = ["qwen2.5:7b", "llama3.1:8b"]
 REPEAT_COUNT = 2
 OPTIONS = {
     "temperature": 0.2,
     "num_predict": 350,
+    # "num_ctx": 4096,   # 실험 당시 실측값. 고정하려면 해제 (단, 위 주의사항 참고)
 }
 
 SYSTEM_PROMPT = """당신은 8년 차 게임 QA 엔지니어의 버그 리포트 1차 트리아지 어시스턴트입니다.

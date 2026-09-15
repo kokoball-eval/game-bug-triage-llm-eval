@@ -2,7 +2,7 @@
 __pycache__/
 *.py[cod]
 .venv/
-.python-version
+# .python-version 은 제출 요구사항(Python 버전 고정)에 포함되므로 제외하지 않음
 
 # 환경 변수 및 보안 키
 .env
@@ -14,3 +14,6 @@ __pycache__/
 .idea/
 .DS_Store
 Thumbs.db
+
+# 제출물이 아닌 작업 보조 산출물 (검토표 등)
+Claude outputs/

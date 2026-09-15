@@ -1,0 +1,96 @@
+{
+  "captured_at": "2026-09-15T12:08:12.900895",
+  "note": "40회 본 실험 종료 후 동일 모델 태그·동일 양자화 조건에서 수행한 사후 환경 측정",
+  "platform": {
+    "system": "Windows",
+    "release": "11",
+    "machine": "AMD64",
+    "python": "3.12.13"
+  },
+  "system_ram": {
+    "total_bytes": 33752997888,
+    "available_bytes": 16966971392,
+    "source": "GlobalMemoryStatusEx"
+  },
+  "gpu": {
+    "detected": true,
+    "gpus": [
+      {
+        "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "memory_total": "8151 MiB",
+        "memory_used_at_capture": "310 MiB",
+        "driver_version": "592.01"
+      }
+    ]
+  },
+  "ollama_version": {
+    "available": true,
+    "raw": "ollama version is 0.34.0"
+  },
+  "package_versions": {
+    "ollama": "0.6.2",
+    "openai": "3.13.0"
+  },
+  "disk_sizes": {
+    "llama3.1:8b": {
+      "bytes": 4920753328,
+      "gb_decimal": 4.92,
+      "gib": 4.58
+    },
+    "qwen2.5:7b": {
+      "bytes": 4683087332,
+      "gb_decimal": 4.68,
+      "gib": 4.36
+    },
+    "gemma3:4b": {
+      "bytes": 3338801804,
+      "gb_decimal": 3.34,
+      "gib": 3.11
+    },
+    "qwen3:4b-instruct-2507-q4_K_M": {
+      "bytes": 2497293803,
+      "gb_decimal": 2.5,
+      "gib": 2.33
+    }
+  },
+  "models": [
+    {
+      "model": "qwen2.5:7b",
+      "digest": "845dbda0ea48",
+      "quantization_level": "Q4_K_M",
+      "parameter_size": "7.6B",
+      "context_length": 4096,
+      "size_total_bytes": 4748056984,
+      "size_total_mib": 4528.1,
+      "size_vram_bytes": 4748056984,
+      "size_vram_mib": 4528.1,
+      "size_system_ram_bytes": 0,
+      "size_system_ram_mib": 0.0,
+      "gpu_offload_ratio_pct": 100.0,
+      "processor": "100% GPU"
+    },
+    {
+      "model": "llama3.1:8b",
+      "digest": "46e0c10c039e",
+      "quantization_level": "Q4_K_M",
+      "parameter_size": "8.0B",
+      "context_length": 4096,
+      "size_total_bytes": 5271715839,
+      "size_total_mib": 5027.5,
+      "size_vram_bytes": 5271715839,
+      "size_vram_mib": 5027.5,
+      "size_system_ram_bytes": 0,
+      "size_system_ram_mib": 0.0,
+      "gpu_offload_ratio_pct": 100.0,
+      "processor": "100% GPU"
+    }
+  ],
+  "cli_path_check": {
+    "model": "qwen2.5:7b",
+    "command": "ollama run qwen2.5:7b \"설정 메뉴 텍스트 오타 제보의 심각도를 Blocker/Critical/Major/Minor/Trivial 중 한 단어로만 답하라.\"",
+    "success": true,
+    "returncode": 0,
+    "response_text": "Critical",
+    "stderr": "\u001b[?2026h\u001b[?25l\u001b[1G⠙ \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1G⠙ \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1G⠸ \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1G⠸ \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1G⠴ \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1G⠦ \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1G⠦ \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1G⠧ \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1G⠏ \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1G⠋ \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1G⠙ \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1G⠹ \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1G⠹ \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1G⠼"
+  }
+}
