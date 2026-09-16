@@ -116,7 +116,6 @@ game-bug-triage-llm-eval/
 ├── pyproject.toml                # uv 기반 의존성 명세 (ollama, openai)
 ├── uv.lock                       # 의존성 잠금 파일 (재현 가능한 환경 구성)
 ├── README.md                     # 프로젝트 종합 대시보드 (본 문서)
-│       └── history/  # 실행 시각별 이력 사본
 ├── data/
 │   ├── questions.json            # 고정 벤치마크 10건 (정상 6, 경계 2, 예외 2)
 │   └── results/
@@ -128,7 +127,6 @@ game-bug-triage-llm-eval/
 │       ├── environment.json             # 실행 환경/자원 점유 실측값 (capture_env.py 생성)
 │       ├── fewshot_verify.json          # 4일차 Few-Shot 교정 검증 응답 및 판정 근거
 │       └── history/                     # 실행 시각별 이력 사본 (run_eval.py 재실행 시 생성)
-
 ├── report/
 │   ├── model_comparison.md      # 로컬 2종 vs Cloud 상세 정량/정성 분석서
 │   ├── final_selection.md       # Qwen2.5 최종 선정 사유 및 배포 가드레일
@@ -200,7 +198,7 @@ uv run python src/capture_env.py
 | `src/test_fewshot.py` | 고정 프롬프트 (Q08 단문) | `data/results/fewshot_verify.json` | `verdict.corrected` 값으로 교정 성공 여부 확인 |
 
 > ⚠️ `src/run_eval.py` 는 재실행 시 `local_eval_results.json` 을 최신 결과로 덮어씁니다.
-> ⚠️ 다만 실행할 때마다 동일한 내용이 `data/results/history/local_eval_results_<실행시각>.json` 으로도 저장되므로, 이전 실행 기록은 그대로 보존됩니다. 따라서 별도 백업이 필요하지 않습니다.
+> ℹ️ 다만 실행할 때마다 동일한 내용이 `data/results/history/local_eval_results_<실행시각>.json` 으로도 저장되므로, 이전 실행 기록은 그대로 보존됩니다. 따라서 별도 백업이 필요하지 않습니다.
 
 ## 7. 프로덕션 도입 로드맵 (Production Action Items)
 
