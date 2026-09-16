@@ -140,7 +140,7 @@ game-bug-triage-llm-eval/
 
 ### 2) 프로젝트 클론 및 가상환경 동기화
 ```powershell
-git clone https://github.com/<your-username>/game-bug-triage-llm-eval.git
+git clone https://github.com/<rkdwlrlarud-create>/game-bug-triage-llm-eval.git
 cd game-bug-triage-llm-eval
 uv sync
 ```
