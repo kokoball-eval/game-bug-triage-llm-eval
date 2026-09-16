@@ -156,12 +156,22 @@ def main():
         "results": benchmark_records,
     }
 
+    # 최신 결과 — 문서와 후속 스크립트가 참조하는 고정 경로
     output_file = results_dir / "local_eval_results.json"
     with output_file.open("w", encoding="utf-8") as f:
         json.dump(output_payload, f, ensure_ascii=False, indent=2)
 
+    # 실행 시각별 사본 — 이전 실행 결과와 비교용 (고정 경로는 그대로 유지)
+    history_dir = results_dir / "history"
+    history_dir.mkdir(parents=True, exist_ok=True)
+    run_stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    history_file = history_dir / f"local_eval_results_{run_stamp}.json"
+    with history_file.open("w", encoding="utf-8") as f:
+        json.dump(output_payload, f, ensure_ascii=False, indent=2)
+
     print(f"\n=== 전체 40회 실험 완료 ===")
-    print(f"결과 저장 위치: {output_file.resolve()}")
+    print(f"최신 결과: {output_file.resolve()}")
+    print(f"이력 사본: {history_file.resolve()}")
 
 if __name__ == "__main__":
     main()

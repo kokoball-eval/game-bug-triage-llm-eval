@@ -39,7 +39,21 @@
 
 ## 2. 벤치마크 핵심 결과 (Benchmark Dashboard)
 
-### 1) 하드웨어 및 런타임 성능 요약 ($N=45$)
+### 1) 비교 대상 모델 제원
+
+| 구분 | Qwen2.5-7B-Instruct (최종 선정) | Llama-3.1-8B-Instruct (비교 대조) |
+| :--- | :--- | :--- |
+| **Ollama 태그** | `qwen2.5:7b` | `llama3.1:8b` |
+| **파라미터 / 양자화** | 7.61B / `Q4_K_M` | 8.03B / `Q4_K_M` |
+| **디스크 용량** | 4.68 GB (4.36 GiB) | 4.92 GB (4.58 GiB) |
+| **네이티브 Context** | 32,768 토큰 (YaRN 적용 시 131,072) | 128,000 토큰 |
+| **한국어 공식 지원** | 지원 | 공식 지원 8개 언어에 **미포함** |
+| **라이선스** | **Apache 2.0** — 상업적 이용·수정·배포 제약 없음 | **Llama 3.1 Community** — MAU 7억 초과 시 별도 계약, 명명 규칙 조건 |
+
+> 실측 context(4,096) · VRAM/시스템 RAM 구분 · 생성 하이퍼파라미터를 포함한 전체 제원표는
+> [`report/model_comparison.md`](report/model_comparison.md) §1-2를 참조하세요.
+
+### 2) 하드웨어 및 런타임 성능 요약 ($N=45$)
 
 | 지표 항목 | Qwen2.5-7B (Local, 최종 선정) | Llama-3.1-8B (Local, 비교 대조) | gpt-5.6-luna (Cloud 참조군) |
 | :--- | :---: | :---: | :---: |
@@ -59,7 +73,7 @@
 
 ---
 
-### 2) 5개 영역 QA 루브릭 정량 채점표 (100점 만점)
+### 3) 5개 영역 QA 루브릭 정량 채점표 (100점 만점)
 
 ```text
 [ 종합 품질 점수 ]
@@ -102,6 +116,7 @@ game-bug-triage-llm-eval/
 ├── pyproject.toml                # uv 기반 의존성 명세 (ollama, openai)
 ├── uv.lock                       # 의존성 잠금 파일 (재현 가능한 환경 구성)
 ├── README.md                     # 프로젝트 종합 대시보드 (본 문서)
+│       └── history/  # 실행 시각별 이력 사본
 ├── data/
 │   ├── questions.json            # 고정 벤치마크 10건 (정상 6, 경계 2, 예외 2)
 │   └── results/
@@ -111,7 +126,9 @@ game-bug-triage-llm-eval/
 │       ├── cloud_eval_results.json      # 3일차 Cloud 5회 비교 실험 원본 로그
 │       ├── format_compliance.json       # 포맷 준수율 자동 채점 결과 (45건 회차별 판정)
 │       ├── environment.json             # 실행 환경/자원 점유 실측값 (capture_env.py 생성)
-│       └── fewshot_verify.json          # 4일차 Few-Shot 교정 검증 응답 및 판정 근거
+│       ├── fewshot_verify.json          # 4일차 Few-Shot 교정 검증 응답 및 판정 근거
+│       └── history/                     # 실행 시각별 이력 사본 (run_eval.py 재실행 시 생성)
+
 ├── report/
 │   ├── model_comparison.md      # 로컬 2종 vs Cloud 상세 정량/정성 분석서
 │   ├── final_selection.md       # Qwen2.5 최종 선정 사유 및 배포 가드레일
@@ -182,7 +199,8 @@ uv run python src/capture_env.py
 | `src/capture_env.py` | 실행 중인 Ollama 런타임 | `data/results/environment.json`, `report/environment.md` | 산출 파일의 `captured_at` 으로 재실행 시점 확인 |
 | `src/test_fewshot.py` | 고정 프롬프트 (Q08 단문) | `data/results/fewshot_verify.json` | `verdict.corrected` 값으로 교정 성공 여부 확인 |
 
-> ⚠️ `src/run_eval.py` 는 재실행 시 40회 본 실험 로그(`local_eval_results.json`)를 덮어씁니다. 기존 기록을 보존하려면 실행 전 백업하세요.
+> ⚠️ `src/run_eval.py` 는 재실행 시 `local_eval_results.json` 을 최신 결과로 덮어씁니다.
+> ⚠️ 다만 실행할 때마다 동일한 내용이 `data/results/history/local_eval_results_<실행시각>.json` 으로도 저장되므로, 이전 실행 기록은 그대로 보존됩니다. 따라서 별도 백업이 필요하지 않습니다.
 
 ## 7. 프로덕션 도입 로드맵 (Production Action Items)
 
