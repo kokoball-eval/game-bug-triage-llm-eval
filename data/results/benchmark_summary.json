@@ -1,0 +1,57 @@
+{
+  "local": {
+    "qwen2.5:7b": {
+      "n": 20,
+      "success": 20,
+      "latency_sec": 1.39,
+      "tokens_per_sec": 57.68,
+      "tokens_per_sec_n": 20,
+      "eval_count": 76.4,
+      "vram_mib": 4528.1,
+      "warmup_load_sec": 2.145,
+      "warmup_elapsed_sec": 3.09,
+      "cloud_subset": {
+        "n": 10,
+        "question_ids": [
+          "Q01",
+          "Q02",
+          "Q06",
+          "Q08",
+          "Q10"
+        ],
+        "latency_sec": 1.481,
+        "eval_count": 82.3
+      }
+    },
+    "llama3.1:8b": {
+      "n": 20,
+      "success": 20,
+      "latency_sec": 1.809,
+      "tokens_per_sec": 66.56,
+      "tokens_per_sec_n": 20,
+      "eval_count": 117.6,
+      "vram_mib": 5027.5,
+      "warmup_load_sec": 3.429,
+      "warmup_elapsed_sec": 5.049,
+      "cloud_subset": {
+        "n": 10,
+        "question_ids": [
+          "Q01",
+          "Q02",
+          "Q06",
+          "Q08",
+          "Q10"
+        ],
+        "latency_sec": 1.989,
+        "eval_count": 129.8
+      }
+    }
+  },
+  "cloud": {
+    "n": 5,
+    "latency_sec": 4.079,
+    "input_tokens_total": 1277,
+    "output_tokens_total": 1167,
+    "output_tokens_avg": 233.4
+  }
+}

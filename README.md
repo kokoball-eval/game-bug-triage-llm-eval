@@ -30,7 +30,7 @@
 * **하드웨어 효율성**: VRAM 4,528 MiB 점유로 Llama 대비 **499 MiB 절약**(두 모델 모두 시스템 RAM 오프로드 없이 100% GPU 적재) 및 평균 응답 지연 1.39초(Llama 대비 23% 고속)
 
 > 📑 **상세 기술 보고서 바로가기**  
-> * [1차·2일차 벤치마크 상세 비교 분석서 (`report/model_comparison.md`)](report/model_comparison.md)  
+> * [1~3일차 벤치마크 상세 비교 분석서 (`report/model_comparison.md`)](report/model_comparison.md)  
 > * [Qwen2.5 최종 선정 보고서 및 실무 배포 전략 (`report/final_selection.md`)](report/final_selection.md)  
 > * [포맷 준수율 채점 규칙 및 회차별 판정 근거 (`report/format_compliance.md`)](report/format_compliance.md)  
 > * [실행 환경 및 자원 점유 실측 (`report/environment.md`)](report/environment.md)
@@ -61,8 +61,8 @@
 | **호출 성공률** | **100% (20/20)** | **100% (20/20)** | **100% (5/5)** |
 | **포맷 준수율** (엄격 / 파서 호환) | **100% / 100% (20/20)** | 5% / 100% (1/20 · 20/20) | **100% / 100% (5/5)** |
 | **평균 응답 지연 (Latency)** | **1.390초** | 1.809초 | 4.079초 (Network RTT 포함) |
-| **평균 생성 토큰 속도** | 58.74 tokens/s | **66.52 tokens/s** | N/A (Serverless API) |
-| **평균 생성 토큰 수** | **76.5 tokens (핵심 압축)** | 117.6 tokens (다변 서술) | 233.4 tokens (상세 가이드) |
+| **평균 생성 토큰 속도** | 57.68 tokens/s | **66.56 tokens/s** | N/A (Serverless API) |
+| **평균 생성 토큰 수** | **76.4 tokens (핵심 압축)** | 117.6 tokens (다변 서술) | 233.4 tokens (상세 가이드) |
 | **VRAM 점유량** | **4,528.1 MiB (~4.42 GB)** | 5,027.5 MiB (~4.91 GB) | 0 MiB (Serverless) |
 | **워밍업 로딩 시간 (Cold)** | **2.145초** | 3.429초 | N/A |
 | **모델 식별값 (Digest)** | `845dbda0ea48` | `46e0c10c039e` | N/A |
@@ -70,6 +70,8 @@
 | **실행 토큰 비용** | **$0.00 (온프레미스)** | **$0.00 (온프레미스)** | In: 1,277 / Out: 1,167 tokens |
 
 > **포맷 준수율 산출 기준**: `src/score_format.py`가 원본 응답 로그 45건을 6개 규칙(R1~R6)으로 자동 채점한 값입니다. **엄격** 기준은 필드 사이 빈 줄까지 금지, **파서 호환** 기준은 빈 줄을 허용합니다. Llama의 실패 사유는 전량 '필드 사이 빈 줄'이며, **서두 사족은 45건 전수에서 0건**이었습니다. 규칙 정의와 회차별 판정은 [`report/format_compliance.md`](report/format_compliance.md) 참조.
+>
+> **성능 수치 산출 기준**: 지연·속도·토큰·VRAM은 `src/summarize_eval.py`가 원본 로그(`local_eval_results.json`, `cloud_eval_results.json`)에서 재집계한 값입니다. 워밍업은 제외했고, 평균 속도는 회차별 `tokens_per_sec`의 단순 평균입니다. 집계 결과는 `data/results/benchmark_summary.json`에 저장됩니다.
 
 ---
 
@@ -124,6 +126,7 @@ game-bug-triage-llm-eval/
 │       ├── local_eval_results.json      # 2일차 로컬 40회 본 실험 원본 로그
 │       ├── cloud_eval_results.json      # 3일차 Cloud 5회 비교 실험 원본 로그
 │       ├── format_compliance.json       # 포맷 준수율 자동 채점 결과 (45건 회차별 판정)
+│       ├── benchmark_summary.json       # 성능 지표 재집계 결과 (summarize_eval.py 생성)
 │       ├── environment.json             # 실행 환경/자원 점유 실측값 (capture_env.py 생성)
 │       ├── fewshot_verify.json          # 4일차 Few-Shot 교정 검증 응답 및 판정 근거
 │       └── history/                     # 실행 시각별 이력 사본 (run_eval.py 재실행 시 생성)
@@ -138,6 +141,7 @@ game-bug-triage-llm-eval/
 │   ├── run_eval.py               # 워밍업 분리 및 40회 로컬 자동 벤치마크 스크립트
 │   ├── test_fewshot.py           # 4일차 Qwen 단문 결함 교정 Few-Shot 검증 스크립트
 │   ├── score_format.py           # 포맷 계약 준수율 자동 채점 (R1~R6 규칙)
+│   ├── summarize_eval.py         # 성능 지표(지연·속도·토큰) 재집계
 │   └── capture_env.py            # 실행 환경/자원 점유 실측 캡처
     
 ```
@@ -184,6 +188,9 @@ uv run python src/test_fewshot.py
 본 실험 로그를 수정하지 않고 산출물을 다시 만들어 검증하는 스크립트입니다. 모두 읽기 전용이거나 결과 파일만 덮어쓰므로, 40회 본 실험 결과에는 영향을 주지 않습니다.
 
 ```powershell
+# 성능 지표 재집계 (문서에 기재된 지연·속도·토큰 수치를 원본 로그에서 다시 계산)
+uv run python src/summarize_eval.py
+
 # 포맷 계약 준수율 재채점 (원본 응답 45건을 R1~R6 규칙으로 다시 채점)
 uv run python src/score_format.py
 
@@ -193,6 +200,7 @@ uv run python src/capture_env.py
 
 | 스크립트 | 입력 | 산출물 | 재현 확인 방법 |
 | :--- | :--- | :--- | :--- |
+| `src/summarize_eval.py` | `data/results/local_eval_results.json`, `cloud_eval_results.json` | `data/results/benchmark_summary.json`, 표준 출력 | 출력 표의 값이 README 2절 대시보드 및 보고서 수치와 일치하는지 대조 |
 | `src/score_format.py` | `data/results/local_eval_results.json`, `cloud_eval_results.json` | `data/results/format_compliance.json`, `report/format_compliance.md` | 회차별 판정과 집계율이 보고서 수치와 일치하는지 대조 |
 | `src/capture_env.py` | 실행 중인 Ollama 런타임 | `data/results/environment.json`, `report/environment.md` | 산출 파일의 `captured_at` 으로 재실행 시점 확인 |
 | `src/test_fewshot.py` | 고정 프롬프트 (Q08 단문) | `data/results/fewshot_verify.json` | `verdict.corrected` 값으로 교정 성공 여부 확인 |
