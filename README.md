@@ -249,7 +249,7 @@ uv run python src/capture_env.py
 | 문서 | 담고 있는 것 |
 | :--- | :--- |
 | [`report/final_selection.md`](report/final_selection.md) | **최종 선정 보고서.** 4대 의사결정 축, 종합 스코어카드, 3단계 프로덕션 아키텍처, 프로젝트 한계 |
-| [`report/model_comparison.md`](report/model_comparison.md) | **1~3일차 비교 분석서.** 실험 조건·프롬프트 전문, 평가 문항 10건, 항목별 판정, Cloud 대조 심층 분석 |
+| [`report/model_comparison.md`](report/model_comparison.md) | **1~3일차 비교 분석서.** 실험 조건·프롬프트 전문, 평가 문항 10건, **벤치마크 코드 구성과 설계 의도**, 항목별 판정, Cloud 대조 심층 분석 |
 | [`report/format_compliance.md`](report/format_compliance.md) | **포맷 준수율 채점 근거.** R1~R6 규칙 정의와 응답 45건의 회차별 판정 |
 | [`report/environment.md`](report/environment.md) | **실행 환경 실측.** 시스템 RAM/VRAM 구분, 실측 context length, CLI/Python 경로 검증 |
 

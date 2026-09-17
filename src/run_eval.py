@@ -1,3 +1,37 @@
+"""40회 로컬 벤치마크 본 실험 스크립트 (2일차).
+
+두 후보 모델에 동일한 조건으로 고정 질문 10건을 2회씩 실행하고,
+응답 원문과 성능 메타데이터를 원본 로그로 남긴다.
+
+    10문항 x 2모델 x 2회 = 40회 (+ 모델별 워밍업 1회는 별도 집계)
+
+출력:
+    data/results/local_eval_results.json              - 최신 결과 (문서·후속 스크립트가 참조)
+    data/results/history/local_eval_results_<시각>.json - 실행 시각별 이력 사본
+
+[설계 의도]
+1. chat()이 아니라 generate() + 문자열 결합을 쓴다.
+   두 모델은 chat 템플릿이 서로 달라, 같은 메시지를 넣어도 실제 입력 문자열이 달라진다.
+   직접 조립해야 완전히 동일한 입력을 보장할 수 있다.
+2. 워밍업 1회를 먼저 돌리고 warmup_runs 키에 분리 저장한다.
+   첫 호출에는 디스크->VRAM 적재 시간이 붙으므로 본 통계에 섞으면 안 된다.
+   단, 로딩 시간 자체는 별도 지표로 보고한다.
+3. eval_duration이 0 이하이면 tokens_per_sec를 None으로 둔다. 0으로 대체하지 않는다.
+   계산 불가를 0으로 채우면 "속도가 0이었다"는 뜻이 되어 평균이 무너진다.
+4. 예외는 잡아서 success=False로 기록하고 다음 회차로 진행한다.
+   한 건의 실패로 40회 배치가 중단되지 않게 하고, 실패 사유를 로그에 남긴다.
+5. 생성 파라미터는 파일 상단 OPTIONS 상수 하나로 둔다.
+   두 모델에 동일한 값이 적용됨을 코드로 보장하기 위해서다.
+6. 결과는 metadata + warmup_runs + results 구조로 저장한다.
+   집계된 숫자가 아니라 회차별 원본을 남겨야 사후 재집계와 재검증이 가능하다.
+
+[Context 설정 관련 주의]
+본 40회 실험은 num_ctx를 명시하지 않고 Ollama 기본값 그대로 실행되었다.
+`src/capture_env.py` 실측 결과, 실제로 적용된 context length는 4,096 토큰이었다
+(상세: report/environment.md). 재현성을 위해 아래 주석을 해제할 경우 반드시 4096을 유지할 것.
+다른 값으로 바꾸면 기존 로그(data/results/local_eval_results.json)와 실행 조건이 달라져 40회 재실험이 필요하다.
+"""
+
 import json
 import time
 from datetime import datetime
@@ -5,11 +39,6 @@ from pathlib import Path
 import ollama
 
 # 1. 설정 상수
-# [Context 설정 관련 주의]
-# 본 40회 실험은 num_ctx를 명시하지 않고 Ollama 기본값 그대로 실행되었다.
-# `src/capture_env.py` 실측 결과, 실제로 적용된 context length는 4,096 토큰이었다
-# (상세: report/environment.md). 재현성을 위해 아래 주석을 해제할 경우 반드시 4096을 유지할 것.
-# 다른 값으로 바꾸면 기존 로그(data/results/local_eval_results.json)와 실행 조건이 달라져 40회 재실험이 필요하다.
 MODELS = ["qwen2.5:7b", "llama3.1:8b"]
 REPEAT_COUNT = 2
 OPTIONS = {
