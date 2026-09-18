@@ -199,7 +199,7 @@ ollama pull llama3.1:8b
 ### 2) 클론 및 가상환경 동기화
 
 ```powershell
-git clone https://github.com/rkdwlrlarud-create/game-bug-triage-llm-eval.git
+git clone https://github.com/kokoball-eval/game-bug-triage-llm-eval.git
 cd game-bug-triage-llm-eval
 uv sync
 ```
