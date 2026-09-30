@@ -28,6 +28,11 @@
    두 모델에 동일한 값이 적용됨을 코드로 보장하기 위해서다.
 6. 결과는 metadata + warmup_runs + results 구조로 저장한다.
    집계된 숫자가 아니라 회차별 원본을 남겨야 사후 재집계와 재검증이 가능하다.
+7. (v1.1) metadata.run_config 에 실행 조건을 기록한다.
+   생성 옵션, 반복 횟수, 시스템 프롬프트·문항 파일의 SHA-256 지문, 모델 digest.
+   compare_runs.py 가 두 실행을 비교하기 전에 "같은 조건에서 돌린 것인가"를 코드로 확인하기 위해서다.
+   프롬프트 전문 대신 지문(해시)을 남기는 이유: 한 글자만 바뀌어도 값이 달라져 변경 여부를 확실히 잡고,
+   로그 크기는 늘지 않는다. 실험 동작(모델 호출 방식·옵션)은 바꾸지 않는다.
 
 [Context 설정 관련 주의]
 본 40회 실험은 num_ctx를 명시하지 않고 Ollama 기본값 그대로 실행되었다.
@@ -36,6 +41,7 @@
 다른 값으로 바꾸면 기존 로그(data/results/local_eval_results.json)와 실행 조건이 달라져 40회 재실험이 필요하다.
 """
 
+import hashlib
 import json
 import time
 from datetime import datetime
@@ -72,6 +78,21 @@ def get_vram_mib(client: ollama.Client, model_name: str) -> float:
     except Exception:
         pass
     return 0.0
+
+def sha256_text(text: str) -> str:
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+def get_model_digests(client: ollama.Client, models: list[str]) -> dict:
+    """ollama list 에서 모델별 digest 앞 12자리를 읽는다. 같은 태그라도 재pull 하면 바뀔 수 있다."""
+    digests = {}
+    try:
+        for m in client.list().get("models", []):
+            name = m.get("model") or m.get("name", "")
+            if name in models:
+                digests[name] = (m.get("digest") or "")[:12] or None
+    except Exception:
+        pass
+    return {model: digests.get(model) for model in models}
 
 def execute_single_inference(client: ollama.Client, model: str, report_text: str) -> dict:
     """단일 추론을 수행하고 성능 메타데이터를 반환합니다."""
@@ -132,6 +153,16 @@ def main():
     questions = questions_data["questions"]
 
     client = ollama.Client()
+    run_config = {
+        "options": OPTIONS,
+        "repeat_count": REPEAT_COUNT,
+        "system_prompt_sha256": sha256_text(SYSTEM_PROMPT),
+        # 파일 바이트가 아니라 파싱한 내용으로 지문을 만든다.
+        # Windows(CRLF)/Linux(LF) 줄바꿈 차이만으로 "문항이 바뀌었다"고 오판하지 않기 위해서다.
+        "questions_sha256": sha256_text(json.dumps(questions_data, ensure_ascii=False, sort_keys=True)),
+        "question_ids": [q["id"] for q in questions],
+        "model_digests": get_model_digests(client, MODELS),
+    }
     benchmark_records = []
     warmup_records = []
 
@@ -184,6 +215,7 @@ def main():
             "models": MODELS,
             "total_formal_runs": len(benchmark_records),
             "warmup_runs": len(warmup_records),
+            "run_config": run_config,
         },
         "warmup_runs": warmup_records,
         "results": benchmark_records,

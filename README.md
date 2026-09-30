@@ -23,6 +23,7 @@
 | [4. 실행 및 재현](#4-실행-및-재현) | 설치, 실험 실행, 수치 재검증 | 직접 돌려보실 분 |
 | [5. 저장소 구조와 상세 보고서](#5-저장소-구조와-상세-보고서) | 보고서 4종, 디렉터리 구성 | 깊이 파보실 분 |
 | [6. 프로덕션 도입 로드맵과 한계](#6-프로덕션-도입-로드맵과-한계) | 3대 가드레일, 실험의 한계 | 실무 적용을 검토할 분 |
+| [7. 고도화 로드맵](#7-고도화-로드맵) | 일회성 선정에서 지속 검증 체계로 | 앞으로의 방향이 궁금한 분 |
 
 ---
 
@@ -242,6 +243,33 @@ uv run python src/capture_env.py
 | `src/score_format.py` | `data/results/local_eval_results.json`, `cloud_eval_results.json` | `data/results/format_compliance.json`, `report/format_compliance.md` | 회차별 판정과 집계율이 보고서 수치와 일치하는지 대조 |
 | `src/capture_env.py` | 실행 중인 Ollama 런타임 | `data/results/environment.json`, `report/environment.md` | 산출 파일의 `captured_at` 으로 재실행 시점 확인 |
 | `src/test_fewshot.py` | 고정 프롬프트 (Q08 단문) | `data/results/fewshot_verify.json` | `verdict.corrected` 값으로 교정 성공 여부 확인 |
+| `src/compare_runs.py` | 기준선·후보 실행 로그, `gate_criteria.toml` | `data/results/gate_result.json`, `report/regression_gate.md` | 종료 코드(0/1/2)와 기준별 판정 확인 |
+
+### 5) 회귀 게이트 — 두 실행 비교 (v1.1)
+
+프롬프트·모델·Ollama 버전을 바꾼 뒤 **"이전보다 나빠졌는가"를 종료 코드 하나로 판정**합니다.
+기준선은 README 수치의 출처인 v1.0 로그를 `data/results/baseline/`에 고정해 두었습니다.
+
+```powershell
+# 1) 새 실행 → 2) 고정 기준선(v1.0)과 비교
+uv run python src/run_eval.py
+uv run python src/compare_runs.py
+
+# 파일 직접 지정 / 대조군 모델까지 판정
+uv run python src/compare_runs.py --baseline <기준선.json> --candidate <후보.json>
+uv run python src/compare_runs.py --model llama3.1:8b
+```
+
+| 종료 코드 | 의미 |
+| :---: | :--- |
+| `0` PASS | `gate_criteria.toml`의 모든 기준 통과 |
+| `1` FAIL | 기준 1개 이상 미달 |
+| `2` ERROR | 비교 불가 — 문항 구성 불일치, 실행 조건(옵션·프롬프트·문항·모델 digest) 변경 등. 의도한 변경이면 `--allow-config-change` |
+
+* **합격 기준**은 루트의 `gate_criteria.toml`에 있습니다. 절대 기준(바닥선)과 회귀 기준(기준선 대비 허용 악화폭) 두 종류이며, 기준마다 근거를 주석으로 달았습니다.
+* 채점 규칙은 `score_format.py`, 지표 정의는 `summarize_eval.py`를 그대로 재사용하므로 README 표와 같은 숫자가 나옵니다.
+* 심각도·모듈·재현 여부 **판정 변화는 참고용 목록**으로만 출력합니다. seed 미고정 상태에서는 같은 조건에서도 흔들리기 때문이며, v1.2 seed 고정 후 합격 기준으로 승격할 예정입니다.
+* 결과: `data/results/gate_result.json`(기계 판독용), `report/regression_gate.md`(판정 근거)
 
 ---
 
@@ -266,6 +294,7 @@ game-bug-triage-llm-eval/
 ├── .gitattributes                # 줄바꿈(EOL) 정규화 규칙
 ├── .python-version               # Python 3.12 고정
 ├── pyproject.toml                # uv 기반 의존성 명세 (ollama, openai)
+├── gate_criteria.toml            # (v1.1) 회귀 게이트 합격 기준
 ├── uv.lock                       # 의존성 잠금 파일 (재현 가능한 환경 구성)
 ├── README.md                     # 프로젝트 종합 대시보드 (본 문서)
 ├── data/
@@ -279,12 +308,16 @@ game-bug-triage-llm-eval/
 │       ├── benchmark_summary.json       # 성능 지표 재집계 결과 (summarize_eval.py 생성)
 │       ├── environment.json             # 실행 환경/자원 점유 실측값 (capture_env.py 생성)
 │       ├── fewshot_verify.json          # 4일차 Few-Shot 교정 검증 응답 및 판정 근거
+│       ├── gate_result.json             # (v1.1) 회귀 게이트 판정 결과 (compare_runs.py 생성)
+│       ├── baseline/
+│       │   └── v1.0_local_eval_results.json # (v1.1) 고정 기준선 — 덮어쓰지 않음
 │       └── history/                     # 실행 시각별 이력 사본 (run_eval.py 재실행 시 생성)
 ├── report/
 │   ├── model_comparison.md      # 로컬 2종 vs Cloud 상세 정량/정성 분석서
 │   ├── final_selection.md       # Qwen2.5 최종 선정 사유 및 배포 가드레일
 │   ├── format_compliance.md     # 포맷 준수율 채점 규칙 및 회차별 판정 근거
-│   └── environment.md           # 시스템 RAM/VRAM 구분, 실측 context length 기록
+│   ├── environment.md           # 시스템 RAM/VRAM 구분, 실측 context length 기록
+│   └── regression_gate.md       # (v1.1) 회귀 게이트 판정 근거 (compare_runs.py 생성)
 └── src/
     ├── 01_ollama_chat.py         # 단일 모델 적재/VRAM 측정 스모크 테스트
     ├── 02_luna_chat.py           # OpenAI Responses API Cloud 비교 스크립트
@@ -292,6 +325,7 @@ game-bug-triage-llm-eval/
     ├── test_fewshot.py           # 4일차 Qwen 단문 결함 교정 Few-Shot 검증 스크립트
     ├── score_format.py           # 포맷 계약 준수율 자동 채점 (R1~R6 규칙)
     ├── summarize_eval.py         # 성능 지표(지연·속도·토큰) 재집계
+    ├── compare_runs.py           # (v1.1) 두 실행 비교 + 회귀 게이트 판정
     └── capture_env.py            # 실행 환경/자원 점유 실측 캡처
 ```
 
@@ -319,7 +353,29 @@ game-bug-triage-llm-eval/
 
 ---
 
-## 7. 라이선스 (License)
+## 7. 고도화 로드맵
+
+v1.0은 "지금 어떤 모델이 이 업무에 맞는가"를 **한 번** 측정한 결과입니다.
+실무에서는 프롬프트·모델 버전·평가셋이 계속 바뀌므로, 이후 버전은 이를 **"LLM에게 트리아지를 맡겨도 되는지 계속 증명하는 평가 체계"**로 확장합니다.
+게임 버그 리포트는 평가 대상 사례이며, 채점·게이트·신뢰도 검증 구조는 도메인과 무관하게 재사용할 수 있도록 설계합니다.
+
+| 버전 | 작업 | 답하려는 질문 | 상태 |
+| :---: | :--- | :--- | :---: |
+| v1.0 | 로컬 LLM 2종 비교·선정 | 어떤 모델이 이 업무에 맞는가? | ✅ 완료 |
+| v1.1 | `compare_runs.py` + `gate_criteria.toml` 회귀 게이트 | 무언가 바꿨을 때 나빠졌는가? | 🔨 진행 중 |
+| v1.1.1 | 채점·게이트 로직 단위 테스트(pytest) + GitHub Actions CI | 평가 도구 자체는 믿을 수 있는가? | 예정 |
+| v1.2 | 환각 자동 탐지 + seed 고정 모드 → 판정 변화를 합격 기준으로 승격 | 가장 위험한 결함(날조)을 사람 없이 잡을 수 있는가? | 예정 |
+| v1.3 | 도메인 설정 분리(프롬프트·필드·enum → 설정 파일) → 평가셋 30~50건 확장 (AI로 초안 생성, 사람 검수) | 평가셋이 실제 업무를 대표하는가? 다른 도메인에도 쓸 수 있는가? | 예정 |
+| v1.4 | LLM-as-judge + 사람 채점과의 일치율 측정 | 품질 채점까지 자동화해도 사람 판단과 맞는가? | 예정 |
+| v2.0 | RAG 평가 — 중복 티켓 감지 품질 측정 + 이슈 트래커 포맷 출력 게이트 | 검색이 끼어도 새로운 실패 유형을 측정하고 막을 수 있는가? | 예정 |
+
+* **v1.1.1** — 모델을 호출하지 않는 채점·게이트 로직은 저장된 로그만으로 테스트할 수 있어 CI에서 자동 실행합니다. 검증 도구가 틀리면 모든 판정이 틀리기 때문입니다.
+* **v1.3** — 설정 분리를 확장보다 먼저 합니다. 설정만 바꿔 다른 도메인(예: 고객 문의 분류)에 같은 체계를 적용할 수 있는지가 확장성의 증거입니다.
+* **v2.0** — 목표는 기능 추가가 아니라 평가 범위 확장입니다. RAG가 끼면 "엉뚱한 티켓을 중복으로 판정"하는 새 실패 유형이 생기며, 이를 기존 게이트 체계로 측정합니다.
+
+---
+
+## 8. 라이선스 (License)
 
 본 프로젝트의 소스 코드와 데이터셋은 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)에 따라 자유롭게 수정, 배포 및 상업적 용도로 활용할 수 있습니다.
 
