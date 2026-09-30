@@ -304,6 +304,9 @@ uv run pytest -v     # 테스트별 결과 표시
 | [`report/model_comparison.md`](report/model_comparison.md) | **1~3일차 비교 분석서.** 실험 조건·프롬프트 전문, 평가 문항 10건, **벤치마크 코드 구성과 설계 의도**, 항목별 판정, Cloud 대조 심층 분석 |
 | [`report/format_compliance.md`](report/format_compliance.md) | **포맷 준수율 채점 근거.** R1~R6 규칙 정의와 응답 45건의 회차별 판정 |
 | [`report/environment.md`](report/environment.md) | **실행 환경 실측.** 시스템 RAM/VRAM 구분, 실측 context length, CLI/Python 경로 검증 |
+| [`report/regression_gate.md`](report/regression_gate.md) | **회귀 게이트 판정 근거.** 기준선 대비 최신 실행의 지표·기준별 판정·판정 변화 (`compare_runs.py` 생성) |
+| [`CHANGELOG.md`](CHANGELOG.md) | **버전별 변경 이력.** v1.0 → v1.1 → v1.1.1, 버전마다 답하려는 질문 |
+| [`docs/issue_log.md`](docs/issue_log.md) | **이슈 기록.** 고도화 중 발견한 결함 5건과 알려진 한계를 현상 → 원인 → 조치 → 재발 방지 형식으로 정리 |
 
 ### 2) 디렉터리 구조
 
@@ -319,6 +322,9 @@ game-bug-triage-llm-eval/
 ├── gate_criteria.toml            # (v1.1) 회귀 게이트 합격 기준
 ├── uv.lock                       # 의존성 잠금 파일 (재현 가능한 환경 구성)
 ├── README.md                     # 프로젝트 종합 대시보드 (본 문서)
+├── CHANGELOG.md                  # 버전별 변경 이력
+├── docs/
+│   └── issue_log.md              # 결함·알려진 한계 기록 (현상 → 원인 → 조치 → 재발 방지)
 ├── data/
 │   ├── questions.json            # 고정 벤치마크 10건 (정상 6, 경계 2, 예외 2)
 │   └── results/
