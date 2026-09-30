@@ -1,0 +1,33 @@
+# 평가 도구(채점·집계·회귀 게이트) 자동 테스트
+#
+# 모델(Ollama)은 CI에서 돌리지 않는다. GPU가 없고, 모델 호출은 매번 결과가 달라진다.
+# 대신 저장소에 커밋된 실제 로그로 "도구가 같은 입력에 같은 판정을 내는지"를 검증한다.
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:        # GitHub Actions 탭에서 수동 실행 버튼
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v9
+
+      # .python-version(3.12)을 읽어 같은 파이썬을 쓰고,
+      # --locked: uv.lock 과 pyproject.toml 이 어긋나면 설치하지 않고 실패한다 (로컬과 같은 환경 보장)
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Run tests
+        run: uv run pytest -v
+
+      # 커밋된 최신 실행 기록을 기준선과 비교 — 판정 결과를 로그로 남기기만 하고 CI 성패에는 넣지 않는다.
+      # (FAIL 판정도 기록할 가치가 있는 데이터이기 때문. 도구 자체의 고장은 위 pytest 가 잡는다)
+      - name: Regression gate report (informational)
+        run: uv run python src/compare_runs.py --no-write || true

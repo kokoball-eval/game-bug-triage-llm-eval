@@ -5,9 +5,13 @@
 
     10문항 x 2모델 x 2회 = 40회 (+ 모델별 워밍업 1회는 별도 집계)
 
+사용법:
+    uv run python src/run_eval.py                  # 이력만 저장 (기본)
+    uv run python src/run_eval.py --update-latest  # 이력 저장 + 문서 기준 파일도 교체
+
 출력:
-    data/results/local_eval_results.json              - 최신 결과 (문서·후속 스크립트가 참조)
-    data/results/history/local_eval_results_<시각>.json - 실행 시각별 이력 사본
+    data/results/history/local_eval_results_<시각>.json - 실행 기록 (항상 저장)
+    data/results/local_eval_results.json              - 문서 수치의 출처. --update-latest 일 때만 교체
 
 [설계 의도]
 1. chat()이 아니라 generate() + 문자열 결합을 쓴다.
@@ -33,6 +37,10 @@
    compare_runs.py 가 두 실행을 비교하기 전에 "같은 조건에서 돌린 것인가"를 코드로 확인하기 위해서다.
    프롬프트 전문 대신 지문(해시)을 남기는 이유: 한 글자만 바뀌어도 값이 달라져 변경 여부를 확실히 잡고,
    로그 크기는 늘지 않는다. 실험 동작(모델 호출 방식·옵션)은 바꾸지 않는다.
+8. (v1.1.1) 기본 실행은 history/ 에만 저장하고 local_eval_results.json 은 건드리지 않는다.
+   이 파일은 README·보고서 수치의 출처라서, 재실행 한 번에 덮어써지면
+   summarize_eval.py 결과가 문서와 어긋난다(2026-09-30 재실행에서 실제로 발생).
+   새 결과를 문서 기준으로 삼기로 "결정"했을 때만 --update-latest 로 교체한다.
 
 [Context 설정 관련 주의]
 본 40회 실험은 num_ctx를 명시하지 않고 Ollama 기본값 그대로 실행되었다.
@@ -41,6 +49,7 @@
 다른 값으로 바꾸면 기존 로그(data/results/local_eval_results.json)와 실행 조건이 달라져 40회 재실험이 필요하다.
 """
 
+import argparse
 import hashlib
 import json
 import time
@@ -143,6 +152,11 @@ def execute_single_inference(client: ollama.Client, model: str, report_text: str
         }
 
 def main():
+    parser = argparse.ArgumentParser(description="로컬 40회 벤치마크 실행")
+    parser.add_argument("--update-latest", action="store_true",
+                        help="이번 결과로 data/results/local_eval_results.json(문서 수치의 출처)도 교체")
+    args = parser.parse_args()
+
     root_dir = Path(__file__).resolve().parent.parent
     data_path = root_dir / "data" / "questions.json"
     results_dir = root_dir / "data" / "results"
@@ -221,12 +235,7 @@ def main():
         "results": benchmark_records,
     }
 
-    # 최신 결과 — 문서와 후속 스크립트가 참조하는 고정 경로
-    output_file = results_dir / "local_eval_results.json"
-    with output_file.open("w", encoding="utf-8") as f:
-        json.dump(output_payload, f, ensure_ascii=False, indent=2)
-
-    # 실행 시각별 사본 — 이전 실행 결과와 비교용 (고정 경로는 그대로 유지)
+    # 실행 기록 — 항상 저장. compare_runs.py 의 기본 후보가 된다.
     history_dir = results_dir / "history"
     history_dir.mkdir(parents=True, exist_ok=True)
     run_stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -234,9 +243,19 @@ def main():
     with history_file.open("w", encoding="utf-8") as f:
         json.dump(output_payload, f, ensure_ascii=False, indent=2)
 
-    print(f"\n=== 전체 40회 실험 완료 ===")
-    print(f"최신 결과: {output_file.resolve()}")
-    print(f"이력 사본: {history_file.resolve()}")
+    print(f"\n=== 전체 {len(benchmark_records)}회 실험 완료 ===")
+    print(f"실행 기록: {history_file.resolve()}")
+
+    # 문서 기준 파일 — 명시적으로 요청했을 때만 교체 (설계 의도 8)
+    if args.update_latest:
+        output_file = results_dir / "local_eval_results.json"
+        with output_file.open("w", encoding="utf-8") as f:
+            json.dump(output_payload, f, ensure_ascii=False, indent=2)
+        print(f"문서 기준 파일 교체: {output_file.resolve()}")
+        print("  → README·보고서 수치를 summarize_eval.py / score_format.py 로 다시 맞춰야 합니다.")
+    else:
+        print("문서 기준 파일(local_eval_results.json)은 그대로 두었습니다. 교체하려면 --update-latest")
+    print("회귀 판정: uv run python src/compare_runs.py")
 
 if __name__ == "__main__":
     main()

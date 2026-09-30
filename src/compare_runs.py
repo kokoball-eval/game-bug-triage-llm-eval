@@ -7,7 +7,7 @@
 
 사용법
 ------
-    # 기본: 고정 기준선(v1.0) vs 최신 실행
+    # 기본: 고정 기준선(v1.0) vs history/ 의 가장 최근 실행
     uv run python src/compare_runs.py
 
     # 파일 직접 지정
@@ -48,6 +48,14 @@
    지금 이걸 기준에 넣으면 노이즈 때문에 게이트가 무의미해진다. v1.2 seed 고정 후 기준으로 승격한다.
 7. PASS/FAIL을 종료 코드로 낸다. 사람이 출력을 읽지 않아도
    배치 파일·CI(GitHub Actions)·다른 스크립트가 "다음 단계로 가도 되는가"를 판단할 수 있다.
+8. (v1.1.1) 기준 파일에 모르는 키가 있으면 판정하지 않고 종료 코드 2를 낸다.
+   예를 들어 strict_rate_min 을 strict_rate_mn 으로 잘못 적으면, 그 기준은 조용히 빠진 채
+   나머지로만 PASS가 난다. 게이트가 "검사를 안 하고 통과"시키는 것이 가장 위험한 실패다.
+9. (v1.1.1) 변화율은 소수 둘째 자리로 반올림한 뒤 허용폭과 비교한다.
+   부동소수점 오차 때문에 정확히 +20%인 변화가 20.000000000000004%로 계산되어
+   "허용 20%"인데 FAIL이 나는 문제를 단위 테스트가 잡아냈다(tests/test_compare_runs.py).
+10. (v1.1.1) 기본 후보는 data/results/history/ 의 가장 최근 파일이다.
+   run_eval.py 가 더 이상 local_eval_results.json(문서 수치의 출처)을 기본으로 덮어쓰지 않기 때문이다.
 """
 
 import argparse
@@ -64,7 +72,7 @@ from summarize_eval import rnd
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_BASELINE = ROOT / "data" / "results" / "baseline" / "v1.0_local_eval_results.json"
-DEFAULT_CANDIDATE = ROOT / "data" / "results" / "local_eval_results.json"
+HISTORY_DIR = ROOT / "data" / "results" / "history"
 DEFAULT_CRITERIA = ROOT / "gate_criteria.toml"
 
 VERDICT_FIELDS = ["모듈", "심각도", "재현 여부"]
@@ -72,8 +80,51 @@ VERDICT_FIELDS = ["모듈", "심각도", "재현 여부"]
 EXIT_PASS, EXIT_FAIL, EXIT_ERROR = 0, 1, 2
 
 
-class ComparabilityError(Exception):
-    """두 실행을 비교할 수 없는 상태. 판정하지 않고 종료 코드 2로 끝낸다."""
+KNOWN_CRITERIA = {
+    "meta": {"version", "target_models"},
+    "absolute": {"success_rate_min", "strict_rate_min", "parsable_rate_min",
+                 "preamble_fail_max", "enum_fail_max", "latency_sec_max"},
+    "regression": {"strict_rate_drop_max_pp", "latency_increase_max_pct",
+                   "tokens_per_sec_drop_max_pct", "eval_count_increase_max_pct"},
+}
+
+
+class GateError(Exception):
+    """판정 자체를 할 수 없는 상태. 판정하지 않고 종료 코드 2로 끝낸다."""
+
+
+class ComparabilityError(GateError):
+    """두 실행을 비교할 수 없는 상태 (문항 구성·실행 조건 불일치, 파일 없음 등)."""
+
+
+class CriteriaError(GateError):
+    """합격 기준 파일이 잘못된 상태 (모르는 섹션·키, 숫자가 아닌 기준값)."""
+
+
+def validate_criteria(criteria: dict) -> None:
+    """기준 파일의 오타가 기준을 조용히 꺼버리지 않도록 모르는 키를 거부한다."""
+    problems = []
+    for section, body in criteria.items():
+        if section not in KNOWN_CRITERIA:
+            problems.append(f"모르는 섹션 [{section}]")
+            continue
+        for key, value in body.items():
+            if key not in KNOWN_CRITERIA[section]:
+                problems.append(f"[{section}] 모르는 키 {key!r}")
+            elif section != "meta" and (isinstance(value, bool) or not isinstance(value, (int, float))):
+                problems.append(f"[{section}] {key} 값이 숫자가 아님: {value!r}")
+    if problems:
+        raise CriteriaError("합격 기준 파일 오류 → " + "; ".join(problems))
+
+
+def latest_history(history_dir: Path = HISTORY_DIR) -> Path:
+    """history/ 에서 가장 최근 실행 파일을 고른다. 파일명의 실행 시각(YYYYMMDD_HHMMSS) 순서를 쓴다."""
+    files = sorted(history_dir.glob("local_eval_results_*.json"))
+    if not files:
+        raise ComparabilityError(
+            f"{history_dir} 에 실행 기록이 없습니다. run_eval.py 를 먼저 실행하거나 --candidate 로 지정하세요."
+        )
+    return files[-1]
 
 
 # ── 1. 로그 읽기 ─────────────────────────────────────────────
@@ -228,6 +279,7 @@ def evaluate_gate(base_m: dict, cand_m: dict, criteria: dict) -> list[dict]:
                                      True, "기준선 값이 0이라 변화율 계산 불가 → 판정 생략"))
                 continue
             change = (c - b) / b * 100
+        change = rnd(change, 2)  # 부동소수점 오차로 경계값이 뒤집히지 않게 (설계 의도 9)
         worsening = change if worse_if == "up" else -change   # 양수 = 나빠짐
         ok = worsening <= thr
         unit_label = "%p" if unit == "pp" else "%"
@@ -336,20 +388,25 @@ def rel(path: Path) -> str:
 
 # ── 7. 진입점 ────────────────────────────────────────────────
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="두 벤치마크 실행 비교 + 회귀 게이트")
     parser.add_argument("--baseline", type=Path, default=DEFAULT_BASELINE, help="기준선 실행 로그")
-    parser.add_argument("--candidate", type=Path, default=DEFAULT_CANDIDATE, help="후보 실행 로그")
+    parser.add_argument("--candidate", type=Path, default=None,
+                        help="후보 실행 로그 (기본: data/results/history/ 의 가장 최근 파일)")
     parser.add_argument("--criteria", type=Path, default=DEFAULT_CRITERIA, help="합격 기준 파일(TOML)")
     parser.add_argument("--model", action="append", help="게이트 대상 모델 (여러 번 지정 가능)")
     parser.add_argument("--allow-config-change", action="store_true",
                         help="실행 조건(옵션·프롬프트·문항·모델 digest)이 달라도 비교를 진행")
     parser.add_argument("--no-write", action="store_true", help="결과 파일을 저장하지 않고 화면에만 출력")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     try:
         with args.criteria.open("rb") as f:
             criteria = tomllib.load(f)
+        validate_criteria(criteria)
+        if args.candidate is None:
+            args.candidate = latest_history()
+            print(f"후보 실행: {rel(args.candidate)} (history/ 의 가장 최근 파일)")
         base = load_run(args.baseline)
         cand = load_run(args.candidate)
         if args.baseline.resolve() == args.candidate.resolve():
@@ -375,8 +432,8 @@ def main() -> int:
                 "checks": checks,
                 "verdict_changes": changes,
             }
-    except ComparabilityError as e:
-        print(f"\n⛔ 비교 불가 (종료 코드 {EXIT_ERROR}): {e}")
+    except GateError as e:
+        print(f"\n⛔ 판정 불가 (종료 코드 {EXIT_ERROR}): {e}")
         return EXIT_ERROR
     except (tomllib.TOMLDecodeError, json.JSONDecodeError, OSError) as e:
         print(f"\n⛔ 입력 파일을 읽지 못했습니다 (종료 코드 {EXIT_ERROR}): {e}")
