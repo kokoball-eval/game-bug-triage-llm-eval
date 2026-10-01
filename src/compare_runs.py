@@ -7,7 +7,7 @@
 
 사용법
 ------
-    # 기본: 고정 기준선(v1.0) vs history/ 의 가장 최근 실행
+    # 기본: 고정 기준선(v1.2 seed=1) vs history/ 의 가장 최근 실행
     uv run python src/compare_runs.py
 
     # 파일 직접 지정
@@ -82,7 +82,11 @@ from summarize_eval import rnd
 from detect_hallucination import detect, load_questions
 
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_BASELINE = ROOT / "data" / "results" / "baseline" / "v1.0_local_eval_results.json"
+# (v1.2) 기본 기준선을 v1.0 → v1.2 seed 고정 실행으로 바꿨다.
+# v1.0 로그에는 seed·실행 조건(run_config)이 없어서, 이 기준선으로는 판정 변화 기준이 항상 SKIP 이 된다.
+# v1.2 기준선은 seed=1·깨끗한 측정 환경에서 찍었고, 같은 조건 재실행 시 응답 40건이 모두 같음을 확인했다.
+# v1.0 로그는 README 수치의 출처로 그대로 보존한다 (baseline/v1.0_local_eval_results.json, local_eval_results.json).
+DEFAULT_BASELINE = ROOT / "data" / "results" / "baseline" / "v1.2_seed1_local_eval_results.json"
 HISTORY_DIR = ROOT / "data" / "results" / "history"
 DEFAULT_CRITERIA = ROOT / "gate_criteria.toml"
 

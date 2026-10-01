@@ -5,6 +5,7 @@ v1.1 때 손으로 돌려 본 시나리오(T1~T6)를 자동 테스트로 옮겼�
 """
 
 import copy
+import json
 import tomllib
 
 import pytest
@@ -299,3 +300,23 @@ def test_environment_warnings_are_reported_but_do_not_block(baseline, criteria):
     assert any("배터리" in w for w in warnings)
     assert any("전원 연결 상태가 다릅니다" in w for w in warnings)
     assert all(gate(base, cand, criteria).values())     # 판정 자체는 막지 않는다
+
+
+# ── 10. v1.2: 기본 기준선과 재현성 실측 ───────────────────
+
+SEEDED_RERUN = ROOT / "data" / "results" / "history" / "local_eval_results_20261001_100030.json"
+
+
+def test_default_baseline_is_a_seeded_run():
+    """기본 기준선에 seed 가 없으면 판정 변화 기준이 영원히 SKIP 이 된다."""
+    payload = json.loads(cr.DEFAULT_BASELINE.read_text(encoding="utf-8"))
+    assert payload["metadata"]["run_config"]["seeds"] == {"1": 1, "2": 2}
+
+
+def test_same_seed_rerun_reproduced_every_response():
+    """2026-10-01 실측: seed=1 로 두 번 돌린 40회의 응답 원문이 모두 같았다 (README 4-7)."""
+    base = json.loads(cr.DEFAULT_BASELINE.read_text(encoding="utf-8"))
+    rerun = json.loads(SEEDED_RERUN.read_text(encoding="utf-8"))
+    a = {r["eval_id"]: r["response_text"] for r in base["results"]}
+    b = {r["eval_id"]: r["response_text"] for r in rerun["results"]}
+    assert len(a) == 40 and a == b

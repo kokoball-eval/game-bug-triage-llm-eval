@@ -6,7 +6,7 @@
 
 ---
 
-## [Unreleased] — v1.2 진행 중
+## [v1.2] — 2026-10-01
 
 > **답하려는 질문:** 가장 위험한 결함(날조)을 사람 없이 잡을 수 있는가?
 
@@ -16,11 +16,18 @@
 - `src/preflight.py` — 실행 전 측정 환경 점검(Ollama 외 GPU 점유, 전원 연결)을 로그에 기록 ([OBS-001](docs/issue_log.md#obs-001))
 - `run_eval.py --seed N` — seed 고정 모드 (1회차 N, 2회차 N+1). `--strict-env` — 측정 환경 경고가 있으면 실행하지 않음
 - 합격 기준 `hallucination_max = 0` (절대), `verdict_change_max = 0` (같은 seed일 때만 적용, 아니면 SKIP)
-- 테스트 36개 추가 (47 → 83): `test_detect_hallucination.py`, `test_preflight.py`, `test_run_eval.py`, `test_compare_runs.py` 보강
+- 테스트 38개 추가 (47 → 85): `test_detect_hallucination.py`, `test_preflight.py`, `test_run_eval.py`, `test_compare_runs.py` 보강
 - README §4-7) 측정 환경 체크리스트와 seed 재현성 확인 방법
 
 ### 수정
 - 환각 탐지기 오탐 2건을 출시 전 단위 테스트에서 발견해 수정 ([ISSUE-006](docs/issue_log.md#issue-006))
+
+### 검증 (2026-10-01 실측)
+- seed=1로 두 번 실행: 응답 원문 **40/40건 일치**, 판정 변화 0건 → `verdict_change_max = 0` 확정
+- 첫 실행을 새 기본 기준선 `data/results/baseline/v1.2_seed1_local_eval_results.json`으로 고정 (v1.0 기준선은 README 수치의 출처로 보존)
+- Llama Q08 날조는 seed가 다른 3번의 실행(v1.0, 9/30, 10/1)의 6회차 **전부에서** 재현됐고, 탐지기가 새 형태("3회 연속 패턴", "10분 정도 플레이 후")까지 탐지
+- 깨끗한 측정 환경에서 Llama 평균 속도 64.3 t/s로 회복 (9/30 재실행 44.9 t/s) → 9/30 급락은 환경 탓이었다는 해석 뒷받침
+- 테스트 85개 (기본 기준선의 seed 기록, 같은 seed 재실행 응답 일치를 테스트로 고정)
 
 ### 변경
 - README §7 고도화 로드맵 재설계 — 최종 목표를 "사람이 보지 않아도 1차 트리아지가 돌아가는 파이프라인"으로 정하고, 최종 지표 4종(자동 처리율, 자동 처리분 정확도, 날조 0건, 위험 건 누락 0건)을 정의
@@ -85,5 +92,6 @@
 - 결론: **Qwen2.5-7B 채택.** Llama-3.1-8B는 단문 리포트(Q08)에서 없는 결함과 PC 사양을 지어내 탈락
 - 상세: [`report/final_selection.md`](report/final_selection.md)
 
+[v1.2]: https://github.com/kokoball-eval/game-bug-triage-llm-eval/compare/v1.1.1...v1.2
 [v1.1.1]: https://github.com/kokoball-eval/game-bug-triage-llm-eval/compare/v1.1...v1.1.1
 [v1.1]: https://github.com/kokoball-eval/game-bug-triage-llm-eval/tree/v1.1
