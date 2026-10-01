@@ -7,6 +7,8 @@
 
 사용법:
     uv run python src/run_eval.py                  # 이력만 저장 (기본)
+    uv run python src/run_eval.py --seed 1         # (v1.2) seed 고정 모드: 1회차 seed=1, 2회차 seed=2
+    uv run python src/run_eval.py --strict-env     # (v1.2) 측정 환경 경고가 있으면 실행하지 않음
     uv run python src/run_eval.py --update-latest  # 이력 저장 + 문서 기준 파일도 교체
 
 출력:
@@ -41,6 +43,14 @@
    이 파일은 README·보고서 수치의 출처라서, 재실행 한 번에 덮어써지면
    summarize_eval.py 결과가 문서와 어긋난다(2026-09-30 재실행에서 실제로 발생).
    새 결과를 문서 기준으로 삼기로 "결정"했을 때만 --update-latest 로 교체한다.
+9. (v1.2) --seed N 을 주면 회차마다 다른 고정 seed 를 쓴다 (1회차 N, 2회차 N+1).
+   회차마다 seed 를 다르게 두는 이유: 같은 seed 로 두 번 돌리면 "출력 안정성 관찰"이라는
+   2회 반복 설계의 의미가 사라진다. 회차별로 다르되 고정된 seed 를 쓰면, 회차 간 변동은 관찰하면서도
+   같은 명령을 다시 실행했을 때 같은 결과가 나와야 한다(재현성).
+   seed 는 run_config.seeds 에 남고, compare_runs.py 는 두 실행의 seeds 가 같을 때만
+   판정 변화를 합격 기준으로 쓴다. 기본 OPTIONS 는 그대로 두므로 seed 없는 실행과도 비교할 수 있다.
+10. (v1.2) 모델 호출 전에 측정 환경(GPU 점유·Ollama 적재 모델·전원)을 점검해 run_config.environment 에
+   남긴다(src/preflight.py). 경고가 있어도 기본은 계속 진행하고, --strict-env 일 때만 멈춘다.
 
 [Context 설정 관련 주의]
 본 40회 실험은 num_ctx를 명시하지 않고 Ollama 기본값 그대로 실행되었다.
@@ -56,6 +66,8 @@ import time
 from datetime import datetime
 from pathlib import Path
 import ollama
+
+from preflight import snapshot as preflight_snapshot
 
 # 1. 설정 상수
 MODELS = ["qwen2.5:7b", "llama3.1:8b"]
@@ -103,7 +115,14 @@ def get_model_digests(client: ollama.Client, models: list[str]) -> dict:
         pass
     return {model: digests.get(model) for model in models}
 
-def execute_single_inference(client: ollama.Client, model: str, report_text: str) -> dict:
+def options_for_run(seed_base: int | None, run_idx: int) -> dict:
+    """회차별 생성 옵션. seed 고정 모드면 OPTIONS 에 회차별 seed 를 더한다 (설계 의도 9)."""
+    if seed_base is None:
+        return dict(OPTIONS)
+    return {**OPTIONS, "seed": seed_base + run_idx - 1}
+
+def execute_single_inference(client: ollama.Client, model: str, report_text: str,
+                             options: dict | None = None) -> dict:
     """단일 추론을 수행하고 성능 메타데이터를 반환합니다."""
     prompt = f"{SYSTEM_PROMPT}\n\n[버그 리포트]\n{report_text}"
     start_time = time.perf_counter()
@@ -112,7 +131,7 @@ def execute_single_inference(client: ollama.Client, model: str, report_text: str
         response = client.generate(
             model=model,
             prompt=prompt,
-            options=OPTIONS,
+            options=options if options is not None else OPTIONS,
         )
         elapsed_sec = round(time.perf_counter() - start_time, 3)
         vram_mib = get_vram_mib(client, model)
@@ -155,6 +174,10 @@ def main():
     parser = argparse.ArgumentParser(description="로컬 40회 벤치마크 실행")
     parser.add_argument("--update-latest", action="store_true",
                         help="이번 결과로 data/results/local_eval_results.json(문서 수치의 출처)도 교체")
+    parser.add_argument("--seed", type=int, default=None,
+                        help="seed 고정 모드. 1회차 seed=N, 2회차 seed=N+1 (기본: 고정 안 함)")
+    parser.add_argument("--strict-env", action="store_true",
+                        help="측정 환경 경고(다른 프로그램의 GPU 사용, 배터리 구동 등)가 있으면 실행하지 않음")
     args = parser.parse_args()
 
     root_dir = Path(__file__).resolve().parent.parent
@@ -167,6 +190,23 @@ def main():
     questions = questions_data["questions"]
 
     client = ollama.Client()
+
+    # 측정 환경 점검 (설계 의도 10)
+    environment = preflight_snapshot(client)
+    print("=== 측정 환경 점검 ===")
+    print(f"GPU 사용 중 VRAM: {environment['gpu_used_mib']} MiB "
+          f"(Ollama 외 {environment['other_vram_mib']} MiB) · 전원 연결: {environment['on_ac_power']}")
+    for w in environment["warnings"]:
+        print(f"  ⚠️  {w}")
+    for n in environment.get("notes", []):
+        print(f"  ℹ️  {n}")
+    if environment["warnings"] and args.strict_env:
+        print("\n--strict-env: 측정 환경 경고가 있어 실행하지 않습니다. 위 항목을 정리한 뒤 다시 실행하세요.")
+        raise SystemExit(2)
+    if not environment["warnings"]:
+        print("  ✅ 경고 없음")
+
+    seeds = None if args.seed is None else {str(i): args.seed + i - 1 for i in range(1, REPEAT_COUNT + 1)}
     run_config = {
         "options": OPTIONS,
         "repeat_count": REPEAT_COUNT,
@@ -176,7 +216,10 @@ def main():
         "questions_sha256": sha256_text(json.dumps(questions_data, ensure_ascii=False, sort_keys=True)),
         "question_ids": [q["id"] for q in questions],
         "model_digests": get_model_digests(client, MODELS),
+        "seeds": seeds,
+        "environment": environment,
     }
+    print(f"seed 고정 모드: {seeds if seeds else '사용 안 함'}\n")
     benchmark_records = []
     warmup_records = []
 
@@ -201,7 +244,8 @@ def main():
                 q_id = q["id"]
                 print(f"[{model}] [Run {run_idx}] ({q_idx}/{len(questions)}) {q_id}: {q['title'][:20]}... ", end="", flush=True)
 
-                res = execute_single_inference(client, model, q["report_text"])
+                run_options = options_for_run(args.seed, run_idx)
+                res = execute_single_inference(client, model, q["report_text"], run_options)
 
                 record = {
                     "eval_id": f"{model.replace(':', '_')}_{q_id}_run{run_idx}",
@@ -211,6 +255,7 @@ def main():
                     "question_id": q_id,
                     "question_type": q["type"],
                     "cloud_eval": q["cloud_eval"],
+                    "seed": run_options.get("seed"),
                     "timestamp": datetime.now().isoformat(),
                     **res,
                 }

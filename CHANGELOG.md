@@ -6,7 +6,21 @@
 
 ---
 
-## [Unreleased]
+## [Unreleased] — v1.2 진행 중
+
+> **답하려는 질문:** 가장 위험한 결함(날조)을 사람 없이 잡을 수 있는가?
+
+### 추가
+- `src/detect_hallucination.py` — 응답의 [요약]·[누락 정보] 필드에서 입력에 근거 없는 구체 사실(OS·하드웨어·기기·버전·수치·조작 입력)을 규칙 기반으로 탐지. 정보를 요청하는 문맥("Windows 10/11 중 택1 확인 필요")은 날조로 세지 않음
+  - 실제 로그 85건 검증: Llama Q08 날조 4건 전수 탐지, Qwen 40건·Cloud 5건 오탐 0건
+- `src/preflight.py` — 실행 전 측정 환경 점검(Ollama 외 GPU 점유, 전원 연결)을 로그에 기록 ([OBS-001](docs/issue_log.md#obs-001))
+- `run_eval.py --seed N` — seed 고정 모드 (1회차 N, 2회차 N+1). `--strict-env` — 측정 환경 경고가 있으면 실행하지 않음
+- 합격 기준 `hallucination_max = 0` (절대), `verdict_change_max = 0` (같은 seed일 때만 적용, 아니면 SKIP)
+- 테스트 36개 추가 (47 → 83): `test_detect_hallucination.py`, `test_preflight.py`, `test_run_eval.py`, `test_compare_runs.py` 보강
+- README §4-7) 측정 환경 체크리스트와 seed 재현성 확인 방법
+
+### 수정
+- 환각 탐지기 오탐 2건을 출시 전 단위 테스트에서 발견해 수정 ([ISSUE-006](docs/issue_log.md#issue-006))
 
 ### 변경
 - README §7 고도화 로드맵 재설계 — 최종 목표를 "사람이 보지 않아도 1차 트리아지가 돌아가는 파이프라인"으로 정하고, 최종 지표 4종(자동 처리율, 자동 처리분 정확도, 날조 0건, 위험 건 누락 0건)을 정의

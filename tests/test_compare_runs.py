@@ -11,8 +11,8 @@ import pytest
 
 import compare_runs as cr
 from compare_runs import (
-    ComparabilityError, CriteriaError, compute_metrics, check_comparability,
-    evaluate_gate, formal_rows, latest_history, validate_criteria, verdict_changes,
+    ComparabilityError, CriteriaError, compute_metrics, check_comparability, environment_warnings,
+    evaluate_gate, formal_rows, latest_history, seeds_match, validate_criteria, verdict_changes,
 )
 from summarize_eval import aggregate_local
 
@@ -213,3 +213,89 @@ def test_cli_exit_code_error_for_broken_criteria(baseline, write_json, tmp_path)
     bad = tmp_path / "bad.toml"
     bad.write_text("[absolute]\nstrict_rate_mn = 95.0\n", encoding="utf-8")
     assert cr.main(["--candidate", str(cand), "--criteria", str(bad), "--no-write"]) == cr.EXIT_ERROR
+
+
+# ── 7. v1.2: 날조 기준 ────────────────────────────────────
+
+def test_fabricated_fact_fails_hallucination_criterion(baseline, criteria):
+    """형식은 정상인데 입력에 없는 기기 사양을 넣은 응답 1건 → hallucination_max 에서 FAIL (KL-001)."""
+    cand = copy.deepcopy(baseline)
+    target = next(r for r in qwen_rows(cand) if r["question_id"] == "Q08")
+    target["response_text"] = target["response_text"].replace(
+        "[누락 정보 및 권장 조치]:", "[누락 정보 및 권장 조치]: Windows 10, GTX 1660 Ti 환경.", 1)
+    result = gate(baseline, cand, criteria)
+    assert result["strict_rate_min"] is True          # 형식 기준은 통과하지만
+    assert result["hallucination_max"] is False       # 날조 기준에서 걸린다
+
+
+def test_metrics_reject_unknown_question(baseline):
+    cand = copy.deepcopy(baseline)
+    qwen_rows(cand)[0]["question_id"] = "Q99"
+    with pytest.raises(ComparabilityError, match="Q99"):
+        compute_metrics(formal_rows(cand, QWEN))
+
+
+# ── 8. v1.2: seed 와 판정 변화 기준 ───────────────────────
+
+def _seeded(payload: dict, seeds: dict | None) -> dict:
+    payload = copy.deepcopy(payload)
+    payload["metadata"]["run_config"] = {"seeds": seeds}
+    return payload
+
+
+def _swap_runs(payload: dict) -> dict:
+    """1·2회차 응답을 맞바꿔 '판정이 흔들린 재실행'을 흉내 낸다 (Qwen Q08 모듈 변화가 생김)."""
+    payload = copy.deepcopy(payload)
+    for r in payload["results"]:
+        r["run_index"] = 3 - r["run_index"]
+    return payload
+
+
+def _verdict_check(base, cand, criteria):
+    b_rows, c_rows = formal_rows(base, QWEN), formal_rows(cand, QWEN)
+    checks = evaluate_gate(compute_metrics(b_rows), compute_metrics(c_rows), criteria,
+                           verdict_change_count=len(verdict_changes(b_rows, c_rows)),
+                           seeded=seeds_match(base, cand))
+    return next(c for c in checks if c["id"] == "verdict_change_max")
+
+
+def test_same_seed_makes_verdict_change_a_real_criterion(baseline, criteria):
+    seeds = {"1": 1, "2": 2}
+    base, cand = _seeded(baseline, seeds), _seeded(_swap_runs(baseline), seeds)
+    check = _verdict_check(base, cand, criteria)
+    assert check["passed"] is False and not check.get("skipped")
+
+
+def test_without_seed_verdict_change_is_skipped_not_passed(baseline, criteria):
+    """seed 가 없으면 판정 변화는 참고용. SKIP 은 PASS 와 구분돼야 한다 (설계 의도 12)."""
+    check = _verdict_check(baseline, _swap_runs(baseline), criteria)
+    assert check.get("skipped") is True
+
+
+def test_different_seeds_are_skipped(baseline, criteria):
+    base = _seeded(baseline, {"1": 1, "2": 2})
+    cand = _seeded(_swap_runs(baseline), {"1": 7, "2": 8})
+    assert _verdict_check(base, cand, criteria).get("skipped") is True
+
+
+def test_same_seed_and_same_answers_pass(baseline, criteria):
+    seeds = {"1": 1, "2": 2}
+    check = _verdict_check(_seeded(baseline, seeds), _seeded(baseline, seeds), criteria)
+    assert check["passed"] is True and not check.get("skipped")
+
+
+# ── 9. v1.2: 측정 환경 경고 ───────────────────────────────
+
+def _with_env(payload: dict, **env) -> dict:
+    payload = copy.deepcopy(payload)
+    payload["metadata"]["run_config"] = {"environment": {"warnings": [], **env}}
+    return payload
+
+
+def test_environment_warnings_are_reported_but_do_not_block(baseline, criteria):
+    base = _with_env(baseline, on_ac_power=True)
+    cand = _with_env(baseline, on_ac_power=False, warnings=["배터리로 구동 중입니다."])
+    warnings = environment_warnings(base, cand)
+    assert any("배터리" in w for w in warnings)
+    assert any("전원 연결 상태가 다릅니다" in w for w in warnings)
+    assert all(gate(base, cand, criteria).values())     # 판정 자체는 막지 않는다

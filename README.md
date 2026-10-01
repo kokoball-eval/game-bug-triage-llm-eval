@@ -211,6 +211,8 @@ uv sync
 ```powershell
 # 로컬 40회 본 실험 (워밍업 2회 자동 분리 · 10문항 × 2모델 × 2회)
 uv run python src/run_eval.py
+# (v1.2) seed 고정 모드 — 1회차 seed=1, 2회차 seed=2. 측정 환경 경고가 있으면 멈춤
+uv run python src/run_eval.py --seed 1 --strict-env
 # 결과를 문서 수치의 새 기준으로 삼을 때만
 uv run python src/run_eval.py --update-latest
 
@@ -238,6 +240,9 @@ uv run python src/score_format.py
 
 # 실행 환경 및 자원 점유 재측정 (CLI/Python 경로 검증 포함)
 uv run python src/capture_env.py
+
+# (v1.2) 환각 탐지 — 입력에 근거 없는 기기·OS·조작·시간 조건을 응답에서 찾음
+uv run python src/detect_hallucination.py
 ```
 
 | 스크립트 | 입력 | 산출물 | 재현 확인 방법 |
@@ -247,6 +252,7 @@ uv run python src/capture_env.py
 | `src/capture_env.py` | 실행 중인 Ollama 런타임 | `data/results/environment.json`, `report/environment.md` | 산출 파일의 `captured_at` 으로 재실행 시점 확인 |
 | `src/test_fewshot.py` | 고정 프롬프트 (Q08 단문) | `data/results/fewshot_verify.json` | `verdict.corrected` 값으로 교정 성공 여부 확인 |
 | `src/compare_runs.py` | 기준선·후보 실행 로그, `gate_criteria.toml` | `data/results/gate_result.json`, `report/regression_gate.md` | 종료 코드(0/1/2)와 기준별 판정 확인 |
+| `src/detect_hallucination.py` | 실행 로그, `data/questions.json` | `data/results/hallucination_report.json`, 표준 출력 | v1.0 로그에서 Llama Q08 2건만 탐지되고 Qwen·Cloud는 0건인지 확인 |
 
 ### 5) 회귀 게이트 — 두 실행 비교 (v1.1)
 
@@ -271,7 +277,8 @@ uv run python src/compare_runs.py --model llama3.1:8b
 
 * **합격 기준**은 루트의 `gate_criteria.toml`에 있습니다. 절대 기준(바닥선)과 회귀 기준(기준선 대비 허용 악화폭) 두 종류이며, 기준마다 근거를 주석으로 달았습니다.
 * 채점 규칙은 `score_format.py`, 지표 정의는 `summarize_eval.py`를 그대로 재사용하므로 README 표와 같은 숫자가 나옵니다.
-* 심각도·모듈·재현 여부 **판정 변화는 참고용 목록**으로만 출력합니다. seed 미고정 상태에서는 같은 조건에서도 흔들리기 때문이며, v1.2 seed 고정 후 합격 기준으로 승격할 예정입니다.
+* (v1.2) **날조 응답 0건**이 절대 기준에 추가됐습니다. 형식은 정상인데 입력에 없는 사실을 지어낸 응답을 막습니다.
+* (v1.2) 심각도·모듈·재현 여부 **판정 변화**는 두 실행이 **같은 seed**로 돌았을 때만 합격 기준(`verdict_change_max`)으로 판정합니다. seed가 없거나 다르면 같은 조건에서도 흔들리므로 `⏭️ SKIP`(판정 생략)으로 표시하고 목록만 보여 줍니다. SKIP은 통과가 아니라 "이번 비교로는 판정할 수 없음"입니다.
 * 결과: `data/results/gate_result.json`(기계 판독용), `report/regression_gate.md`(판정 근거)
 
 ### 6) 평가 도구 테스트 (v1.1.1)
@@ -287,10 +294,34 @@ uv run pytest -v     # 테스트별 결과 표시
 | :--- | :--- |
 | `tests/test_score_format.py` | R1~R6 규칙이 각자 정확히 자기 위반만 잡는지, v1.0 로그 채점 결과가 README 준수율과 같은지 |
 | `tests/test_summarize_eval.py` | half-up 반올림, 워밍업 제외, 결측 속도 처리, v1.0 로그 집계가 README 성능 표와 같은지 |
-| `tests/test_compare_runs.py` | 게이트 판정(통과·실패·경계값), 비교 불가 조건, 기준 파일 오타 거부, 종료 코드 0/1/2 |
+| `tests/test_compare_runs.py` | 게이트 판정(통과·실패·경계값), 비교 불가 조건, 기준 파일 오타 거부, 종료 코드 0/1/2, (v1.2) 날조 기준·seed별 판정 변화 기준·환경 경고 |
+| `tests/test_detect_hallucination.py` | (v1.2) 범주별 탐지, 근거 있는 사실·요청 문맥·선택지 필드 오탐 방지, 실제 로그의 Llama Q08 날조 4건 전수 탐지와 Qwen·Cloud 오탐 0건 |
+| `tests/test_preflight.py` | (v1.2) 측정 환경 경고 판정 (다른 프로그램의 GPU 사용, 배터리 구동, 측정 불가와 문제 있음의 구분) |
+| `tests/test_run_eval.py` | (v1.2) seed 고정 모드의 회차별 seed, 기본 옵션 보존 |
 
 * README 수치를 재현하는 테스트가 있어서, 채점·집계 코드를 고쳤을 때 **문서 수치가 더는 재현되지 않으면 테스트가 실패**합니다.
 * 테스트를 추가하면서 경계값 버그 1건을 발견해 수정했습니다. 정확히 허용폭(+20%)만큼 느려진 경우 부동소수점 오차로 FAIL이 나던 문제입니다(`test_exactly_at_tolerance_passes`).
+* (v1.2) 환각 탐지기도 테스트 단계에서 오탐 결함 2건이 걸러졌습니다([ISSUE-006](docs/issue_log.md#issue-006)).
+
+### 7) 측정 환경 체크리스트와 seed 재현성 확인 (v1.2)
+
+성능 지표는 모델이 같아도 측정 환경에 따라 크게 흔들립니다. 9/30 재실행에서 모델 파일은 그대로인데 Llama의 평균 지연이 +45.6% 늘었습니다([OBS-001](docs/issue_log.md#obs-001)). 벤치마크를 돌리기 전에 아래를 확인합니다.
+
+| 확인 항목 | 이유 | 자동 점검 |
+| :--- | :--- | :---: |
+| 게임·영상·브라우저 등 GPU를 쓰는 프로그램 종료 | 같은 GPU를 나눠 쓰면 지연·속도가 흔들림 | ✅ Ollama 외 VRAM 1,024 MiB 이상이면 경고 |
+| 노트북 전원 어댑터 연결 | 배터리 구동 시 GPU 클럭이 낮아질 수 있음 | ✅ Windows에서 경고 |
+| 같은 seed로 실행 (`--seed 1`) | seed가 같아야 판정 변화를 합격 기준으로 쓸 수 있음 | — |
+
+`run_eval.py`는 모델을 호출하기 전에 이 점검 결과를 화면에 출력하고 로그(`metadata.run_config.environment`)에 남깁니다. `--strict-env`를 주면 경고가 있을 때 실행하지 않습니다(종료 코드 2). `compare_runs.py`는 두 실행의 환경 경고와 전원 상태 차이를 함께 보여 줍니다.
+
+**seed 재현성 확인 방법** — 같은 seed로 두 번 돌린 결과를 비교하면, 판정 변화가 0건이어야 합니다.
+
+```powershell
+uv run python src/run_eval.py --seed 1 --strict-env      # 1차
+uv run python src/run_eval.py --seed 1 --strict-env      # 2차
+uv run python src/compare_runs.py --baseline data/results/history/<1차 파일>.json
+```
 
 ---
 
@@ -337,6 +368,7 @@ game-bug-triage-llm-eval/
 │       ├── environment.json             # 실행 환경/자원 점유 실측값 (capture_env.py 생성)
 │       ├── fewshot_verify.json          # 4일차 Few-Shot 교정 검증 응답 및 판정 근거
 │       ├── gate_result.json             # (v1.1) 회귀 게이트 판정 결과 (compare_runs.py 생성)
+│       ├── hallucination_report.json    # (v1.2) 환각 탐지 결과 (detect_hallucination.py 생성)
 │       ├── baseline/
 │       │   └── v1.0_local_eval_results.json # (v1.1) 고정 기준선 — 덮어쓰지 않음
 │       └── history/                     # 실행 기록 (run_eval.py 실행마다 생성, compare_runs.py 기본 후보)
@@ -354,12 +386,17 @@ game-bug-triage-llm-eval/
 │   ├── score_format.py           # 포맷 계약 준수율 자동 채점 (R1~R6 규칙)
 │   ├── summarize_eval.py         # 성능 지표(지연·속도·토큰) 재집계
 │   ├── compare_runs.py           # (v1.1) 두 실행 비교 + 회귀 게이트 판정
+│   ├── detect_hallucination.py   # (v1.2) 입력에 근거 없는 구체 사실(기기·OS·조작·시간) 탐지
+│   ├── preflight.py              # (v1.2) 실행 전 측정 환경 점검 (GPU 점유·전원)
 │   └── capture_env.py            # 실행 환경/자원 점유 실측 캡처
 └── tests/                        # (v1.1.1) 평가 도구 단위 테스트 (pytest)
     ├── conftest.py               # 공통 준비물 (기준선 로그 로드, 임시 파일)
     ├── test_score_format.py      # 포맷 채점 규칙 R1~R6
     ├── test_summarize_eval.py    # 성능 지표 집계 정의
-    └── test_compare_runs.py      # 회귀 게이트 판정·종료 코드
+    ├── test_compare_runs.py      # 회귀 게이트 판정·종료 코드
+    ├── test_detect_hallucination.py # (v1.2) 환각 탐지 범주·오탐 방지·실제 로그 골든 테스트
+    ├── test_preflight.py         # (v1.2) 측정 환경 경고 판정
+    └── test_run_eval.py          # (v1.2) seed 고정 모드
 ```
 
 </details>

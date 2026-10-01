@@ -45,7 +45,8 @@
    게이트는 "좋다는 증거가 있을 때만 통과"여야 한다. 증거가 없는데 통과시키면 게이트가 아니다.
 6. 심각도/모듈/재현 여부 판정 변화는 목록으로만 보여주고 합격 기준에는 넣지 않는다.
    v1.0은 seed 미고정이라 같은 조건에서도 판정이 흔들린다(final_selection.md §6: 3건 변동).
-   지금 이걸 기준에 넣으면 노이즈 때문에 게이트가 무의미해진다. v1.2 seed 고정 후 기준으로 승격한다.
+   지금 이걸 기준에 넣으면 노이즈 때문에 게이트가 무의미해진다.
+   → v1.2에서 "같은 seed로 돈 두 실행"일 때만 합격 기준으로 승격했다 (설계 의도 12).
 7. PASS/FAIL을 종료 코드로 낸다. 사람이 출력을 읽지 않아도
    배치 파일·CI(GitHub Actions)·다른 스크립트가 "다음 단계로 가도 되는가"를 판단할 수 있다.
 8. (v1.1.1) 기준 파일에 모르는 키가 있으면 판정하지 않고 종료 코드 2를 낸다.
@@ -56,6 +57,15 @@
    "허용 20%"인데 FAIL이 나는 문제를 단위 테스트가 잡아냈다(tests/test_compare_runs.py).
 10. (v1.1.1) 기본 후보는 data/results/history/ 의 가장 최근 파일이다.
    run_eval.py 가 더 이상 local_eval_results.json(문서 수치의 출처)을 기본으로 덮어쓰지 않기 때문이다.
+11. (v1.2) 날조 응답 수(hallucination_count)를 절대 기준으로 둔다.
+   판정은 detect_hallucination.py 의 규칙을 그대로 import 해서 쓴다(설계 의도 1과 같은 이유).
+   형식이 멀쩡한 날조가 게이트를 통과하던 공백(docs/issue_log.md KL-001)을 막는다.
+12. (v1.2) 판정 변화 수(verdict_change_max)는 "두 실행이 같은 seed로 돌았을 때만" 합격 기준으로 쓴다.
+   seed가 같으면 같은 입력에 같은 판정이 나와야 하므로, 판정이 바뀌었다면 프롬프트·모델·환경 중
+   무언가가 바뀐 것이다. seed가 다르거나 없으면 흔들림이 자연스러우므로 "생략(SKIP)"으로 표시한다.
+   SKIP은 통과가 아니라 "이번 비교에서는 판정할 수 없음"이라는 뜻이라 PASS와 구분해 출력한다.
+13. (v1.2) 실행 시점의 측정 환경(GPU 점유, 전원 연결)이 다르면 경고만 하고 판정은 막지 않는다.
+   환경 차이는 성능 지표를 흔들 수 있지만(docs/issue_log.md OBS-001) 판정 자체를 무효로 만들지는 않는다.
 """
 
 import argparse
@@ -69,6 +79,7 @@ from statistics import mean
 
 from score_format import parse_lines, score_response, FIELDS
 from summarize_eval import rnd
+from detect_hallucination import detect, load_questions
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_BASELINE = ROOT / "data" / "results" / "baseline" / "v1.0_local_eval_results.json"
@@ -83,9 +94,10 @@ EXIT_PASS, EXIT_FAIL, EXIT_ERROR = 0, 1, 2
 KNOWN_CRITERIA = {
     "meta": {"version", "target_models"},
     "absolute": {"success_rate_min", "strict_rate_min", "parsable_rate_min",
-                 "preamble_fail_max", "enum_fail_max", "latency_sec_max"},
+                 "preamble_fail_max", "enum_fail_max", "latency_sec_max", "hallucination_max"},
     "regression": {"strict_rate_drop_max_pp", "latency_increase_max_pct",
-                   "tokens_per_sec_drop_max_pct", "eval_count_increase_max_pct"},
+                   "tokens_per_sec_drop_max_pct", "eval_count_increase_max_pct",
+                   "verdict_change_max"},
 }
 
 
@@ -145,11 +157,15 @@ def formal_rows(payload: dict, model: str) -> list[dict]:
 
 # ── 2. 지표 계산 ─────────────────────────────────────────────
 
-def compute_metrics(rows: list[dict]) -> dict:
-    """summarize_eval.py / score_format.py 와 같은 정의로 지표를 계산한다."""
+def compute_metrics(rows: list[dict], questions: dict | None = None) -> dict:
+    """summarize_eval.py / score_format.py / detect_hallucination.py 와 같은 정의로 지표를 계산한다."""
     n = len(rows)
     if n == 0:
         return {"n": 0}
+    questions = questions if questions is not None else load_questions(ROOT)
+    missing = sorted({r["question_id"] for r in rows} - set(questions))
+    if missing:
+        raise ComparabilityError(f"questions.json 에 없는 문항이 로그에 있습니다: {missing}")
 
     scored = [score_response(r.get("response_text", "")) for r in rows]
     speeds = [r["tokens_per_sec"] for r in rows if r.get("tokens_per_sec") is not None]
@@ -164,6 +180,10 @@ def compute_metrics(rows: list[dict]) -> dict:
         "parsable_rate": rate(sum(1 for s in scored if s["parsable_pass"])),
         "preamble_fail": sum(1 for s in scored if "R1_no_preamble" in s["failed_rules"]),
         "enum_fail": sum(1 for s in scored if "R6_enum_valid" in s["failed_rules"]),
+        "hallucination_count": sum(
+            1 for r in rows
+            if detect(r.get("response_text", ""), questions[r["question_id"]]["report_text"])["hallucinated"]
+        ),
         "latency_sec": rnd(mean(r["elapsed_sec"] for r in rows), 3),
         "tokens_per_sec": rnd(mean(speeds), 2) if speeds else None,
         "eval_count": rnd(mean(r.get("eval_count", 0) for r in rows), 1),
@@ -228,7 +248,31 @@ def _check(cid, kind, metric, rule, threshold, base_v, cand_v, passed, detail):
     }
 
 
-def evaluate_gate(base_m: dict, cand_m: dict, criteria: dict) -> list[dict]:
+def seeds_match(base: dict, cand: dict) -> bool:
+    """두 실행이 같은 seed 로 돌았는지. v1.2 run_eval.py --seed 로 실행한 로그에만 seeds 가 있다."""
+    b = (base.get("metadata", {}).get("run_config") or {}).get("seeds")
+    c = (cand.get("metadata", {}).get("run_config") or {}).get("seeds")
+    return bool(b) and b == c
+
+
+def environment_warnings(base: dict, cand: dict) -> list[str]:
+    """실행 시점 측정 환경의 경고와 차이를 모은다 (설계 의도 13). 판정에는 영향 없음."""
+    out = []
+    envs = {}
+    for name, payload in (("기준선", base), ("후보", cand)):
+        env = (payload.get("metadata", {}).get("run_config") or {}).get("environment")
+        envs[name] = env
+        for w in (env or {}).get("warnings", []):
+            out.append(f"{name} 실행 환경: {w}")
+    b, c = envs["기준선"], envs["후보"]
+    if b and c and b.get("on_ac_power") != c.get("on_ac_power"):
+        out.append(f"전원 연결 상태가 다릅니다 (기준선 {b.get('on_ac_power')} → 후보 {c.get('on_ac_power')}). "
+                   "성능 지표 차이가 환경 때문일 수 있습니다.")
+    return out
+
+
+def evaluate_gate(base_m: dict, cand_m: dict, criteria: dict,
+                  verdict_change_count: int | None = None, seeded: bool = False) -> list[dict]:
     checks = []
     ab = criteria.get("absolute", {})
     rg = criteria.get("regression", {})
@@ -241,6 +285,7 @@ def evaluate_gate(base_m: dict, cand_m: dict, criteria: dict) -> list[dict]:
         ("preamble_fail_max", "preamble_fail", "max"),
         ("enum_fail_max", "enum_fail", "max"),
         ("latency_sec_max", "latency_sec", "max"),
+        ("hallucination_max", "hallucination_count", "max"),
     ]
     for key, metric, direction in absolute_specs:
         if key not in ab:
@@ -285,6 +330,20 @@ def evaluate_gate(base_m: dict, cand_m: dict, criteria: dict) -> list[dict]:
         unit_label = "%p" if unit == "pp" else "%"
         checks.append(_check(key, "regression", metric, worse_if, thr, b, c, ok,
                              f"변화 {change:+.1f}{unit_label} (허용 악화폭 {thr}{unit_label})"))
+
+    # 판정 변화: 같은 seed 일 때만 합격 기준 (설계 의도 12)
+    if "verdict_change_max" in rg and verdict_change_count is not None:
+        thr = rg["verdict_change_max"]
+        if seeded:
+            checks.append(_check("verdict_change_max", "regression", "verdict_changes", "max", thr,
+                                 None, verdict_change_count, verdict_change_count <= thr,
+                                 f"같은 seed 에서 판정 변화 {verdict_change_count}건 ≤ {thr} 이어야 함"))
+        else:
+            c = _check("verdict_change_max", "regression", "verdict_changes", "max", thr,
+                       None, verdict_change_count, True,
+                       f"seed 가 고정되지 않았거나 서로 달라 판정 생략 (판정 변화 {verdict_change_count}건은 참고용)")
+            c["skipped"] = True
+            checks.append(c)
     return checks
 
 
@@ -319,6 +378,7 @@ METRIC_LABELS = [
     ("parsable_rate", "PARSABLE 준수율(%)"),
     ("preamble_fail", "R1 서두 사족(건)"),
     ("enum_fail", "R6 enum 이탈(건)"),
+    ("hallucination_count", "날조 응답(건)"),
     ("latency_sec", "평균 지연(초)"),
     ("tokens_per_sec", "평균 속도(t/s)"),
     ("eval_count", "평균 생성 토큰"),
@@ -336,10 +396,10 @@ def print_model_report(model, base_m, cand_m, checks, changes, warnings):
         print(f"{label:<22}{str(base_m.get(key)):>14}{str(cand_m.get(key)):>14}")
     print("\n[기준별 판정]")
     for c in checks:
-        mark = "✅" if c["passed"] else "❌"
+        mark = "⏭️" if c.get("skipped") else ("✅" if c["passed"] else "❌")
         kind = "절대" if c["kind"] == "absolute" else "회귀"
         print(f"  {mark} [{kind}] {c['id']:<30} {c['detail']}")
-    print(f"\n[판정 변화 — 참고용, 합격 기준 아님] {len(changes)}건")
+    print(f"\n[판정 변화 목록] {len(changes)}건")
     for ch in changes:
         parts = [f"{f} {v['baseline']!r}→{v['candidate']!r}" for f, v in ch["changes"].items()]
         print(f"  - {ch['question_id']} run{ch['run_index']}: " + ", ".join(parts))
@@ -365,9 +425,13 @@ def write_markdown(path: Path, result: dict):
         L.append("| :---: | :---: | :--- | :--- |")
         for c in m["checks"]:
             kind = "절대" if c["kind"] == "absolute" else "회귀"
-            L.append(f"| {'✅' if c['passed'] else '❌'} | {kind} | `{c['id']}` | {c['detail']} |")
-        L.append(f"\n**판정 변화 (참고용, 합격 기준 아님): {len(m['verdict_changes'])}건**\n")
-        L.append("> v1.0은 seed 미고정이라 같은 조건에서도 판정이 흔들립니다. v1.2 seed 고정 후 합격 기준으로 승격 예정입니다.\n")
+            mark = "⏭️" if c.get("skipped") else ("✅" if c["passed"] else "❌")
+            L.append(f"| {mark} | {kind} | `{c['id']}` | {c['detail']} |")
+        L.append(f"\n**판정 변화 목록: {len(m['verdict_changes'])}건**\n")
+        if m.get("seeded"):
+            L.append("> 두 실행이 같은 seed로 돌았으므로 판정 변화는 합격 기준(`verdict_change_max`)으로 판정했습니다.\n")
+        else:
+            L.append("> seed가 고정되지 않았거나 서로 달라, 같은 조건에서도 판정이 흔들릴 수 있습니다. 이번 판정 변화는 참고용입니다.\n")
         if m["verdict_changes"]:
             L.append("| 문항 | 회차 | 변화 |")
             L.append("| :---: | :---: | :--- |")
@@ -412,6 +476,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.baseline.resolve() == args.candidate.resolve():
             print("⚠️  기준선과 후보가 같은 파일입니다. 게이트 동작 확인용이 아니라면 파일을 확인하세요.")
 
+        questions = load_questions(ROOT)
         models = args.model or criteria.get("meta", {}).get("target_models", [])
         if not models:
             raise ComparabilityError("게이트 대상 모델이 없습니다 (--model 또는 target_models).")
@@ -419,10 +484,12 @@ def main(argv: list[str] | None = None) -> int:
         result_models = {}
         for model in models:
             warnings = check_comparability(base, cand, model, args.allow_config_change)
+            warnings += environment_warnings(base, cand)
+            seeded = seeds_match(base, cand)
             b_rows, c_rows = formal_rows(base, model), formal_rows(cand, model)
-            base_m, cand_m = compute_metrics(b_rows), compute_metrics(c_rows)
-            checks = evaluate_gate(base_m, cand_m, criteria)
+            base_m, cand_m = compute_metrics(b_rows, questions), compute_metrics(c_rows, questions)
             changes = verdict_changes(b_rows, c_rows)
+            checks = evaluate_gate(base_m, cand_m, criteria, verdict_change_count=len(changes), seeded=seeded)
             print_model_report(model, base_m, cand_m, checks, changes, warnings)
             result_models[model] = {
                 "passed": all(c["passed"] for c in checks),
@@ -431,6 +498,7 @@ def main(argv: list[str] | None = None) -> int:
                 "candidate_metrics": cand_m,
                 "checks": checks,
                 "verdict_changes": changes,
+                "seeded": seeded,
             }
     except GateError as e:
         print(f"\n⛔ 판정 불가 (종료 코드 {EXIT_ERROR}): {e}")
