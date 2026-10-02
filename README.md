@@ -334,6 +334,21 @@ uv run python src/compare_runs.py --baseline data/results/history/<1차 파일>.
 
 첫 번째 실행은 기본 기준선(`baseline/v1.2_seed1_local_eval_results.json`)으로 고정했고, 두 실행 모두 `data/results/history/`에 보존했습니다.
 
+> (v1.3) 같은 seed라도 **직전에 다른 프롬프트를 처리한 Ollama 프로세스**에서는 응답이 재현되지 않았습니다([OBS-002](docs/issue_log.md#obs-002)). 프롬프트를 바꿔 가며 측정할 때는 실행 전에 `ollama stop <모델>`로 모델을 내립니다.
+
+### 8) v1.3 평가셋 실행·채점·회귀 게이트
+
+```powershell
+ollama stop qwen2.5:7b                                                       # 재현성 조건 (OBS-002)
+uv run python src/run_eval_v2.py --seed 1 --strict-env --model qwen2.5:7b    # 개발용 32건 × 2회
+uv run python src/score_v2.py                                                # 정답 대조 채점
+uv run python src/gate_v13.py; echo "종료 코드: $LASTEXITCODE"               # 고정 기준선 대비 판정 (0 PASS · 1 FAIL · 2 판정 불가)
+```
+
+* 평가용(test) 문항은 `--final`을 줘야만 실행됩니다. 게이트는 개발용 실행만 판정합니다.
+* `--no-retry`, `--no-discard-check`, `--no-guardrail`로 형식 재요청·폐기 확인·후처리 안전장치를 끄면 모델 단독 성능을 잴 수 있습니다. 켜 둔 상태에서도 실행 기록에 모델 원본 응답(`raw_response_text`)이 함께 남습니다.
+* 결과: `data/results/v13/gate_result_v13.json`(기계 판독용), `report/regression_gate_v13.md`(판정 근거)
+
 ---
 
 ## 5. 저장소 구조와 상세 보고서
@@ -349,8 +364,9 @@ uv run python src/compare_runs.py --baseline data/results/history/<1차 파일>.
 | [`report/eval_v13_baseline.md`](report/eval_v13_baseline.md) | **(v1.3) 기준선 측정 보고서.** 개발용 세트 측정 조건, 결과, 오판 원인 분석 |
 | [`report/eval_v13.md`](report/eval_v13.md) | **(v1.3) 정답 대조 채점 요약.** 모델·세트별 칸별 정답률, 위험 건, 날조 (`score_v2.py` 생성) |
 | [`report/regression_gate.md`](report/regression_gate.md) | **회귀 게이트 판정 근거.** 기준선 대비 최신 실행의 지표·기준별 판정·판정 변화 (`compare_runs.py` 생성) |
-| [`CHANGELOG.md`](CHANGELOG.md) | **버전별 변경 이력.** v1.0 → v1.1 → v1.1.1, 버전마다 답하려는 질문 |
-| [`docs/issue_log.md`](docs/issue_log.md) | **이슈 기록.** 고도화 중 발견한 결함 5건과 알려진 한계를 현상 → 원인 → 조치 → 재발 방지 형식으로 정리 |
+| [`report/regression_gate_v13.md`](report/regression_gate_v13.md) | **(v1.3) 회귀 게이트 판정 근거.** 기준선 대비 후보 실행의 기준별 판정과 문항 단위 변화 (`gate_v13.py` 생성) |
+| [`CHANGELOG.md`](CHANGELOG.md) | **버전별 변경 이력.** v1.0부터 v1.3까지, 버전마다 답하려는 질문 |
+| [`docs/issue_log.md`](docs/issue_log.md) | **이슈 기록.** 고도화 중 발견한 결함, v1.3 실사용 시나리오, 알려진 한계, 관찰 사항을 현상 → 원인 → 조치 → 재발 방지 형식으로 정리 |
 | [`docs/dataset/triage_guideline.md`](docs/dataset/triage_guideline.md) | **(v1.3) 트리아지 판정 기준서.** 분류·우선순위·처리·발생 빈도 규칙과 조항별 근거(인터뷰 출처) |
 | [`docs/dataset/review_log.md`](docs/dataset/review_log.md) | **(v1.3) 평가셋 검토 기록.** 배치·전체 검토의 쟁점, 검토자 판단, 그에 따른 라벨·기준서 변경 |
 
@@ -366,6 +382,7 @@ game-bug-triage-llm-eval/
 ├── .python-version               # Python 3.12 고정
 ├── pyproject.toml                # uv 기반 의존성 명세 (ollama, openai / 개발용 pytest)
 ├── gate_criteria.toml            # (v1.1) 회귀 게이트 합격 기준
+├── gate_criteria_v13.toml        # (v1.3) 평가셋 회귀 게이트 합격 기준 (응답 수 기준 허용폭)
 ├── uv.lock                       # 의존성 잠금 파일 (재현 가능한 환경 구성)
 ├── README.md                     # 프로젝트 종합 대시보드 (본 문서)
 ├── CHANGELOG.md                  # 버전별 변경 이력
@@ -395,7 +412,7 @@ game-bug-triage-llm-eval/
 │       │   ├── v1.0_local_eval_results.json # (v1.1) v1.0 기준선 — README 수치의 출처, 덮어쓰지 않음
 │       │   └── v1.2_seed1_local_eval_results.json # (v1.2) 기본 기준선 — seed=1, 깨끗한 환경
 │       ├── history/                     # 실행 기록 (run_eval.py 실행마다 생성, compare_runs.py 기본 후보)
-│       └── v13/                         # (v1.3) 평가셋 실행 기록(history/)과 채점 결과(score_*.json)
+│       └── v13/                         # (v1.3) 평가셋 실행 기록(history/), 고정 기준선(baseline/), 채점 결과(score_*.json), 게이트 판정(gate_result_v13.json)
 ├── report/
 │   ├── model_comparison.md      # 로컬 2종 vs Cloud 상세 정량/정성 분석서
 │   ├── final_selection.md       # Qwen2.5 최종 선정 사유 및 배포 가드레일
@@ -403,7 +420,8 @@ game-bug-triage-llm-eval/
 │   ├── environment.md           # 시스템 RAM/VRAM 구분, 실측 context length 기록
 │   ├── regression_gate.md       # (v1.1) 회귀 게이트 판정 근거 (compare_runs.py 생성)
 │   ├── eval_v13_baseline.md     # (v1.3) 기준선 측정 보고서 (원인 분석)
-│   └── eval_v13.md              # (v1.3) 정답 대조 채점 요약 (score_v2.py 생성)
+│   ├── eval_v13.md              # (v1.3) 정답 대조 채점 요약 (score_v2.py 생성)
+│   └── regression_gate_v13.md   # (v1.3) 회귀 게이트 판정 근거 (gate_v13.py 생성)
 ├── src/
 │   ├── 01_ollama_chat.py         # 단일 모델 적재/VRAM 측정 스모크 테스트
 │   ├── 02_luna_chat.py           # OpenAI Responses API Cloud 비교 스크립트
@@ -418,6 +436,8 @@ game-bug-triage-llm-eval/
 │   ├── prompt_v2.py              # (v1.3) 판정 기준서 요약 프롬프트와 입력 조립
 │   ├── run_eval_v2.py            # (v1.3) 평가셋 실행 (개발용 기본, 평가용은 --final)
 │   ├── score_v2.py               # (v1.3) 정답 대조 채점 (칸별 정답률·위험 건·과잉 상신·날조)
+│   ├── guardrail_v2.py           # (v1.3) 후처리 안전장치 — [처리] 규칙 보정 (정답 라벨 미사용)
+│   ├── gate_v13.py               # (v1.3) 평가셋 회귀 게이트 판정
 │   └── capture_env.py            # 실행 환경/자원 점유 실측 캡처
 ├── tools/
 │   └── dataset_v13/              # (v1.3) 평가셋 생성·병합·검증 스크립트 (정답 라벨의 원본)
@@ -432,7 +452,9 @@ game-bug-triage-llm-eval/
     ├── test_dataset_v13.py       # (v1.3) 평가셋 = 생성 스크립트 결과, 라벨 규칙 일관성, 분할 균형
     ├── test_contract_v2.py       # (v1.3) 출력 형식 v2 채점 규칙
     ├── test_score_v2.py          # (v1.3) 정답 대조 채점, 가짜 모델로 실행→채점 전 과정
-    └── test_run_eval_v2.py       # (v1.3) 평가용 실행 차단, 프롬프트에 문항 유출 없음
+    ├── test_run_eval_v2.py       # (v1.3) 평가용 실행 차단, 문항 유출 없음, 형식 재요청·폐기 확인
+    ├── test_guardrail_v2.py      # (v1.3) 후처리 안전장치 규칙, 정답 라벨 미사용, 원본 보존
+    └── test_gate_v13.py          # (v1.3) 게이트 판정·비교 조건·기준 파일 검증
 ```
 
 </details>
@@ -485,7 +507,7 @@ v1.0은 "지금 어떤 모델이 이 업무에 맞는가"를 **한 번** 측정�
 | ✅&nbsp;v1.1 | 무언가 바꿨을 때 나빠졌는가? | 두 실행 비교 회귀 게이트 (`compare_runs.py`, `gate_criteria.toml`) |
 | ✅&nbsp;v1.1.1 | 평가 도구 자체는 믿을 수 있는가? | 채점·게이트 로직 단위 테스트(pytest) + GitHub Actions CI |
 | ✅&nbsp;v1.2 | 가장 위험한 결함(날조)을 사람 없이 잡을 수 있는가? | 환각 자동 탐지 + seed 고정 모드 + 측정 환경 체크리스트 |
-| 🔨&nbsp;v1.3 | 평가셋이 실제 현업 인입을 대표하는가? | ✅ 현업 기반 평가셋 63건 (분류 체계 → 판정 기준서 → 시드 케이스·정답 라벨), 개발용/평가용 분리 · ✅ 출력 형식 v2와 기준선 측정 · 🔨 v1.3 게이트·실사용 시나리오 |
+| 🔨&nbsp;v1.3 | 평가셋이 실제 현업 인입을 대표하는가? | ✅ 현업 기반 평가셋 63건 (분류 체계 → 판정 기준서 → 시드 케이스·정답 라벨), 개발용/평가용 분리 · ✅ 출력 형식 v2와 기준선 측정 · ✅ v1.3 게이트·실사용 시나리오 · 🔨 저장소 구조 정리, 평가용 세트 최종 측정 |
 | ⏳&nbsp;v1.4 | 정답 라벨과 자동 채점을 믿을 수 있는가? | 채점자 간 라벨 일치율 + LLM-as-judge와 사람 채점의 일치율 |
 | ⏳&nbsp;v1.5 | 무엇을 자동 처리하고 무엇을 사람에게 넘길지 시스템이 판단할 수 있는가? | 확신도 기반 라우팅 + 자동 처리율·정확도·위험 건 누락 측정 |
 | ⏳&nbsp;v2.0 | 사람이 보지 않는 동안에도 BTS에 올바르게 인입되는가? | BTS 자동 인입 (Redmine) + 중복 티켓 감지(RAG) + 무인 운영 데모 |
@@ -506,13 +528,17 @@ v1.0은 "지금 어떤 모델이 이 업무에 맞는가"를 **한 번** 측정�
      - Qwen2.5-7B 기준선: 형식 STRICT 89.1%, 처리 정답률 40.6%, **X-1 누락(Critical 미상신) 13/22**, 날조·결함 폐기·경계 건 확정 0건
      - 주원인: Critical 인식 실패(악용·이중 결제·필터 우회 등 피해가 쌓이는 유형을 Major로 판정), 명백한 결함을 "버그 아님"으로 분류, `개발 배정` 미사용 (→ [`report/eval_v13_baseline.md`](report/eval_v13_baseline.md))
      - 대조군 Llama3.1-8B는 형식 붕괴(대괄호 누락 16/64)와 판정 불안정(seed가 다른 두 회차에서 19/32문항 변화)으로, 새 평가셋에서도 Qwen 선정 판단이 유지됩니다
-  7. 🔨 **v1.3 회귀 게이트와 실사용 시나리오** — 위 기준선을 기준으로 합격 기준을 정하고, 프롬프트 개선 과정을 게이트로 판정합니다
+  7. ✅ **v1.3 회귀 게이트와 실사용 시나리오** — 위 기준선으로 합격 기준을 정하고(`gate_criteria_v13.toml`, `src/gate_v13.py`), 프롬프트 개선 과정을 게이트로 판정했습니다. 게이트 FAIL 5회를 거쳐 PASS에 이른 과정과 원인 분석은 [ISSUE-007](docs/issue_log.md#issue-007)에 기록했습니다
+     - 기준선 → 최종(seed 1): X-1 누락 13 → 2, 처리 정답 26 → 48/64, 6칸 모두 정답 6 → 18, 형식 STRICT 57 → 64, 허용 값 위반 7 → 0, 날조·결함 폐기·경계 건 확정·언어 위반 0건, 평균 지연 +4.6%. seed 11·21에서도 절대 기준 0건 유지
+     - 확인한 것: 7B 모델은 프롬프트 문장 1~2줄만 바꿔도 응답 64개 중 29~49개가 바뀌고, 규칙을 문장으로 강제하면 분류를 바꿔 규칙을 피해 갑니다. 형식 오류는 판단 오류를 가리고, "다시 써 달라"는 재요청은 같은 오류를 되풀이합니다
+     - 그래서 **모델은 판단하고, 절차와 형식은 코드가 강제하는 구조**로 정리했습니다: 프롬프트 v2.3 → 형식 위반 필드만 재요청(구조화 출력의 enum·pattern으로 생성 단계 제한) → 폐기 직전 확인 질문 → 후처리 안전장치(`src/guardrail_v2.py`, [처리]만 보정)
+     - 선택지 표기를 고친 프롬프트 v2.4는 seed 3쌍 비교에서 우선순위·처리 정답 하락과 과잉 상신 증가가 일관되게 나타나 기각했습니다
   8. 🔨 **저장소 구조 정리 (v1.3 태그 전)** — `src/`를 공용 도구(`common/`), 동결된 v1.0 벤치마크(`bench_v1/`), 현역 평가 파이프라인(`eval/`)으로 나누고, 5일 실험 당시의 일회용 스크립트는 `scripts/legacy/`로 옮깁니다. 이후 버전은 현역 파이프라인 하나를 고쳐 나가고 이전 버전은 태그로 보존해, 버전마다 같은 역할의 파일이 늘어나지 않게 합니다
 
   정답 라벨의 원본은 생성 스크립트([`tools/dataset_v13/`](tools/dataset_v13/))이고 JSON은 그 결과물입니다. 테스트가 둘의 일치와 라벨 규칙 간 일관성을 CI에서 확인합니다.
 
-  평가셋이 갖춰지면 **실사용 시나리오 1건**을 기록합니다. 프롬프트를 개선하려고 수정 → 게이트가 특정 문항의 판정 저하로 FAIL → 원인 분석 → 수정 → PASS까지의 실제 과정을 이슈 기록에 남깁니다.
-* **v1.4** — 같은 기준서로 다른 채점자가 독립적으로 라벨을 달아 일치율을 잽니다. 일치하지 않는 건은 기준서가 모호하다는 신호이므로 기준서를 고칩니다. 이어서 LLM-as-judge의 채점이 사람 채점과 얼마나 일치하는지 측정해, 품질 채점 자동화를 어디까지 믿을 수 있는지 정합니다.
+  실사용 시나리오(프롬프트 수정 → 게이트 FAIL → 원인 분석 → 수정 → PASS)는 [ISSUE-007](docs/issue_log.md#issue-007)에 기록했습니다. 남은 한계는 [KL-002](docs/issue_log.md#kl-002)에 있습니다.
+* **v1.4** — 같은 기준서로 다른 채점자가 독립적으로 라벨을 달아 일치율을 잽니다. 일치하지 않는 건은 기준서가 모호하다는 신호이므로 기준서를 고칩니다. 이어서 LLM-as-judge의 채점이 사람 채점과 얼마나 일치하는지 측정해, 품질 채점 자동화를 어디까지 믿을 수 있는지 정합니다. 게이트 판정도 seed 하나가 아니라 여러 seed의 결과로 내리는 방식을 검토합니다(v1.3에서 seed에 따라 판정이 갈린 사례: [KL-002](docs/issue_log.md#kl-002)).
 * **v1.5** — 응답의 확신도, 환각 탐지 결과, 판단보류·Critical 여부를 근거로 **자동 등록 / 검토 큐**를 나눕니다. 자동 처리율을 높이는 것보다 **위험 건 누락 0건을 지키는 것**이 우선입니다. v1.0 보고서의 Human-in-the-Loop 큐 설계([`report/final_selection.md`](report/final_selection.md) §5)를 실제로 구현하고 측정하는 단계입니다.
 * **v2.0** — 리포트가 쌓이면 자동으로 감지해 트리아지하고, BTS에 등록합니다. BTS는 사내 설치형인 **Redmine**(Docker 로컬 실행)을 써서 "외부 API 전송 불가" 전제를 지키고, 공개 데모용으로 녹화 영상을 함께 남깁니다. 과거 티켓을 검색해 중복 제보(예: Q10과 Q01)를 묶는 RAG를 붙이며, 검색이 끼면서 생기는 새 실패 유형(엉뚱한 티켓을 중복으로 판정)도 기존 게이트 체계로 측정합니다.
 

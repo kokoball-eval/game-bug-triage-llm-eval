@@ -26,6 +26,46 @@
    입력+출력 상한이 num_ctx 를 넘을 수 있으면 경고한다.
 4. num_predict 를 512로 둔다. v2는 필드가 8개라 v1(350)보다 출력이 길다.
    잘린 응답은 형식 채점에서 R2(필드 누락)로 드러나므로, 상한에 걸린 회차 수도 기록한다.
+5. 모델 응답에 후처리 안전장치(guardrail_v2.py)를 적용한 결과를 response_text 로 기록하고,
+   모델 원본은 raw_response_text 에 남긴다. 채점·게이트는 실제 BTS에 들어가는 response_text 를 판정한다.
+   --no-guardrail 을 주면 원본을 그대로 기록한다(모델 단독 성능 측정용).
+6. 응답이 R6(허용 값)을 어기면 틀린 필드와 허용 값을 알려 주고, 그 필드만 1회 다시 요청한다(generate_with_retry).
+   - 응답 전체가 아니라 틀린 필드만 다시 받는다. 전체를 다시 생성하면 형식에 문제가 없던 다른 필드의 판단까지
+     바뀔 수 있다(v2.1 대비 응답 64개 중 프롬프트 v2.2는 29개, v2.3은 49개가 바뀌었다). 생성 길이도 짧아
+     재요청 비용이 작다(num_predict 128 — 필드 6개를 모두 다시 받아도 JSON이 잘리지 않는 길이). eval_count·tokens_per_sec·hit_num_predict 는 첫 응답 기준이다.
+   - 분류·우선순위·재현 정보 중 하나가 틀렸으면 [처리]도 함께 다시 정하게 한다. 처리는 그 판단에서 정해지므로,
+     분류만 고치면 "결함인데 폐기" 같은 앞뒤가 맞지 않는 응답이 남는다.
+   - 재요청 응답은 JSON 스키마로 제한한다(Ollama 구조화 출력, format=스키마). 각 필드의 값은 허용 값 목록(enum)
+     안에서만 생성되므로 '무관 중' 같은 값이 재요청 결과로 나올 수 없다. 프롬프트 v2.3에서는 텍스트 재요청이
+     '무관 중'을 그대로 되풀이했고(A17, seed 3쌍 모두), 선택지 표기를 고친 v2.4는 판단 품질을 떨어뜨려 기각했다.
+     첫 응답은 제한하지 않는다. 8개 필드 전체를 JSON으로 받으면 출력 형식 자체가 바뀌어 기준선과 비교할 수 없다.
+     [모듈] 재요청은 단일 모듈만 고를 수 있다(복합 병기 "A/B"는 enum으로 표현하지 않는다).
+   - 새 값은 모델이 고른다. 코드는 그 값이 허용 값일 때만 첫 응답의 해당 줄에 넣고, 아니면 첫 응답을 그대로 둔다.
+     허용 값 밖인 값을 코드가 비슷한 값으로 바꾸지 않는다. 스키마 제한과 별개로 이 검증을 유지해,
+     구조화 출력이 지원되지 않는 환경에서도 잘못된 값이 들어가지 않게 한다.
+   - 첫 응답·재요청 응답·고쳐진 필드를 attempts 에 남기고, elapsed_sec 는 두 호출 시간의 합으로 기록한다.
+     재요청에 드는 시간은 실제 운영에서도 드는 비용이므로 지연 측정에서 빼지 않는다.
+   - 재요청은 같은 seed로 호출한다. 프롬프트가 달라지므로 응답이 바뀌고, 같은 조건으로 다시 실행하면 재현된다.
+   - 출력 언어 위반(R7)도 같은 방식으로 재요청한다. 다른 문자가 섞인 자유 서술 필드([요약], [누락 정보 및 권장 조치])만
+     한국어로 다시 쓰게 하고, 새 값이 한 줄이며 출력 언어 밖 문자가 없을 때만 넣는다. 자유 서술은 enum 으로 제한할 수
+     없으므로 허용 문자 패턴(JSON 스키마 pattern, contract_v2.LINE_PATTERNS)으로 제한하고, 받은 뒤에도 다시 검증한다.
+     처음에는 문자열 제한 없이 "한국어로 다시 쓰라"고만 했는데, v2.3 seed 11 A10에서 모델이 '과熱'을 그대로 되풀이했다
+     ('무관 중'을 텍스트 재요청이 고치지 못한 것과 같은 현상). 실행 환경이 pattern 을 지원하지 않아 호출이 실패하면
+     pattern 없이 한 번 더 호출하고 그 사실을 기록한다. 지금까지 측정된 R7 위반 6건은 모두 [요약]에서 시작했다
+     (v2.3 seed 11의 '과熱' 등). 응답 전체가 다른 언어로 넘어가 필드 라벨까지 사라진 경우는 고칠 필드가 없어
+     재요청하지 않고, 형식 위반으로 남는다. num_predict 는 자유 서술을 다시 받을 수 있게 256으로 둔다.
+   --no-retry 를 주면 재요청하지 않는다.
+7. 최종 [처리]가 폐기이고 [분류]가 중복 의심이 아니면, 폐기 직전에 확인 질문을 1회 한다(discard_check).
+   - 판정 기준서 H-9("결함일 가능성이 있는 제보는 폐기하지 않는다. 확신이 없으면 보류")를 실행 단계로 옮긴 것이다.
+     폐기는 되돌릴 수 없고 아무도 다시 보지 않는 처리라, 이 처리에만 확인 단계를 둔다.
+   - 확인 답은 JSON 스키마로 "이상 현상 제보 / 무관" 중 하나만 나오게 한다. "이상 현상 제보"면 [처리]를
+     정보 요청 후 보류로 바꾼다. [분류]는 모델의 첫 판단을 그대로 남겨, 분류 오답은 채점에 그대로 드러나게 한다.
+   - 중복 의심은 제외한다. 중복 건은 결함 정보가 있어도 기존 이슈에 덧붙이고 폐기하는 것이 규칙(H-6)이므로
+     이 질문으로는 가를 수 없다.
+   - 도입 근거: 형식 재요청으로 '무관 중'이 '무관'으로 고쳐지자, 그 뒤에 가려져 있던 판단 오류
+     (발열 제보 A10을 무관으로 보고 폐기, X-2)가 드러났다 (docs/issue_log.md ISSUE-007).
+   - 확인 질문과 답은 attempts 에 남기고, 호출 시간은 elapsed_sec 에 더한다.
+   --no-discard-check 를 주면 확인하지 않는다.
 """
 
 import argparse
@@ -38,8 +78,12 @@ import time
 
 import ollama
 
+from contract_v2 import (ENUMS_V2, FORBIDDEN_SCRIPTS, LINE_PATTERNS, MODULES, NO_MODULE, OUTPUT_LANG, enum_errors,
+                         language_errors, parse_v2, replace_field, score_format_v2)
+from guardrail_v2 import GUARDRAIL_VERSION, apply_record
 from preflight import snapshot as preflight_snapshot
-from prompt_v2 import SYSTEM_PROMPT_V2, build_prompt
+from prompt_v2 import (DISCARD_CHECK_CHOICES, PROMPT_VERSION, SYSTEM_PROMPT_V2, build_discard_check_prompt,
+                       build_prompt, build_retry_prompt)
 from run_eval import get_model_digests, get_vram_mib, sha256_text
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -49,6 +93,9 @@ OUT_DIR = ROOT / "data" / "results" / "v13" / "history"
 MODELS = ["qwen2.5:7b", "llama3.1:8b"]
 REPEAT_COUNT = 2
 OPTIONS_V2 = {"temperature": 0.2, "num_predict": 512, "num_ctx": 8192}
+RECHECK_TRIGGER = ("분류", "우선순위", "재현 정보")  # 이 필드가 틀리면 [처리]도 다시 정한다
+RETRY_POLICY = {"trigger": ["R6_enum_valid", "R7_output_language"], "max_retries": 1, "scope": "field",
+                "output": "json_schema_enum+line_pattern", "num_predict": 256}  # 설계 의도 6
 
 
 def rel(path: Path) -> str:
@@ -68,11 +115,13 @@ def select_items(dataset: dict, split: str, set_name: str) -> list[dict]:
     return items
 
 
-def generate_once(client, model: str, prompt: str, options: dict) -> dict:
-    """완성된 프롬프트로 1회 생성한다. 측정 항목은 v1 execute_single_inference 와 같고 입력 토큰 수가 추가된다."""
+def generate_once(client, model: str, prompt: str, options: dict, schema: dict | None = None) -> dict:
+    """완성된 프롬프트로 1회 생성한다. 측정 항목은 v1 execute_single_inference 와 같고 입력 토큰 수가 추가된다.
+    schema 를 주면 응답을 그 JSON 스키마로 제한한다(재요청 전용, 설계 의도 6)."""
     start = time.perf_counter()
     try:
-        r = client.generate(model=model, prompt=prompt, options=options)
+        extra = {"format": schema} if schema else {}
+        r = client.generate(model=model, prompt=prompt, options=options, **extra)
         eval_ns = r.get("eval_duration", 0)
         return {
             "success": True,
@@ -91,6 +140,117 @@ def generate_once(client, model: str, prompt: str, options: dict) -> dict:
             "load_duration_sec": 0.0, "prompt_eval_count": None, "eval_count": 0, "tokens_per_sec": None,
             "vram_mib": get_vram_mib(client, model), "error_message": str(e),
         }
+
+
+def retry_schema(fields: list[str], use_pattern: bool = True) -> dict:
+    """재요청 필드만 담는 JSON 스키마 (설계 의도 6). 선택지 필드는 허용 값 enum, 자유 서술 필드는
+    출력 언어 허용 문자만 쓰는 한 줄 문자열(pattern)로 제한한다."""
+    def prop(f):
+        if f in ENUMS_V2 or f == "모듈":
+            return {"type": "string", "enum": ENUMS_V2.get(f) or (MODULES + [NO_MODULE])}
+        return {"type": "string", "pattern": LINE_PATTERNS[OUTPUT_LANG]} if use_pattern else {"type": "string"}
+    return {"type": "object", "properties": {f: prop(f) for f in fields}, "required": list(fields)}
+
+
+def value_ok(field: str, value: str, merged_text: str) -> bool:
+    """재요청 값을 넣어도 되는가. 선택지 필드는 허용 값(R6), 자유 서술 필드는 한 줄 + 출력 언어(R7)."""
+    if field in ENUMS_V2 or field == "모듈":
+        return all(f != field for f, _ in enum_errors(parse_v2(merged_text)))
+    return "\n" not in value and not FORBIDDEN_SCRIPTS[OUTPUT_LANG].search(value)
+
+
+def parse_retry(text: str) -> dict:
+    """재요청 응답(JSON)을 읽는다. 읽을 수 없으면 빈 dict — 첫 응답이 그대로 남는다."""
+    try:
+        data = json.loads(text)
+    except (json.JSONDecodeError, TypeError):
+        return {}
+    return {k: v.strip() for k, v in data.items() if isinstance(v, str)} if isinstance(data, dict) else {}
+
+
+def merge_retry(first_text: str, new_values: dict, fields: list[str]) -> tuple[str, dict]:
+    """재요청에서 받은 값 중 다시 요청한 필드만, 허용 값일 때만 첫 응답의 그 줄에 넣는다 (설계 의도 6)."""
+    out, fixed = first_text, {}  # 재요청 대상이 아닌 필드는 무시한다
+    for field in fields:
+        value = new_values.get(field)
+        if not value:
+            continue
+        candidate = replace_field(out, field, value)
+        if value_ok(field, value, candidate):
+            out, fixed[field] = candidate, value
+    return out, fixed
+
+
+def generate_with_retry(client, model: str, item: dict, options: dict, retry: bool = True) -> dict:
+    """설계 의도 6 — 1회 생성하고, R6·R7 위반이면 틀린 필드만 1회 다시 요청한다."""
+    first = generate_once(client, model, build_prompt(item), options)
+    if not first["success"]:
+        return {**first, "attempts": [], "retried": False}
+    fmt1 = score_format_v2(first["response_text"])
+    attempts = [{"kind": "first", "response_text": first["response_text"], "failed_rules": fmt1["failed_rules"],
+                 "elapsed_sec": first["elapsed_sec"]}]
+    if not retry or not any(r in fmt1["failed_rules"] for r in RETRY_POLICY["trigger"]):
+        return {**first, "attempts": attempts, "retried": False}
+
+    values = parse_v2(first["response_text"])
+    errors, lang_errs = enum_errors(values), language_errors(values)
+    # 처리는 분류·우선순위·재현 정보 판단에서 정해지므로, 그중 하나가 틀렸으면 처리도 함께 다시 정하게 한다
+    recheck = ("처리",) if any(f in RECHECK_TRIGGER for f, _ in errors) and all(f != "처리" for f, _ in errors) else ()
+    fields = [f for f, _ in errors] + list(recheck) + [f for f, _ in lang_errs]
+    if not fields:   # 위반이 필드 밖(필드 라벨이 아닌 줄 등)에 있으면 고칠 필드가 없다
+        return {**first, "attempts": attempts, "retried": False}
+    retry_opts = {**options, "num_predict": RETRY_POLICY["num_predict"]}
+    retry_prompt = build_retry_prompt(item, first["response_text"], errors, recheck, lang_errs)
+    second = generate_once(client, model, retry_prompt, retry_opts, schema=retry_schema(fields))
+    pattern_fallback = False
+    if not second["success"] and lang_errs:
+        # 실행 환경의 문법 변환기가 pattern 을 지원하지 않아 호출이 실패하면, pattern 없이 다시 호출한다.
+        # 같은 재요청의 일부로 보며 오류 내용과 두 호출 시간을 모두 남긴다. 받은 값은 value_ok 가 검증한다.
+        pattern_error, failed_sec = second["error_message"], second["elapsed_sec"]
+        second = generate_once(client, model, retry_prompt, retry_opts, schema=retry_schema(fields, use_pattern=False))
+        second = {**second, "elapsed_sec": round(second["elapsed_sec"] + failed_sec, 3), "pattern_error": pattern_error}
+        pattern_fallback = True
+    merged, fixed = merge_retry(first["response_text"], parse_retry(second["response_text"]), fields) \
+        if second["success"] else (first["response_text"], {})
+    attempts.append({"kind": "retry", "response_text": second["response_text"], "elapsed_sec": second["elapsed_sec"],
+                     "eval_count": second.get("eval_count", 0), "error_message": second["error_message"],
+                     "errors": [{"field": f, "value": v} for f, v in errors], "recheck": list(recheck),
+                     "lang_errors": [{"field": f, "chars": c} for f, c in lang_errs], "fixed": fixed,
+                     "pattern_fallback": pattern_fallback, "pattern_error": second.get("pattern_error")})
+    return {**first, "response_text": merged,
+            "elapsed_sec": round(first["elapsed_sec"] + second["elapsed_sec"], 3),
+            "attempts": attempts, "retried": True,
+            # 채택 = 원래 틀렸던 필드가 고쳐졌는가. 함께 다시 받은 [처리]만 받아진 경우는 채택이 아니다
+            "retry_adopted": any(f in fixed for f, _ in errors + lang_errs)}
+
+
+DISCARD_CHECK_POLICY = {"trigger": "처리=폐기, 분류≠중복 의심", "choices": DISCARD_CHECK_CHOICES,
+                        "on_report": "정보 요청 후 보류", "num_predict": 32}  # 설계 의도 7
+DISCARD_CHECK_SCHEMA = {"type": "object", "properties": {"판정": {"type": "string", "enum": DISCARD_CHECK_CHOICES}},
+                        "required": ["판정"]}
+
+
+def discard_check(client, model: str, item: dict, res: dict, options: dict) -> dict:
+    """설계 의도 7 — 폐기 직전 확인. 대상이 아니면 res 를 그대로 돌려준다."""
+    pred = parse_v2(res.get("response_text", ""))
+    if not res.get("success") or pred.get("처리") != "폐기" or pred.get("분류") == "중복 의심":
+        return {**res, "discard_checked": False}
+    opts = {**options, "num_predict": DISCARD_CHECK_POLICY["num_predict"]}
+    ans = generate_once(client, model, build_discard_check_prompt(item), opts, schema=DISCARD_CHECK_SCHEMA)
+    verdict = parse_retry(ans["response_text"]).get("판정") if ans["success"] else None
+    held = verdict == "이상 현상 제보"
+    text = replace_field(res["response_text"], "처리", DISCARD_CHECK_POLICY["on_report"]) if held else res["response_text"]
+    attempts = res.get("attempts", []) + [{"kind": "discard_check", "response_text": ans["response_text"],
+                                          "verdict": verdict, "held": held, "elapsed_sec": ans["elapsed_sec"],
+                                          "error_message": ans["error_message"]}]
+    return {**res, "response_text": text, "elapsed_sec": round(res["elapsed_sec"] + ans["elapsed_sec"], 3),
+            "attempts": attempts, "discard_checked": True, "discard_held": held}
+
+
+def generate_triage(client, model: str, item: dict, options: dict, retry: bool = True, check: bool = True) -> dict:
+    """1회 생성 → 형식 재요청(설계 의도 6) → 폐기 확인(설계 의도 7). 후처리 안전장치는 main 에서 적용한다."""
+    res = generate_with_retry(client, model, item, options, retry=retry)
+    return discard_check(client, model, item, res, options) if check else {**res, "discard_checked": False}
 
 
 def check_split_guard(split: str, final: bool) -> str | None:
@@ -114,6 +274,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--repeat", type=int, default=REPEAT_COUNT)
     p.add_argument("--strict-env", action="store_true", help="측정 환경 경고가 있으면 실행하지 않음")
     p.add_argument("--final", action="store_true", help="평가용(test) 문항 실행 허용 — 최종 측정 때만")
+    p.add_argument("--no-guardrail", action="store_true", help="후처리 안전장치 없이 모델 원본만 기록")
+    p.add_argument("--no-retry", action="store_true", help="형식 위반 응답을 다시 요청하지 않음")
+    p.add_argument("--no-discard-check", action="store_true", help="폐기 직전 확인 질문을 하지 않음")
     args = p.parse_args(argv)
 
     blocked = check_split_guard(args.split, args.final)
@@ -144,6 +307,10 @@ def main(argv: list[str] | None = None) -> int:
         "repeat_count": args.repeat,
         "split": args.split,
         "set": args.set_name,
+        "prompt_version": PROMPT_VERSION,
+        "guardrail_version": None if args.no_guardrail else GUARDRAIL_VERSION,
+        "retry_policy": None if args.no_retry else RETRY_POLICY,
+        "discard_check_policy": None if args.no_discard_check else DISCARD_CHECK_POLICY,
         "system_prompt_sha256": sha256_text(SYSTEM_PROMPT_V2),
         "dataset_sha256": hashlib.sha256(json.dumps(dataset, ensure_ascii=False, sort_keys=True).encode()).hexdigest(),
         "item_ids": [i["id"] for i in items],
@@ -162,10 +329,10 @@ def main(argv: list[str] | None = None) -> int:
         for run_idx in range(1, args.repeat + 1):
             opts = options_for(args.seed, run_idx)
             for n, item in enumerate(items, start=1):
-                prompt = build_prompt(item)
-                res = generate_once(client, model, prompt, opts)
+                res = generate_triage(client, model, item, opts, retry=not args.no_retry,
+                                      check=not args.no_discard_check)
                 near_limit = (res.get("prompt_eval_count") or 0) + OPTIONS_V2["num_predict"] > OPTIONS_V2["num_ctx"]
-                results.append({
+                record = {
                     "eval_id": f"{model.replace(':', '_')}_{item['id']}_run{run_idx}",
                     "model": model, "run_index": run_idx, "item_id": item["id"],
                     "set": item["set"], "track": item["track"], "split": item["split"],
@@ -173,8 +340,13 @@ def main(argv: list[str] | None = None) -> int:
                     "hit_num_predict": res.get("eval_count", 0) >= OPTIONS_V2["num_predict"],
                     "context_near_limit": near_limit,
                     **res,
-                })
+                }
+                results.append(record if args.no_guardrail else apply_record(record, item))
                 status = "성공" if res["success"] else f"실패 - {res['error_message']}"
+                if res.get("retried"):
+                    status += f" · 형식 재요청({'채택' if res['retry_adopted'] else '미채택'})"
+                if res.get("discard_checked"):
+                    status += f" · 폐기 확인({'보류로 변경' if res['discard_held'] else '폐기 유지'})"
                 print(f"[{model}] [Run {run_idx}] ({n}/{len(items)}) {item['id']}: {status} "
                       f"({res['elapsed_sec']}s, 입력 {res.get('prompt_eval_count')} 토큰)")
 
@@ -194,6 +366,15 @@ def main(argv: list[str] | None = None) -> int:
     near = sum(r["context_near_limit"] for r in results)
     capped = sum(r["hit_num_predict"] for r in results)
     print(f"\n=== 완료: {len(results)}회 → {rel(out)}")
+    fixed = [r for r in results if r.get("guardrail", {}).get("applied")]
+    if not args.no_retry:
+        retried = [r for r in results if r.get("retried")]
+        print(f"  형식 재요청 {len(retried)}건 (채택 {sum(r['retry_adopted'] for r in retried)}건)")
+    if not args.no_discard_check:
+        checked = [r for r in results if r.get("discard_checked")]
+        print(f"  폐기 확인 {len(checked)}건 (보류로 변경 {sum(r['discard_held'] for r in checked)}건)")
+    if not args.no_guardrail:
+        print(f"  후처리 안전장치({GUARDRAIL_VERSION}) 적용 {len(fixed)}건")
     if near:
         print(f"  ⚠️  입력+출력 상한이 num_ctx 를 넘을 수 있는 회차 {near}건 — 프롬프트 길이를 확인하세요")
     if capped:

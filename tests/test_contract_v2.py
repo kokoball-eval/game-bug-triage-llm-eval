@@ -62,3 +62,49 @@ def test_module_split_keeps_middle_dot():
 
 def test_field_order_constant():
     assert FIELDS_V2[0] == "요약" and FIELDS_V2[-1] == "누락 정보 및 권장 조치" and len(FIELDS_V2) == 8
+
+
+def test_r7_flags_language_drift_but_allows_english_terms():
+    """응답 도중 중국어로 넘어가면 위반, 선택지 값(Critical)·용어(PvP)의 영문은 허용 (설계 의도 5)."""
+    assert "R7_output_language" not in score_format_v2(GOOD.replace("결제 로그 확인", "PvP 결투장 SSR 로그 확인"))["failed_rules"]
+    drift = score_format_v2(GOOD.replace("패키지 결제 후 다이아 미지급", "업데이트 이후 폰 과热无法翻译"))
+    assert "R7_output_language" in drift["failed_rules"] and not drift["strict_pass"] and not drift["parsable_pass"]
+
+
+def test_r7_target_language_is_configurable():
+    """글로벌 BTS(en)라면 한글이 위반이 된다 — 규칙은 그대로, 설정값만 바뀐다."""
+    english = GOOD.replace("패키지 결제 후 다이아 미지급", "Diamonds not granted after purchase")
+    assert "R7_output_language" in score_format_v2(GOOD, lang="en")["failed_rules"]
+    assert "R7_output_language" not in score_format_v2(english, lang="ko")["failed_rules"]
+
+
+def test_prompt_states_output_language():
+    from prompt_v2 import SYSTEM_PROMPT_V2
+    assert "모든 필드는 한국어로 작성하세요" in SYSTEM_PROMPT_V2 and "{output_language}" not in SYSTEM_PROMPT_V2
+
+
+def test_language_errors_point_to_free_text_field():
+    from contract_v2 import language_errors
+    vals = {"요약": "폰이 10분만에 과熱", "누락 정보 및 권장 조치": "기기 정보", "분류": "결함"}
+    assert language_errors(vals) == [("요약", "熱")]
+    assert language_errors({"요약": "Critical 크래시 SSR"}) == []
+
+
+def test_r7_allowlist_catches_any_foreign_script():
+    """허용 목록 방식 — 한자·가나·키릴뿐 아니라 그 밖의 문자 체계와 전각 구두점·이모지도 잡는다."""
+    from contract_v2 import FORBIDDEN_SCRIPTS
+    ko = FORBIDDEN_SCRIPTS["ko"]
+    for foreign in ("過熱", "ログイン", "ошибка", "เกม", "لعبة", "λάθος", "lỗi", "，", "：", "\uf900", "\U00020000", "😀"):
+        assert ko.search(foreign), foreign
+    for allowed in ("계정·로그인", "Critical 크래시 SSR PvP", "→ ↔ ① ★ ■ — … “인용”", "10% 3회 ×2 30°C", "ㄱㄴ"):
+        assert not ko.search(allowed), allowed
+
+
+def test_r7_allowlist_has_no_false_positive_on_inputs():
+    """평가셋 입력 원문에 쓰인 문자는 모두 허용 목록 안에 있다 (모델이 입력을 인용해도 오탐하지 않는다)."""
+    import json
+    from pathlib import Path
+    from contract_v2 import FORBIDDEN_SCRIPTS
+    data = json.loads((Path(__file__).resolve().parent.parent / "data/eval_v13/aether_raid_v13.json").read_text(encoding="utf-8"))
+    for item in data["items"]:
+        assert not FORBIDDEN_SCRIPTS["ko"].search(json.dumps(item["input"], ensure_ascii=False)), item["id"]

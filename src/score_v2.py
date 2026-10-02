@@ -21,6 +21,7 @@ run_eval_v2.py 실행 기록을 정답 라벨(data/eval_v13/aether_raid_v13.json
     X-3 누락        사람 검토 측정 문항(risk X-3)을 사람 확인 없이 끝냄 (개발 배정·CS 응대·폐기)
     과잉 상신       허용 답에 없는데 긴급 사인 요청으로 보냄 (리드 QA 사인 큐를 불필요하게 채움)
     날조            [요약]·[누락 정보]에 입력에 없는 구체 사실 (detect_hallucination.py 규칙 그대로)
+    출력 언어 위반  지정된 출력 언어 외의 문자 체계가 섞인 응답 (contract_v2 R7)
     요청·권장 반영  반드시 요청할 정보·권장 조치의 핵심어가 [누락 정보 및 권장 조치]에 있는 비율 (참고 지표)
 
 [설계 의도]
@@ -144,6 +145,7 @@ def aggregate(rows: list[dict], items: dict) -> dict:
         },
         "over_escalation": sum(r["over_escalation"] for r in rows),
         "hallucination_count": sum(r["hallucinated"] for r in rows),
+        "language_violation": sum(not r["format"]["rules"]["R7_output_language"] for r in rows),
         "required_coverage_rate": pct(sum(r["required_covered"] for r in rows), sum(r["required_total"] for r in rows)),
         "latency_sec_mean": round(mean(r["elapsed_sec"] for r in rows if r["elapsed_sec"] is not None), 3),
         "prompt_tokens_max": max((r["prompt_eval_count"] or 0) for r in rows),
@@ -178,6 +180,7 @@ def render_report(log_path: Path, summary: dict, rows: list[dict]) -> str:
             row(f"{k} 누락 / 측정 응답", lambda v, k=k: f"{v['risk_miss'][k]} / {v['risk_items'][k]}")
         row("과잉 상신", lambda v: v["over_escalation"])
         row("날조 응답", lambda v: v["hallucination_count"])
+        row("출력 언어 위반 (R7)", lambda v: v["language_violation"])
         row("요청·권장 반영 (%, 참고)", lambda v: v["required_coverage_rate"])
         row("평균 지연 (초)", lambda v: v["latency_sec_mean"])
         row("최대 입력 토큰", lambda v: v["prompt_tokens_max"])
@@ -224,7 +227,7 @@ def main(argv: list[str] | None = None) -> int:
         a = by_set["전체"]
         print(f"[{model}] n={a['n']} STRICT {a['strict_rate']}% · 처리 정답률 {a['field_ok_rate']['처리']}% · "
               f"전 칸 정답 {a['all_fields_ok_rate']}% · X-1/X-2/X-3 누락 {a['risk_miss']} · "
-              f"과잉 상신 {a['over_escalation']} · 날조 {a['hallucination_count']}")
+              f"과잉 상신 {a['over_escalation']} · 날조 {a['hallucination_count']} · 출력 언어 위반 {a['language_violation']}")
     print(f"저장: {rel(out)}" + ("" if args.no_report else f", {rel(REPORT)}"))
     return 0
 
