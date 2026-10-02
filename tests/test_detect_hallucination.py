@@ -124,3 +124,33 @@ def test_llama_q02_option_list_is_hedged(questions):
     q02 = rows["llama3.1_8b_Q02_run1"]
     assert q02["hallucinated"] is False
     assert [h["entity"] for h in q02["hedged"]] == ["Windows 10"]
+
+
+@pytest.mark.parametrize("report, said", [
+    ("추석 픽업 100번 뽑았는데 하나도 안 나옴", "100회"),   # ISSUE-008 v1.3 S17
+    ("추석 픽업 100연 돌렸는데 하나도 안 나옴", "100회"),
+    ("패키지 한 번 눌렀는데 결제가 두 번 됨", "1회"),        # ISSUE-008 재현 v1.4 S12
+    ("보스방 들어가면 세 번 다 꺼짐", "3회"),
+    ("다섯 차례 재접속해도 같음", "5회"),
+])
+def test_same_count_in_other_unit_is_grounded(report, said):
+    """설계 의도 5 — 같은 수량을 다른 횟수 단위로 옮긴 것은 날조가 아니다."""
+    assert not detect(response(f"{said} 시도 후 발생", "로그 확인"), report)["hallucinated"]
+
+
+@pytest.mark.parametrize("report, said", [
+    ("10번 뽑았는데 하나도 안 나옴", "100회"),               # 다른 수량은 계속 잡는다
+    ("100번 뽑았는데 하나도 안 나옴", "10회"),
+    ("3번째 시도에서 튕김", "3회"),                          # 순서(번째)는 횟수가 아니다
+    ("주문번호 7 결제 실패", "7회"),                         # 번호는 횟수가 아니다
+    ("한 번 눌렀는데 결제가 됨", "2회"),
+    ("레이드 10초 후 튕김", "10회"),                         # 다른 단위의 수치는 근거가 아니다
+])
+def test_different_count_or_non_count_is_still_caught(report, said):
+    """설계 의도 3·5 — 정규화는 같은 수량의 횟수 표현에만 적용된다."""
+    assert detect(response(f"{said} 시도 후 발생", "로그 확인"), report)["hallucinated"]
+
+
+def test_non_count_quantities_are_unchanged():
+    """시간 단위는 정규화하지 않는다 — "15초"는 "5초"의 근거가 아니다 (ISSUE-006)."""
+    assert detect(response("5초 후 멈춤", "로그 확인"), "15초 후에 멈춤")["hallucinated"]

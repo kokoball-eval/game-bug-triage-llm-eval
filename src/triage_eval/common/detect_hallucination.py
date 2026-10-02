@@ -47,6 +47,12 @@ v1.0과 9/30 재실행에서 Llama-3.1-8B가 단문 리포트 "크래시남"에 
 4. 요청·예시 문맥은 따로 기록(hedged)하되 날조로 세지 않는다.
    "확인이 필요한 정보"를 묻는 것은 트리아지 응답의 정상 동작이다.
    이를 날조로 세면 역질문을 잘하는 모델이 벌점을 받는다.
+5. (v1.4) 횟수는 단위 표현이 달라도 같은 수량이면 근거가 있는 것으로 본다.
+   응답의 "N회"는 입력에 같은 N의 횟수 표현("N번", "N회", "N연", "N차례", "한 번"·"세 번" 같은 고유어 수사)이
+   있으면 근거로 인정한다. 리포트의 "100번 뽑았는데"를 "100회"로, "한 번 눌렀는데"를 "1회"로 옮긴 응답이
+   날조로 집계되었다(docs/issue_log.md ISSUE-008). 수량 자체는 그대로 비교하므로 "10번"과 "100회"는
+   여전히 다른 수치이고(설계 의도 3), 순서를 나타내는 "N번째"와 "번호"는 횟수로 보지 않는다.
+   시간·용량 같은 다른 단위는 바꾸지 않았다.
 """
 
 import argparse
@@ -86,6 +92,22 @@ def _tokens(entity: str) -> list[str]:
     return re.findall(r"[a-z]+|\d+(?:\.\d+)*|[가-힣]+", entity.lower())
 
 
+# 횟수 표현 (설계 의도 5) — 숫자 + 횟수 단위, 고유어 수사 + 번/차례
+COUNT_DIGIT = re.compile(r"(?<![\d.])(\d+)\s?(?:번(?!째|호|지)|회(?!귀)|연(?:차)?|차례)")
+NATIVE_NUMBERS = {"한": 1, "두": 2, "세": 3, "네": 4, "다섯": 5, "여섯": 6, "일곱": 7, "여덟": 8, "아홉": 9, "열": 10}
+COUNT_NATIVE = re.compile(r"(?<![가-힣])(" + "|".join(sorted(NATIVE_NUMBERS, key=len, reverse=True))
+                          + r")\s?(?:번(?!째|호|지)|차례)")
+COUNT_ENTITY = re.compile(r"(\d+)\s?회")
+
+
+def counts_in(text: str) -> set[int]:
+    """입력에 나온 횟수(수량)의 집합 (설계 의도 5)."""
+    lowered = (text or "").lower()
+    found = {int(n) for n in COUNT_DIGIT.findall(lowered)}
+    found |= {NATIVE_NUMBERS[w] for w in COUNT_NATIVE.findall(lowered)}
+    return found
+
+
 def is_grounded(entity: str, category: str, report_text: str) -> bool:
     """후보가 입력 리포트에 근거가 있는지 (설계 의도 3)."""
     source = _normalize(report_text)
@@ -93,7 +115,10 @@ def is_grounded(entity: str, category: str, report_text: str) -> bool:
         return True
     if category == "quantity":
         # "5초"가 "15초" 안에 들어 있다고 근거로 치지 않는다 (앞에 숫자가 붙으면 다른 수치)
-        return re.search(r"(?<![\d.])" + re.escape(_normalize(entity)), source) is not None
+        if re.search(r"(?<![\d.])" + re.escape(_normalize(entity)), source):
+            return True
+        count = COUNT_ENTITY.fullmatch(_normalize(entity))
+        return bool(count) and int(count.group(1)) in counts_in(report_text)  # 설계 의도 5
     return all(tok in source for tok in _tokens(entity))
 
 
