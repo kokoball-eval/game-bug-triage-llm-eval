@@ -346,6 +346,8 @@ uv run python src/compare_runs.py --baseline data/results/history/<1차 파일>.
 | [`report/model_comparison.md`](report/model_comparison.md) | **1~3일차 비교 분석서.** 실험 조건·프롬프트 전문, 평가 문항 10건, **벤치마크 코드 구성과 설계 의도**, 항목별 판정, Cloud 대조 심층 분석 |
 | [`report/format_compliance.md`](report/format_compliance.md) | **포맷 준수율 채점 근거.** R1~R6 규칙 정의와 응답 45건의 회차별 판정 |
 | [`report/environment.md`](report/environment.md) | **실행 환경 실측.** 시스템 RAM/VRAM 구분, 실측 context length, CLI/Python 경로 검증 |
+| [`report/eval_v13_baseline.md`](report/eval_v13_baseline.md) | **(v1.3) 기준선 측정 보고서.** 개발용 세트 측정 조건, 결과, 오판 원인 분석 |
+| [`report/eval_v13.md`](report/eval_v13.md) | **(v1.3) 정답 대조 채점 요약.** 모델·세트별 칸별 정답률, 위험 건, 날조 (`score_v2.py` 생성) |
 | [`report/regression_gate.md`](report/regression_gate.md) | **회귀 게이트 판정 근거.** 기준선 대비 최신 실행의 지표·기준별 판정·판정 변화 (`compare_runs.py` 생성) |
 | [`CHANGELOG.md`](CHANGELOG.md) | **버전별 변경 이력.** v1.0 → v1.1 → v1.1.1, 버전마다 답하려는 질문 |
 | [`docs/issue_log.md`](docs/issue_log.md) | **이슈 기록.** 고도화 중 발견한 결함 5건과 알려진 한계를 현상 → 원인 → 조치 → 재발 방지 형식으로 정리 |
@@ -392,13 +394,16 @@ game-bug-triage-llm-eval/
 │       ├── baseline/
 │       │   ├── v1.0_local_eval_results.json # (v1.1) v1.0 기준선 — README 수치의 출처, 덮어쓰지 않음
 │       │   └── v1.2_seed1_local_eval_results.json # (v1.2) 기본 기준선 — seed=1, 깨끗한 환경
-│       └── history/                     # 실행 기록 (run_eval.py 실행마다 생성, compare_runs.py 기본 후보)
+│       ├── history/                     # 실행 기록 (run_eval.py 실행마다 생성, compare_runs.py 기본 후보)
+│       └── v13/                         # (v1.3) 평가셋 실행 기록(history/)과 채점 결과(score_*.json)
 ├── report/
 │   ├── model_comparison.md      # 로컬 2종 vs Cloud 상세 정량/정성 분석서
 │   ├── final_selection.md       # Qwen2.5 최종 선정 사유 및 배포 가드레일
 │   ├── format_compliance.md     # 포맷 준수율 채점 규칙 및 회차별 판정 근거
 │   ├── environment.md           # 시스템 RAM/VRAM 구분, 실측 context length 기록
-│   └── regression_gate.md       # (v1.1) 회귀 게이트 판정 근거 (compare_runs.py 생성)
+│   ├── regression_gate.md       # (v1.1) 회귀 게이트 판정 근거 (compare_runs.py 생성)
+│   ├── eval_v13_baseline.md     # (v1.3) 기준선 측정 보고서 (원인 분석)
+│   └── eval_v13.md              # (v1.3) 정답 대조 채점 요약 (score_v2.py 생성)
 ├── src/
 │   ├── 01_ollama_chat.py         # 단일 모델 적재/VRAM 측정 스모크 테스트
 │   ├── 02_luna_chat.py           # OpenAI Responses API Cloud 비교 스크립트
@@ -409,6 +414,10 @@ game-bug-triage-llm-eval/
 │   ├── compare_runs.py           # (v1.1) 두 실행 비교 + 회귀 게이트 판정
 │   ├── detect_hallucination.py   # (v1.2) 입력에 근거 없는 구체 사실(기기·OS·조작·시간) 탐지
 │   ├── preflight.py              # (v1.2) 실행 전 측정 환경 점검 (GPU 점유·전원)
+│   ├── contract_v2.py            # (v1.3) 출력 형식 v2 — 8칸 정의·파싱·형식 채점
+│   ├── prompt_v2.py              # (v1.3) 판정 기준서 요약 프롬프트와 입력 조립
+│   ├── run_eval_v2.py            # (v1.3) 평가셋 실행 (개발용 기본, 평가용은 --final)
+│   ├── score_v2.py               # (v1.3) 정답 대조 채점 (칸별 정답률·위험 건·과잉 상신·날조)
 │   └── capture_env.py            # 실행 환경/자원 점유 실측 캡처
 ├── tools/
 │   └── dataset_v13/              # (v1.3) 평가셋 생성·병합·검증 스크립트 (정답 라벨의 원본)
@@ -420,7 +429,10 @@ game-bug-triage-llm-eval/
     ├── test_detect_hallucination.py # (v1.2) 환각 탐지 범주·오탐 방지·실제 로그 골든 테스트
     ├── test_preflight.py         # (v1.2) 측정 환경 경고 판정
     ├── test_run_eval.py          # (v1.2) seed 고정 모드
-    └── test_dataset_v13.py       # (v1.3) 평가셋 = 생성 스크립트 결과, 라벨 규칙 일관성, 분할 균형
+    ├── test_dataset_v13.py       # (v1.3) 평가셋 = 생성 스크립트 결과, 라벨 규칙 일관성, 분할 균형
+    ├── test_contract_v2.py       # (v1.3) 출력 형식 v2 채점 규칙
+    ├── test_score_v2.py          # (v1.3) 정답 대조 채점, 가짜 모델로 실행→채점 전 과정
+    └── test_run_eval_v2.py       # (v1.3) 평가용 실행 차단, 프롬프트에 문항 유출 없음
 ```
 
 </details>
@@ -473,7 +485,7 @@ v1.0은 "지금 어떤 모델이 이 업무에 맞는가"를 **한 번** 측정�
 | ✅&nbsp;v1.1 | 무언가 바꿨을 때 나빠졌는가? | 두 실행 비교 회귀 게이트 (`compare_runs.py`, `gate_criteria.toml`) |
 | ✅&nbsp;v1.1.1 | 평가 도구 자체는 믿을 수 있는가? | 채점·게이트 로직 단위 테스트(pytest) + GitHub Actions CI |
 | ✅&nbsp;v1.2 | 가장 위험한 결함(날조)을 사람 없이 잡을 수 있는가? | 환각 자동 탐지 + seed 고정 모드 + 측정 환경 체크리스트 |
-| 🔨&nbsp;v1.3 | 평가셋이 실제 현업 인입을 대표하는가? | ✅ 현업 기반 평가셋 63건 (분류 체계 → 판정 기준서 → 시드 케이스·정답 라벨), 개발용/평가용 분리 · 🔨 출력 형식 v2와 기준선 측정 |
+| 🔨&nbsp;v1.3 | 평가셋이 실제 현업 인입을 대표하는가? | ✅ 현업 기반 평가셋 63건 (분류 체계 → 판정 기준서 → 시드 케이스·정답 라벨), 개발용/평가용 분리 · ✅ 출력 형식 v2와 기준선 측정 · 🔨 v1.3 게이트·실사용 시나리오 |
 | ⏳&nbsp;v1.4 | 정답 라벨과 자동 채점을 믿을 수 있는가? | 채점자 간 라벨 일치율 + LLM-as-judge와 사람 채점의 일치율 |
 | ⏳&nbsp;v1.5 | 무엇을 자동 처리하고 무엇을 사람에게 넘길지 시스템이 판단할 수 있는가? | 확신도 기반 라우팅 + 자동 처리율·정확도·위험 건 누락 측정 |
 | ⏳&nbsp;v2.0 | 사람이 보지 않는 동안에도 BTS에 올바르게 인입되는가? | BTS 자동 인입 (Redmine) + 중복 티켓 감지(RAG) + 무인 운영 데모 |
@@ -490,7 +502,12 @@ v1.0은 "지금 어떤 모델이 이 업무에 맞는가"를 **한 번** 측정�
   3. ✅ **시드 케이스와 정답 라벨** — 63건(대표 세트 40 + 집중 세트 23). 문항 원문은 인터뷰에서 정한 시나리오를 바탕으로 Claude가 작성했고, 운영 불만형 5건은 직접 작성했습니다. 모든 문항과 라벨은 배치 검토 5회와 전체 검토 5회로 확정했으며, 쟁점과 판단, 반영 내용을 [`review_log.md`](docs/dataset/review_log.md)에 기록했습니다
   4. ⏭️ **변형** — v1.3에서는 하지 않았습니다. 63건 모두 사람이 문항별로 검토한 원문이라, 검수되지 않은 변형으로 수를 늘리기보다 검토된 원문만 쓰는 쪽을 택했습니다
   5. ✅ **개발용/평가용 분리** — 세트마다 반씩(대표 20/20, 집중 12/11) 나누되, 위험 건 측정 문항(Critical, 사람 검토)을 먼저 번갈아 배정해 양쪽에 고르게 들어가게 했습니다. 난수를 쓰지 않아 다시 실행해도 같은 분할이 나옵니다
-  6. 🔨 **출력 형식 v2와 기준선 측정** — 새 판정 체계(처리·발생 빈도 포함)용 프롬프트와 채점기를 만들고, 개발용 세트로 기준선을 잽니다
+  6. ✅ **출력 형식 v2와 기준선 측정** — 새 판정 체계용 8칸 출력 형식(`src/contract_v2.py`), 판정 기준서 요약 프롬프트(`src/prompt_v2.py`), 정답 대조 채점기(`src/score_v2.py`)를 만들고 개발용 32건으로 기준선을 쟀습니다. v1.0 파일은 수정하지 않고 별도 파일로 두어 v1.0 수치의 재현성을 유지했습니다. 평가용 세트는 `--final` 없이 실행되지 않습니다
+     - Qwen2.5-7B 기준선: 형식 STRICT 89.1%, 처리 정답률 40.6%, **X-1 누락(Critical 미상신) 13/22**, 날조·결함 폐기·경계 건 확정 0건
+     - 주원인: Critical 인식 실패(악용·이중 결제·필터 우회 등 피해가 쌓이는 유형을 Major로 판정), 명백한 결함을 "버그 아님"으로 분류, `개발 배정` 미사용 (→ [`report/eval_v13_baseline.md`](report/eval_v13_baseline.md))
+     - 대조군 Llama3.1-8B는 형식 붕괴(대괄호 누락 16/64)와 판정 불안정(seed가 다른 두 회차에서 19/32문항 변화)으로, 새 평가셋에서도 Qwen 선정 판단이 유지됩니다
+  7. 🔨 **v1.3 회귀 게이트와 실사용 시나리오** — 위 기준선을 기준으로 합격 기준을 정하고, 프롬프트 개선 과정을 게이트로 판정합니다
+  8. 🔨 **저장소 구조 정리 (v1.3 태그 전)** — `src/`를 공용 도구(`common/`), 동결된 v1.0 벤치마크(`bench_v1/`), 현역 평가 파이프라인(`eval/`)으로 나누고, 5일 실험 당시의 일회용 스크립트는 `scripts/legacy/`로 옮깁니다. 이후 버전은 현역 파이프라인 하나를 고쳐 나가고 이전 버전은 태그로 보존해, 버전마다 같은 역할의 파일이 늘어나지 않게 합니다
 
   정답 라벨의 원본은 생성 스크립트([`tools/dataset_v13/`](tools/dataset_v13/))이고 JSON은 그 결과물입니다. 테스트가 둘의 일치와 라벨 규칙 간 일관성을 CI에서 확인합니다.
 
