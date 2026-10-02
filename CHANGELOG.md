@@ -6,6 +6,28 @@
 
 ---
 
+## [Unreleased] — v1.4
+
+### 추가 (1단계: 모델 재선정)
+- `src/triage_eval/pipeline/screen.py` (`uv run triage-screen`) — 후보 모델 사전 점검. 개발용 3건으로 설치·생각 끄기·GPU 적재·구조화 출력·출력 형식(R2·R7)만 확인하고 정답률은 기록하지 않음. 평가용 문항은 쓰지 않음
+  - GPU 적재 판정은 ps 보고 크기가 모델 파일보다 작으면 판정 불가(HOLD). ps 원본·모델 파일 크기·nvidia-smi VRAM·생성 속도를 함께 기록 ([ISSUE-009](docs/issue_log.md#issue-009), [OBS-003](docs/issue_log.md#obs-003))
+- `src/triage_eval/pipeline/selection.py` (`uv run triage-select`), `model_selection_v14.toml` — 현재 모델 vs 후보 모델 교체 판정. seed 3개의 실행 기록에서 모델 외 조건(프롬프트·재요청·폐기 확인·안전장치·생각 끄기 포함)이 모두 같아야 판정. 절대·회귀 기준 값은 `gate_criteria_v13.toml`을 그대로 읽고, 지연은 증가율 대신 1건 평균 10초 이하를 절대 기준으로 씀
+  - 교체 규칙(측정 전 확정): 모든 seed에서 기준 통과 + seed 합계로 X-1 누락 감소(같으면 우선순위 정답 증가). 개선이 없으면 현재 모델 유지
+- 테스트 173 → 199개
+
+### 변경
+- `run.py` — 모든 모델 호출에 `think=False`, 실행 기록에 `run_config.think`. 모델마다 실행 전에 메모리에서 내림(OBS-002의 `ollama stop`을 코드로 옮김). 기본 대상 모델을 `qwen2.5:7b` 하나로 변경(Llama 3.1은 정기 측정에서 제외)
+- 동작 동일성 확인: 변경 후 qwen2.5:7b 개발용 seed 1의 모델 원본·최종 응답 64/64가 v1.3 실행 기록과 같음
+
+### 모델 재선정 (2026-10-02~03, 개발용 32건 × 2회 × seed 3개)
+- 후보 8개 → 조건(한국어·VRAM 8GB·상업 라이선스·구조화 출력)으로 6개 사전 점검 → gemma4:12b·granite4:tiny-h 비교 측정
+- **결정: 현재 모델(qwen2.5:7b) 유지** — 두 후보 모두 seed 3개 전부에서 기준 미통과
+- gemma4:12b: X-1 누락 8→3, 우선순위 정답 119→158(seed 합계)로 판단은 앞섰으나, X-3(B12)·과잉 상신·처리 문항 회귀가 모든 seed의 같은 문항에서 반복. 날조 판정 6건은 탐지기 오판([ISSUE-008](docs/issue_log.md#issue-008) 재현)이나 제외해도 결론 동일
+- 한계: 프롬프트 v2.3이 현재 모델에 맞춰져 있음 ([KL-004](docs/issue_log.md#kl-004))
+- 보고서: [`report/eval_v14_model_selection.md`](report/eval_v14_model_selection.md)
+
+---
+
 ## [v1.3] — 2026-10-02
 
 > **답하려는 질문:** 평가셋이 실제 현업 인입을 대표하는가?

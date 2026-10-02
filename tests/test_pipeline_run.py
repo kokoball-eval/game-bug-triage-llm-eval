@@ -57,9 +57,10 @@ class FakeClient:
     """모델 대신 정해진 응답을 차례로 돌려준다. 받은 프롬프트를 기록한다."""
 
     def __init__(self, *responses):
-        self.responses, self.prompts, self.formats = list(responses), [], []
+        self.responses, self.prompts, self.formats, self.thinks = list(responses), [], [], []
 
-    def generate(self, model, prompt, options, format=None):
+    def generate(self, model, prompt, options, format=None, think=None):
+        self.thinks.append(think)
         self.prompts.append(prompt)
         self.formats.append(format)
         return {"response": self.responses.pop(0), "eval_count": 100, "eval_duration": 10**9, "prompt_eval_count": 2400}
@@ -270,12 +271,12 @@ def test_line_pattern_matches_allowlist():
 class PatternRejectingClient(FakeClient):
     """pattern 을 지원하지 않는 실행 환경 — pattern 이 든 스키마를 받으면 오류를 낸다."""
 
-    def generate(self, model, prompt, options, format=None):
+    def generate(self, model, prompt, options, format=None, think=None):
         if format and any("pattern" in v for v in format.get("properties", {}).values()):
             self.prompts.append(prompt)
             self.formats.append(format)
             raise RuntimeError("unsupported schema: pattern")
-        return super().generate(model, prompt, options, format)
+        return super().generate(model, prompt, options, format, think)
 
 
 def test_pattern_fallback_when_unsupported():
@@ -285,3 +286,10 @@ def test_pattern_fallback_when_unsupported():
     assert retry["pattern_fallback"] and "pattern" in retry["pattern_error"]
     assert "pattern" not in client.formats[-1]["properties"]["요약"]
     assert parse_v2(res["response_text"])["요약"] == "접속 시 과열 후 튕김"
+
+
+def test_every_call_turns_thinking_off():
+    """설계 의도 8 — 첫 응답과 재요청 모두 think=False 로 부른다."""
+    client = FakeClient(BAD, '{"우선순위": "Minor", "분류": "버그 아님"}')
+    generate_with_retry(client, "m", DATA["items"][0], {"num_predict": 512})
+    assert len(client.thinks) == 2 and all(t is False for t in client.thinks)

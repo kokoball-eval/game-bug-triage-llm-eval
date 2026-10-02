@@ -1,0 +1,506 @@
+{
+  "kind": "model_screening",
+  "created": "2026-10-02T23:49:06",
+  "prompt_version": "v2.3",
+  "options": {
+    "temperature": 0.2,
+    "num_predict": 512,
+    "num_ctx": 8192,
+    "seed": 1
+  },
+  "items": [
+    "A01",
+    "B01",
+    "S01"
+  ],
+  "environment": {
+    "gpu_used_mib": 4888.0,
+    "ollama_loaded": [
+      {
+        "model": "qwen2.5:7b",
+        "vram_mib": 4756.1
+      }
+    ],
+    "other_vram_mib": 131.9,
+    "on_ac_power": true,
+    "warnings": [],
+    "notes": [
+      "Ollama에 이미 올라가 있는 모델: qwen2.5:7b (워밍업 로딩 시간만 짧아지며 본 통계에는 영향 없음)"
+    ]
+  },
+  "results": [
+    {
+      "model": "qwen2.5:7b",
+      "digest": "845dbda0ea48",
+      "result": "PASS",
+      "checks": {
+        "C1_installed": {
+          "pass": true,
+          "note": ""
+        },
+        "C2_think_off": {
+          "pass": true,
+          "note": ""
+        },
+        "C3_gpu_fit": {
+          "pass": true,
+          "note": "전체 4756 MiB GPU 적재"
+        },
+        "C4_structured": {
+          "pass": true,
+          "note": ""
+        },
+        "C5_format": {
+          "pass": true,
+          "note": "R2 위반 0건, R7 위반 0건 / 참고: R1 0, R3 0, R4 0, R5 0, R6 0"
+        }
+      },
+      "info": {
+        "capabilities": [
+          "completion",
+          "tools"
+        ],
+        "license_first_line": "Apache License",
+        "ps_raw": {
+          "size": 4987132312,
+          "size_vram": 4987132312,
+          "context_length": 8192
+        },
+        "disk_bytes": 4683087332,
+        "vram_used_mib_after_load": 4888.0,
+        "default_outputs_thinking": false,
+        "think_param_rejected": false,
+        "avg_elapsed_sec": 1.651,
+        "avg_tokens_per_sec": 67.9
+      },
+      "responses": [
+        {
+          "id": "A01",
+          "text": "[요약]: 다이아 패키지 결제 후 다이아가 게임 내에 반영되지 않았습니다.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "thinking": null
+        },
+        {
+          "id": "B01",
+          "text": "[요약]: 신규 계정 생성 후 첫 로딩 화면에서 앱이 강제 종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "thinking": null
+        },
+        {
+          "id": "S01",
+          "text": "[요약]: 경매장 수령액이나 우편함 보상을 받을 때, 특정 길드원들이 와이파이를 껐다 켜면서 중복 수령을 시도하고 있습니다.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "thinking": null
+        }
+      ],
+      "structured": {
+        "enum": "{ \"분류\": \"결함\", \"우선순위\": \"Critical\" }",
+        "pattern": "{ \"요약\": \"아이폰에서 다이아 결제 후 다이아 보유량이 늘지 않았습니다.\" }"
+      }
+    },
+    {
+      "model": "qwen3.5:9b",
+      "digest": "6488c96fa5fa",
+      "result": "FAIL",
+      "checks": {
+        "C1_installed": {
+          "pass": true,
+          "note": ""
+        },
+        "C2_think_off": {
+          "pass": true,
+          "note": ""
+        },
+        "C3_gpu_fit": {
+          "pass": false,
+          "note": "CPU로 넘친 부분 735 MiB (전체 5987 MiB)"
+        },
+        "C4_structured": {
+          "pass": true,
+          "note": ""
+        },
+        "C5_format": {
+          "pass": false,
+          "note": "R2 위반 1건, R7 위반 0건 / 참고: R1 0, R3 1, R4 0, R5 1, R6 1"
+        }
+      },
+      "info": {
+        "capabilities": [
+          "completion",
+          "vision",
+          "tools",
+          "thinking"
+        ],
+        "license_first_line": "Apache License",
+        "ps_raw": {
+          "size": 6277541392,
+          "size_vram": 5506439576,
+          "context_length": 8192
+        },
+        "disk_bytes": 6594474711,
+        "vram_used_mib_after_load": 6396.0,
+        "default_outputs_thinking": true,
+        "think_param_rejected": false,
+        "avg_elapsed_sec": 2.44,
+        "avg_tokens_per_sec": 49.8
+      },
+      "responses": [
+        {
+          "id": "A01",
+          "text": "[요약] 아이폰 15 에서 추석 한정 다이아 패키지 결제 후 다이아가 지급되지 않고 보유량이 유지되는 결제 불성공 이슈 제보\n[분류] 결함\n[모듈] 결제·재화\n[우선순위] Critical\n[재현 정보] 충분\n[발생 빈도] 1회\n[처리] 긴급 사인 요청\n[누락 정보 및 권장 조치] 주문번호와 앱스토어 영수증 상세 내역, 결제 시도 시점의 서버 상태 확인 필요",
+          "thinking": null
+        },
+        {
+          "id": "B01",
+          "text": "[요약]: 신규 계정 첫 로딩 시 리소스 다운로드 완료 직후 앱이 강제 종료되어 게임 진입 불가\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 재현에 필요한데 빠진 정보 없음, 크래시 로그 분석 후 원인 규명 및 수정 필요",
+          "thinking": null
+        },
+        {
+          "id": "S01",
+          "text": "[요약]: 우편함 보상 중복 수령 및 악용을 목적으로 한 네트워크 조작 행위 제보\n[분류]: 결함\n[모듈]: 네트워크 / 보안·어뷰징\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 악용 경로 재현을 위한 구체적인 조작 방법 (와이파이 끄기/켜기 타이밍 등) 및 관련 로그 데이터 확보 필요",
+          "thinking": null
+        }
+      ],
+      "structured": {
+        "enum": "{\n  \"분류\": \"결함\",\n  \"우선순위\": \"Critical\"\n}",
+        "pattern": "{\n  \"요약\": \"아이폰 15 에서 상점에서 다이아 패키지 결제 완료 후에도 보유량이 변경되지 않고 영수증과 팝업만 표시되는 결제 미처리 이슈 제보입니다.\"\n}"
+      }
+    },
+    {
+      "model": "gemma4:e4b",
+      "digest": "dc35e8d9c606",
+      "result": "FAIL",
+      "checks": {
+        "C1_installed": {
+          "pass": true,
+          "note": ""
+        },
+        "C2_think_off": {
+          "pass": true,
+          "note": ""
+        },
+        "C3_gpu_fit": {
+          "pass": null,
+          "note": "ps 적재 크기 249 MiB < 모델 파일 6279 MiB — 값을 믿을 수 없어 판정 불가, ollama ps 의 PROCESSOR 칸으로 직접 확인 필요"
+        },
+        "C4_structured": {
+          "pass": true,
+          "note": ""
+        },
+        "C5_format": {
+          "pass": false,
+          "note": "R2 위반 3건, R7 위반 0건 / 참고: R1 3, R3 3, R4 0, R5 3, R6 3"
+        }
+      },
+      "info": {
+        "capabilities": [
+          "completion",
+          "vision",
+          "audio",
+          "tools",
+          "thinking"
+        ],
+        "license_first_line": "Apache License",
+        "ps_raw": {
+          "size": 261347081,
+          "size_vram": 261347081,
+          "context_length": 8192
+        },
+        "disk_bytes": 6583656505,
+        "vram_used_mib_after_load": 4740.0,
+        "default_outputs_thinking": true,
+        "think_param_rejected": false,
+        "avg_elapsed_sec": 1.017,
+        "avg_tokens_per_sec": 112.7
+      },
+      "responses": [
+        {
+          "id": "A01",
+          "text": "결제 후 다이아 지급 누락 현상 발생\n결함\n결제·재화\nCritical\n충분\n1회\n긴급 사인 요청\n결제 영수증 및 주문번호를 첨부하여 재현 및 지급 확인 요청",
+          "thinking": null
+        },
+        {
+          "id": "B01",
+          "text": "신규 계정 생성 후 첫 로딩 시 앱 강제 종료 발생\n결함\n클라이언트 안정성\nCritical\n충분\n항상\n개발 배정\n없음",
+          "thinking": null
+        },
+        {
+          "id": "S01",
+          "text": "요약: 일부 길드원이 우편함 보상 수령 시 고의적인 네트워크 불안정 유발로 아이템을 중복 수령하는 악용 행위 제보\n분류: 결함\n모듈: 네트워크/결제·재화\n우선순위: Critical\n재현 정보: 부족\n발생 빈도: 간헐적\n처리: 긴급 사인 요청\n누락 정보 및 권장 조치: 악용 행위의 구체적인 재현 조건(어떤 보상, 어떤 상황) 및 로그 조사가 필요하므로, 관련 로그 확보 및 개발팀의 조사 요청",
+          "thinking": null
+        }
+      ],
+      "structured": {
+        "enum": "{\n\"분류\": \"결함\",\n\"우선순위\": \"Critical\"\n}",
+        "pattern": "{\n\"요약\": \"아이폰 15에서 추석 한정 다이아 패키지 결제 후 다이아가 지급되지 않음. 영수증은 수신됨. 게임 재접속 및 재부팅 시도했으나 변화 없음. 주문번호는 문의함 상태임.\"\n}"
+      }
+    },
+    {
+      "model": "gemma4:12b",
+      "digest": "6114515d63c1",
+      "result": "HOLD",
+      "checks": {
+        "C1_installed": {
+          "pass": true,
+          "note": ""
+        },
+        "C2_think_off": {
+          "pass": true,
+          "note": ""
+        },
+        "C3_gpu_fit": {
+          "pass": null,
+          "note": "ps 적재 크기 896 MiB < 모델 파일 7650 MiB — 값을 믿을 수 없어 판정 불가, ollama ps 의 PROCESSOR 칸으로 직접 확인 필요"
+        },
+        "C4_structured": {
+          "pass": true,
+          "note": ""
+        },
+        "C5_format": {
+          "pass": true,
+          "note": "R2 위반 0건, R7 위반 0건 / 참고: R1 0, R3 0, R4 0, R5 0, R6 0"
+        }
+      },
+      "info": {
+        "capabilities": [
+          "completion",
+          "vision",
+          "audio",
+          "tools",
+          "thinking"
+        ],
+        "license_first_line": "Apache License",
+        "ps_raw": {
+          "size": 939125636,
+          "size_vram": 939125636,
+          "context_length": 8192
+        },
+        "disk_bytes": 8021618941,
+        "vram_used_mib_after_load": 6762.0,
+        "default_outputs_thinking": true,
+        "think_param_rejected": false,
+        "avg_elapsed_sec": 5.049,
+        "avg_tokens_per_sec": 31.3
+      },
+      "responses": [
+        {
+          "id": "A01",
+          "text": "[요약]: 아이폰 15에서 추석 한정 다이아 패키지 결제 후 재화가 지급되지 않음\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 결제 영수증 내 주문번호를 확인하여 실제 결제 완료 여부와 서버 로그를 대조해야 함.",
+          "thinking": null
+        },
+        {
+          "id": "B01",
+          "text": "[요약]: 신규 계정 생성 후 첫 로딩 완료 직후 앱이 강제 종료되어 게임 진입 불가\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "thinking": null
+        },
+        {
+          "id": "S01",
+          "text": "[요약]: 우편함 및 경매장 보상 수령 시 네트워크 조작을 통한 아이템 복사 의심 제보\n[분류]: 결함\n[모듈]: 결제·재화/보안·어뷰징\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 미기재\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 복사 의심 유저의 계정 정보 및 구체적인 복사 사례(아이템 ID 등) 확보 필요. 로그 조사를 통한 데이터 검증 권장.",
+          "thinking": null
+        }
+      ],
+      "structured": {
+        "enum": "{\n    \"분류\": \"결함\",\n    \"우선순위\": \"Critical\"\n}",
+        "pattern": "{\n\"요약\": \"아이폰 15에서 추석 한정 다이아 패키지 결제 후 재화가 지급되지 않음\"\n}"
+      }
+    },
+    {
+      "model": "qwen3:8b",
+      "digest": "500a1f067a9f",
+      "result": "FAIL",
+      "checks": {
+        "C1_installed": {
+          "pass": true,
+          "note": ""
+        },
+        "C2_think_off": {
+          "pass": true,
+          "note": ""
+        },
+        "C3_gpu_fit": {
+          "pass": true,
+          "note": "전체 5900 MiB GPU 적재"
+        },
+        "C4_structured": {
+          "pass": true,
+          "note": ""
+        },
+        "C5_format": {
+          "pass": false,
+          "note": "R2 위반 3건, R7 위반 0건 / 참고: R1 3, R3 3, R4 0, R5 3, R6 3"
+        }
+      },
+      "info": {
+        "capabilities": [
+          "completion",
+          "tools",
+          "thinking"
+        ],
+        "license_first_line": "Apache License",
+        "ps_raw": {
+          "size": 6186378198,
+          "size_vram": 6186378198,
+          "context_length": 8192
+        },
+        "disk_bytes": 5225388164,
+        "vram_used_mib_after_load": 6066.0,
+        "default_outputs_thinking": true,
+        "think_param_rejected": false,
+        "avg_elapsed_sec": 2.565,
+        "avg_tokens_per_sec": 59.1
+      },
+      "responses": [
+        {
+          "id": "A01",
+          "text": "요약: 다이아 패키지 결제 후 다이아가 반영되지 않음  \n분류: 결함  \n모듈: 결제·재화  \n우선순위: Critical  \n재현 정보: 충분  \n발생 빈도: 1회  \n처리: 긴급 사인 요청  \n누락 정보 및 권장 조치: 결제 내역 및 주문번호 확인 요청, 결제 시 기기 정보 및 빌드 버전 확인 권장",
+          "thinking": null
+        },
+        {
+          "id": "B01",
+          "text": "요약: 신규 계정 생성 후 첫 진입 로딩 중 앱 강제 종료  \n분류: 결함  \n모듈: 클라이언트 안정성  \n우선순위: Critical  \n재현 정보: 충분  \n발생 빈도: 항상  \n처리: 긴급 사인 요청  \n누락 정보 및 권장 조치: 해당 없음",
+          "thinking": null
+        },
+        {
+          "id": "S01",
+          "text": "요약: 특정 길드원들이 와이파이를 껐다 켜면서 우편함 보상을 중복으로 타먹는 현상 발생  \n분류: 개선 제안  \n모듈: 네트워크  \n우선순위: Major  \n재현 정보: 충분  \n발생 빈도: 간헐적  \n처리: 개발 배정  \n누락 정보 및 권장 조치: 해당 없음",
+          "thinking": null
+        }
+      ],
+      "structured": {
+        "enum": "{\"분류\":\"결함\",\"우선순위\":\"Critical\"}",
+        "pattern": "{\"요약\": \"유저가 다이아 패키지 결제 후 다이아가 반영되지 않음\"}"
+      }
+    },
+    {
+      "model": "granite4:tiny-h",
+      "digest": "566b725534ea",
+      "result": "PASS",
+      "checks": {
+        "C1_installed": {
+          "pass": true,
+          "note": ""
+        },
+        "C2_think_off": {
+          "pass": true,
+          "note": ""
+        },
+        "C3_gpu_fit": {
+          "pass": true,
+          "note": "전체 4263 MiB GPU 적재"
+        },
+        "C4_structured": {
+          "pass": true,
+          "note": ""
+        },
+        "C5_format": {
+          "pass": true,
+          "note": "R2 위반 0건, R7 위반 0건 / 참고: R1 0, R3 1, R4 3, R5 0, R6 0"
+        }
+      },
+      "info": {
+        "capabilities": [
+          "completion",
+          "tools"
+        ],
+        "license_first_line": "Apache License",
+        "ps_raw": {
+          "size": 4470027058,
+          "size_vram": 4470027058,
+          "context_length": 8192
+        },
+        "disk_bytes": 4230995221,
+        "vram_used_mib_after_load": 4444.0,
+        "default_outputs_thinking": false,
+        "think_param_rejected": false,
+        "avg_elapsed_sec": 1.438,
+        "avg_tokens_per_sec": 180.9
+      },
+      "responses": [
+        {
+          "id": "A01",
+          "text": "[요약]: 다이아 패키지 결제 후 다이아가 도착하지 않는 문제\n\n[분류]: 결함\n\n[모듈]: 결제·재화\n\n[우선순위]: Critical\n\n[재현 정보]: 충분\n\n[발생 빈도]: 항상\n\n[처리]: 긴급 사인 요청\n\n[누락 정보 및 권장 조치]: 영수증과 주문번호 확인 필요, 다이아 도착 여부 확인 후 보완 조치 권장",
+          "thinking": null
+        },
+        {
+          "id": "B01",
+          "text": "[요약]: 신규 계정 첫 로딩 중 앱 강제 종료 현상\n\n[분류]: 결함\n\n[모듈]: 클라이언트 안정성\n\n[우선순위]: Critical\n\n[재현 정보]: 충분\n\n[발생 빈도]: 항상\n\n[처리]: 긴급 사인 요청\n\n[누락 정보 및 권장 조치]: 테스트 환경, 재현율, 기대·실제 결과, 참고 문서 등 충분히 제공되었으나, 추가로 필요한 정보가 있을 수 있음.",
+          "thinking": null
+        },
+        {
+          "id": "S01",
+          "text": "[요약]: 특정 유저들이 경매장 수령액이나 우편함 보상을 받을 때, 고의로 와이파이를 껐다 켜서 여러 번 중복으로 타먹는 현상이 발생하고 있으며, 랭커들의 스펙업 속도가 비정상적이라는 우려가 제기되고 있습니다.\n\n[분류]: 결함\n\n[모듈]: 계정·로그인, 콘텐츠 진행\n\n[우선순위]: Critical\n\n[재현 정보]: 충분\n\n[발생 빈도]: 항상\n\n[처리]: 긴급 사인 요청\n\n[누락 정보 및 권장 조치]: 로그 조사 및 영구정지 조치 권장\n\n[분류]: 결함\n\n[모듈]: 콘텐츠 진행\n\n[우선순위]: Critical\n\n[재현 정보]: 충분\n\n[발생 빈도]: 항상\n\n[처리]: 긴급 사인 요청\n\n[누락 정보 및 권장 조치]: 로그 조사 및 영구정지 조치 권장",
+          "thinking": null
+        }
+      ],
+      "structured": {
+        "enum": "{ \"분류\": \"결함\", \"우선순위\": \"Critical\" }",
+        "pattern": "{ \"요약\": \"아이폰 15 사용자가 '추석 한정 다이아 패키지(33,000원)' 결제 후 다이아가 안 들어왔다.\" }"
+      }
+    },
+    {
+      "model": "qwen3.5:4b",
+      "digest": "2a654d98e6fb",
+      "result": "FAIL",
+      "checks": {
+        "C1_installed": {
+          "pass": true,
+          "note": ""
+        },
+        "C2_think_off": {
+          "pass": true,
+          "note": ""
+        },
+        "C3_gpu_fit": {
+          "pass": true,
+          "note": "전체 3187 MiB GPU 적재"
+        },
+        "C4_structured": {
+          "pass": true,
+          "note": ""
+        },
+        "C5_format": {
+          "pass": false,
+          "note": "R2 위반 1건, R7 위반 0건 / 참고: R1 0, R3 1, R4 0, R5 1, R6 1"
+        }
+      },
+      "info": {
+        "capabilities": [
+          "completion",
+          "vision",
+          "tools",
+          "thinking"
+        ],
+        "license_first_line": "Apache License",
+        "ps_raw": {
+          "size": 3341958511,
+          "size_vram": 3341958511,
+          "context_length": 8192
+        },
+        "disk_bytes": 3389983735,
+        "vram_used_mib_after_load": 4062.0,
+        "default_outputs_thinking": true,
+        "think_param_rejected": false,
+        "avg_elapsed_sec": 1.594,
+        "avg_tokens_per_sec": 87.7
+      },
+      "responses": [
+        {
+          "id": "A01",
+          "text": "[요약]: 다이아 패키지 결제 후 앱스토어 영수증과 결제 완료 팝업이 뜨지만 게임 내 다이아 보유량이 증가하지 않았습니다.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 재접속 시 다이아가 들어오는지 확인하고, 영수증 주문번호로 CS 팀에 즉시 연락하여 결제 내역과 게임 데이터 동기화 상태를 조사해야 합니다.",
+          "thinking": null
+        },
+        {
+          "id": "B01",
+          "text": "[요약] 신규 계정 생성 후 첫 진입 로딩 중 앱이 강제 종료되어 게임 진입 불가합니다.\n[분류] 결함\n[모듈] 클라이언트 안정성\n[우선순위] Critical\n[재현 정보] 충분\n[발생 빈도] 항상\n[처리] 긴급 사인 요청\n[누락 정보 및 권장 조치] 재현 가능한 크래시 로그와 빌드 버전 확인이 완료되었으므로 개발팀에 즉시 배정하여 원인 규명과 패치 진행을 요청합니다.",
+          "thinking": null
+        },
+        {
+          "id": "S01",
+          "text": "[요약]: 우편함 보상 시 와이파이 재연결을 이용해 중복 수령하는 악용 사례를 신고합니다.\n[분류]: 결함\n[모듈]: 네트워크/계정·로그인\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 악용 절차의 기술적 차단 여부 확인 필요, 개발팀에 즉시 대응 요청",
+          "thinking": null
+        }
+      ],
+      "structured": {
+        "enum": "{\n\"분류\": \"결함\",\n\"우선순위\": \"Critical\"\n}",
+        "pattern": "{\n\"요약\": \"아이폰 15 에서 추석 한정 다이아 패키지 결제 후 다이아가 게임 내로 들어오지 않았습니다.\"\n}"
+      }
+    }
+  ]
+}

@@ -85,8 +85,14 @@ def test_pipeline_end_to_end_with_fake_model(tmp_path, monkeypatch):
 
     by_title = {i["input"]["title"]: i for i in ITEMS.values()}
 
+    unloaded = []
+
     class FakeClient:
-        def generate(self, model, prompt, options):
+        def generate(self, model, prompt, options=None, think=None, keep_alive=None):
+            if keep_alive == 0:  # 설계 의도 9 — 모델마다 실행 전에 내린다
+                unloaded.append(model)
+                return {}
+            assert think is False  # 설계 의도 8
             item = next((it for t, it in by_title.items() if f"[제목] {t}\n" in prompt), None)
             text = ideal(item) if item else "[요약]: 워밍업"
             return {"response": text, "eval_count": 100, "eval_duration": 10**9,
@@ -102,7 +108,9 @@ def test_pipeline_end_to_end_with_fake_model(tmp_path, monkeypatch):
     monkeypatch.setattr(pipeline_run, "preflight_snapshot", lambda c: {"warnings": [], "notes": []})
     monkeypatch.setattr(pipeline_run, "OUT_DIR", tmp_path / "history")
     assert pipeline_run.main(["--seed", "1", "--model", "fake", "--repeat", "1"]) == 0
+    assert unloaded == ["fake"]
     log = next((tmp_path / "history").glob("v13_dev_*.json"))
+    assert json.loads(log.read_text(encoding="utf-8"))["metadata"]["run_config"]["think"] is False
     assert pipeline_score.main(["--log", str(log), "--no-report"]) == 0
     result = json.loads(next(tmp_path.glob("score_*.json")).read_text(encoding="utf-8"))
     total = result["summary"]["fake"]["전체"]

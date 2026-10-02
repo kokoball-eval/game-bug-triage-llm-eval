@@ -1,8 +1,8 @@
 """v1.3 평가셋(data/eval_v13/aether_raid_v13.json) 실행 스크립트 — 출력 형식 v2.
 
 사용법:
-    uv run triage-run --seed 1 --strict-env                 # 개발용(dev) 전체, Qwen·Llama
-    uv run triage-run --seed 1 --model qwen2.5:7b           # 모델 하나만
+    uv run triage-run --seed 1 --strict-env                 # 개발용(dev) 전체, 현재 선정 모델(qwen2.5:7b)
+    uv run triage-run --seed 1 --model qwen2.5:7b --model gemma4:12b   # 모델 비교 (v1.4, triage-select 로 판정)
     uv run triage-run --seed 1 --set focused                # 집중 세트만
     uv run triage-run --seed 1 --split test --final         # 평가용(test) — 최종 측정 때만
 
@@ -66,6 +66,15 @@
      (발열 제보 A10을 무관으로 보고 폐기, X-2)가 드러났다 (docs/issue_log.md ISSUE-007).
    - 확인 질문과 답은 attempts 에 남기고, 호출 시간은 elapsed_sec 에 더한다.
    --no-discard-check 를 주면 확인하지 않는다.
+8. (v1.4) 모든 모델 호출에 think=False 를 넘기고 실행 기록에 남긴다(run_config.think).
+   최근 모델은 기본 상태에서 생각 과정을 먼저 출력하는데(사전 점검: qwen3.5·gemma4 계열 모두), 켜 두면 8칸 형식과
+   지연이 모두 달라진다. 생각 기능이 없는 qwen2.5:7b 는 이 인자를 거부하지 않는 것을 사전 점검으로 확인했고,
+   응답이 바뀌지 않는지는 v1.3 실행 기록과 대조해 확인한다.
+9. (v1.4) 모델마다 실행 전에 그 모델을 메모리에서 내린다(keep_alive=0). 같은 seed라도 Ollama가 직전에 다른 프롬프트를
+   처리했으면 응답이 재현되지 않으므로(docs/issue_log.md OBS-002), 사람이 실행 전에 하던 ollama stop 을 코드가 한다.
+   여러 모델을 한 번에 실행해도 모델마다 같은 출발 상태에서 측정된다.
+10. (v1.4) 기본 대상은 현재 선정 모델 하나다. Llama 3.1은 평가용 세트에서도 형식·Critical 인식 모두 크게 뒤져
+   정기 측정에서 뺐다(필요하면 --model 로 지정). 후보 모델은 --model 로 함께 넘겨 같은 실행 안에서 비교한다.
 """
 
 import argparse
@@ -90,7 +99,8 @@ from triage_eval.pipeline.prompt import (DISCARD_CHECK_CHOICES, PROMPT_VERSION, 
 DATASET = ROOT / "data" / "eval_v13" / "aether_raid_v13.json"
 OUT_DIR = ROOT / "data" / "results" / "v13" / "history"
 
-MODELS = ["qwen2.5:7b", "llama3.1:8b"]
+MODELS = ["qwen2.5:7b"]  # 설계 의도 10
+THINK = False  # 설계 의도 8
 REPEAT_COUNT = 2
 OPTIONS_V2 = {"temperature": 0.2, "num_predict": 512, "num_ctx": 8192}
 RECHECK_TRIGGER = ("분류", "우선순위", "재현 정보")  # 이 필드가 틀리면 [처리]도 다시 정한다
@@ -121,7 +131,7 @@ def generate_once(client, model: str, prompt: str, options: dict, schema: dict |
     start = time.perf_counter()
     try:
         extra = {"format": schema} if schema else {}
-        r = client.generate(model=model, prompt=prompt, options=options, **extra)
+        r = client.generate(model=model, prompt=prompt, options=options, think=THINK, **extra)
         eval_ns = r.get("eval_duration", 0)
         return {
             "success": True,
@@ -179,6 +189,14 @@ def merge_retry(first_text: str, new_values: dict, fields: list[str]) -> tuple[s
         if value_ok(field, value, candidate):
             out, fixed[field] = candidate, value
     return out, fixed
+
+
+def unload_model(client, model: str) -> None:
+    """설계 의도 9 — 모델을 메모리에서 내린다. 내릴 모델이 없거나 실패해도 실행은 계속한다."""
+    try:
+        client.generate(model=model, prompt="", keep_alive=0)
+    except Exception:
+        pass
 
 
 def generate_with_retry(client, model: str, item: dict, options: dict, retry: bool = True) -> dict:
@@ -269,7 +287,7 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="v1.3 평가셋 실행 (출력 형식 v2)")
     p.add_argument("--split", choices=["dev", "test", "all"], default="dev")
     p.add_argument("--set", dest="set_name", choices=["representative", "focused", "all"], default="all")
-    p.add_argument("--model", action="append", help="실행할 모델 (여러 번 지정 가능, 기본: Qwen·Llama)")
+    p.add_argument("--model", action="append", help="실행할 모델 (여러 번 지정 가능, 기본: qwen2.5:7b)")
     p.add_argument("--seed", type=int, default=None, help="seed 고정 모드 (1회차 N, 2회차 N+1)")
     p.add_argument("--repeat", type=int, default=REPEAT_COUNT)
     p.add_argument("--strict-env", action="store_true", help="측정 환경 경고가 있으면 실행하지 않음")
@@ -312,6 +330,7 @@ def main(argv: list[str] | None = None) -> int:
         "retry_policy": None if args.no_retry else RETRY_POLICY,
         "discard_check_policy": None if args.no_discard_check else DISCARD_CHECK_POLICY,
         "system_prompt_sha256": sha256_text(SYSTEM_PROMPT_V2),
+        "think": THINK,
         "dataset_sha256": hashlib.sha256(json.dumps(dataset, ensure_ascii=False, sort_keys=True).encode()).hexdigest(),
         "item_ids": [i["id"] for i in items],
         "model_digests": get_model_digests(client, models),
@@ -323,6 +342,7 @@ def main(argv: list[str] | None = None) -> int:
 
     results, warmups = [], []
     for model in models:
+        unload_model(client, model)  # 설계 의도 9
         w = generate_once(client, model, SYSTEM_PROMPT_V2 + "\n[리포트]\n워밍업 입력", options_for(args.seed, 1))
         warmups.append({"model": model, "is_warmup": True, **w})
         print(f"[{model}] 워밍업 {w['elapsed_sec']}s (로드 {w['load_duration_sec']}s)")
