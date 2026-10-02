@@ -347,7 +347,7 @@ uv run triage-score                                          # 정답 대조 채
 uv run triage-gate; echo "종료 코드: $LASTEXITCODE"           # 고정 기준선 대비 판정 (0 PASS · 1 FAIL · 2 판정 불가)
 ```
 
-* 평가용(test) 문항은 `--final`을 줘야만 실행됩니다. 게이트는 개발용 실행만 판정합니다.
+* 평가용(test) 문항은 `--final`을 줘야만 실행됩니다. 게이트는 개발용 실행만 판정합니다. v1.3 최종 측정은 `uv run triage-run --seed 1 --strict-env --split test --final`로 1회 실행했습니다(→ [`report/eval_v13_final.md`](report/eval_v13_final.md)).
 * `--no-retry`, `--no-discard-check`, `--no-guardrail`로 형식 재요청·폐기 확인·후처리 안전장치를 끄면 모델 단독 성능을 잴 수 있습니다. 켜 둔 상태에서도 실행 기록에 모델 원본 응답(`raw_response_text`)이 함께 남습니다.
 * 결과: `data/results/v13/gate_result_v13.json`(기계 판독용), `report/regression_gate_v13.md`(판정 근거)
 
@@ -364,7 +364,8 @@ uv run triage-gate; echo "종료 코드: $LASTEXITCODE"           # 고정 기�
 | [`report/format_compliance.md`](report/format_compliance.md) | **포맷 준수율 채점 근거.** R1~R6 규칙 정의와 응답 45건의 회차별 판정 |
 | [`report/environment.md`](report/environment.md) | **실행 환경 실측.** 시스템 RAM/VRAM 구분, 실측 context length, CLI/Python 경로 검증 |
 | [`report/eval_v13_baseline.md`](report/eval_v13_baseline.md) | **(v1.3) 기준선 측정 보고서.** 개발용 세트 측정 조건, 결과, 오판 원인 분석 |
-| [`report/eval_v13.md`](report/eval_v13.md) | **(v1.3) 정답 대조 채점 요약.** 모델·세트별 칸별 정답률, 위험 건, 날조 (`score_v2.py` 생성) |
+| [`report/eval_v13.md`](report/eval_v13.md) | **(v1.3) 정답 대조 채점 요약.** 모델·세트별 칸별 정답률, 위험 건, 날조 (`pipeline/score.py` 생성, 가장 최근 실행 기준) |
+| [`report/eval_v13_final.md`](report/eval_v13_final.md) | **(v1.3) 최종 측정 보고서.** 평가용 세트 결과, 개발용 대비 비교, 모델 원본과 최종 출력 비교, 오답 원인 분석 |
 | [`report/regression_gate.md`](report/regression_gate.md) | **회귀 게이트 판정 근거.** 기준선 대비 최신 실행의 지표·기준별 판정·판정 변화 (`compare_runs.py` 생성) |
 | [`report/regression_gate_v13.md`](report/regression_gate_v13.md) | **(v1.3) 회귀 게이트 판정 근거.** 기준선 대비 후보 실행의 기준별 판정과 문항 단위 변화 (`gate_v13.py` 생성) |
 | [`CHANGELOG.md`](CHANGELOG.md) | **버전별 변경 이력.** v1.0부터 v1.3까지, 버전마다 답하려는 질문 |
@@ -422,7 +423,8 @@ game-bug-triage-llm-eval/
 │   ├── environment.md           # 시스템 RAM/VRAM 구분, 실측 context length 기록
 │   ├── regression_gate.md       # (v1.1) 회귀 게이트 판정 근거 (compare_runs.py 생성)
 │   ├── eval_v13_baseline.md     # (v1.3) 기준선 측정 보고서 (원인 분석)
-│   ├── eval_v13.md              # (v1.3) 정답 대조 채점 요약 (score_v2.py 생성)
+│   ├── eval_v13.md              # (v1.3) 정답 대조 채점 요약 (pipeline/score.py 생성)
+│   ├── eval_v13_final.md        # (v1.3) 평가용 세트 최종 측정 보고서
 │   └── regression_gate_v13.md   # (v1.3) 회귀 게이트 판정 근거 (gate_v13.py 생성)
 ├── scripts/legacy/               # 5일 실험 당시의 일회용 스크립트 (v1.3 구조 정리 때 src/ 에서 이동)
 │   ├── 01_ollama_chat.py         # 단일 모델 적재/VRAM 측정 스모크 테스트
@@ -515,7 +517,7 @@ v1.0은 "지금 어떤 모델이 이 업무에 맞는가"를 **한 번** 측정�
 | ✅&nbsp;v1.1 | 무언가 바꿨을 때 나빠졌는가? | 두 실행 비교 회귀 게이트 (`compare_runs.py`, `gate_criteria.toml`) |
 | ✅&nbsp;v1.1.1 | 평가 도구 자체는 믿을 수 있는가? | 채점·게이트 로직 단위 테스트(pytest) + GitHub Actions CI |
 | ✅&nbsp;v1.2 | 가장 위험한 결함(날조)을 사람 없이 잡을 수 있는가? | 환각 자동 탐지 + seed 고정 모드 + 측정 환경 체크리스트 |
-| 🔨&nbsp;v1.3 | 평가셋이 실제 현업 인입을 대표하는가? | ✅ 현업 기반 평가셋 63건 (분류 체계 → 판정 기준서 → 시드 케이스·정답 라벨), 개발용/평가용 분리 · ✅ 출력 형식 v2와 기준선 측정 · ✅ v1.3 게이트·실사용 시나리오 · ✅ 저장소 구조 정리 · 🔨 평가용 세트 최종 측정 |
+| ✅&nbsp;v1.3 | 평가셋이 실제 현업 인입을 대표하는가? | ✅ 현업 기반 평가셋 63건 (분류 체계 → 판정 기준서 → 시드 케이스·정답 라벨), 개발용/평가용 분리 · ✅ 출력 형식 v2와 기준선 측정 · ✅ v1.3 게이트·실사용 시나리오 · ✅ 저장소 구조 정리 · ✅ 평가용 세트 최종 측정 |
 | ⏳&nbsp;v1.4 | 정답 라벨과 자동 채점을 믿을 수 있는가? | 채점자 간 라벨 일치율 + LLM-as-judge와 사람 채점의 일치율 |
 | ⏳&nbsp;v1.5 | 무엇을 자동 처리하고 무엇을 사람에게 넘길지 시스템이 판단할 수 있는가? | 확신도 기반 라우팅 + 자동 처리율·정확도·위험 건 누락 측정 |
 | ⏳&nbsp;v2.0 | 사람이 보지 않는 동안에도 BTS에 올바르게 인입되는가? | BTS 자동 인입 (Redmine) + 중복 티켓 감지(RAG) + 무인 운영 데모 |
@@ -542,6 +544,12 @@ v1.0은 "지금 어떤 모델이 이 업무에 맞는가"를 **한 번** 측정�
      - 그래서 **모델은 판단하고, 절차와 형식은 코드가 강제하는 구조**로 정리했습니다: 프롬프트 v2.3 → 형식 위반 필드만 재요청(구조화 출력의 enum·pattern으로 생성 단계 제한) → 폐기 직전 확인 질문 → 후처리 안전장치(`src/triage_eval/pipeline/guardrail.py`, [처리]만 보정)
      - 선택지 표기를 고친 프롬프트 v2.4는 seed 3쌍 비교에서 우선순위·처리 정답 하락과 과잉 상신 증가가 일관되게 나타나 기각했습니다
   8. ✅ **저장소 구조 정리 (v1.3 태그 전)** — `src/`를 패키지 `src/triage_eval/` 아래 공용 도구(`common/`), 동결된 v1.0 벤치마크(`bench_v1/`), 현역 파이프라인(`pipeline/`)으로 나누고, 일회용 스크립트는 `scripts/legacy/`로 옮겼습니다. 현역 파이프라인 파일 이름에서 버전을 빼(`run_eval_v2.py` → `pipeline/run.py` 등) 이후 버전은 같은 파일을 고쳐 나가고, 이전 버전은 git 태그로 보존합니다. 실행 명령은 `uv run triage-run`처럼 짧아졌습니다. 정리 전후의 동작이 같은지는 저장된 실행 기록 22건 재채점, 게이트 판정, 기록된 모델 응답 재생, 실제 모델 재측정으로 확인했습니다. 기존 경로 → 새 경로 대응표는 [`CHANGELOG.md`](CHANGELOG.md)에 있습니다
+  9. ✅ **평가용 세트 최종 측정** — 개발 과정에서 한 번도 실행하지 않은 평가용 31건으로 최종 구성을 한 번 측정했습니다. 결과를 보고 프롬프트·안전장치·채점기를 고치지 않는다는 규칙을 미리 정했습니다 (→ [`report/eval_v13_final.md`](report/eval_v13_final.md))
+     - **코드로 강제한 형식·절차는 일반화됐습니다**: 허용 값 위반·출력 언어 위반·결함 폐기 0건, 형식 STRICT 100%가 평가용에서도 유지됐습니다
+     - **모델의 판단은 개발용에 맞춰져 있었습니다**: 개발용 → 평가용으로 우선순위 정답률 62.5% → 43.5%, X-1 누락 2/22 → 6/18, X-3 누락 0/12 → 4/10, 처리 정답률 75.0% → 62.9%. 놓친 Critical 5문항은 모두 프롬프트에 해당 규칙 문장이 있었는데도 판정되지 않았습니다 ([KL-003](docs/issue_log.md#kl-003))
+     - 날조 2건은 같은 수량을 다른 단위로 옮긴 표현("100번" → "100회")을 탐지기가 날조로 잡은 오탐으로 판단하고, 측정값은 그대로 기록했습니다 ([ISSUE-008](docs/issue_log.md#issue-008))
+     - 대조군 Llama3.1-8B는 평가용에서도 형식 STRICT 50%, X-1 누락 18/18로 Qwen 선정 판단이 유지됩니다
+     - 이 결과로 v1.4의 과제가 분명해졌습니다: 판단 기준을 프롬프트 문장이 아닌 방식으로 전달하는 방법을 여러 seed로 비교하고, v1.5에서는 확신할 수 없는 건을 사람 검토 큐로 보내 위험 건 누락 0건을 지킵니다
 
   정답 라벨의 원본은 생성 스크립트([`tools/dataset_v13/`](tools/dataset_v13/))이고 JSON은 그 결과물입니다. 테스트가 둘의 일치와 라벨 규칙 간 일관성을 CI에서 확인합니다.
 
