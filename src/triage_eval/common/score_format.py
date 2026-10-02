@@ -23,8 +23,8 @@ PARSABLE (R4 제외 통과)    : 빈 줄만 허용. 정규식/필드 파서로 �
 
 사용법
 ------
-    uv run python src/score_format.py
-    uv run python src/score_format.py --root <프로젝트 루트 경로>
+    uv run bench-score-format
+    uv run bench-score-format --root <프로젝트 루트 경로>
 """
 
 import argparse
@@ -32,6 +32,8 @@ import json
 import re
 from collections import defaultdict
 from pathlib import Path
+
+from triage_eval.common.paths import ROOT
 
 FIELDS = ["요약", "모듈", "심각도", "재현 여부", "누락 정보 및 권장 조치"]
 
@@ -186,7 +188,7 @@ def main():
     parser.add_argument("--root", default=None, help="프로젝트 루트 (기본: 스크립트 상위 폴더)")
     args = parser.parse_args()
 
-    root = Path(args.root).resolve() if args.root else Path(__file__).resolve().parent.parent
+    root = Path(args.root).resolve() if args.root else ROOT
     records = collect_records(root)
     if not records:
         raise SystemExit(f"결과 파일을 찾지 못했습니다: {root / 'data' / 'results'}")

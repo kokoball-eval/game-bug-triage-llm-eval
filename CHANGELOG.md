@@ -56,6 +56,33 @@
 - 기준선 → 최종(seed 1): X-1 13 → 2, 처리 정답 26 → 48, 6칸 모두 정답 6 → 18, 형식 STRICT 57 → 64, 허용 값 위반 7 → 0, 날조·X-2·X-3·언어 위반 0건, 평균 지연 +4.6%
 - seed 11·21에서도 절대 기준 0건 유지. 남은 한계: [KL-002](docs/issue_log.md#kl-002), 재현성 조건: [OBS-002](docs/issue_log.md#obs-002)
 
+### 변경 (4단계: 저장소 구조 정리)
+- `src/`를 패키지 `src/triage_eval/`로 바꾸고 공용 도구(`common/`), 동결된 v1.0 벤치마크(`bench_v1/`), 현역 파이프라인(`pipeline/`)으로 나눔. 일회용 스크립트는 `scripts/legacy/`로 이동
+- 현역 파이프라인 파일 이름에서 버전 표기를 뺌. 버전은 코드 안 상수(`PROMPT_VERSION`, `GUARDRAIL_VERSION` 등)로 실행 기록에 남고, 이전 버전은 git 태그로 보존
+- 저장소 루트 경로를 `common/paths.py` 한 곳에서 정의 (기존에는 9개 파일이 각자 계산). 모델 digest·VRAM·프롬프트 지문 함수 3개를 `bench_v1/run_eval.py`에서 `common/ollama_runtime.py`로 옮김 (함수 본문은 그대로)
+- `pyproject.toml`에 패키지 빌드 설정과 실행 명령 등록. `uv sync`가 패키지를 편집 가능 모드로 설치하고, 실행은 `uv run <명령>`
+- 동작 동일성 확인: 테스트 173개, 저장된 v1.3 실행 기록 22건 재채점 결과 정리 전과 일치, 게이트 판정 결과 일치, 기록된 모델 응답을 재생한 실행 결과 일치(seed 1·11 각 64건), v1.0 벤치마크 실행 흐름·프롬프트 지문 일치, v1.0 산출물(`benchmark_summary.json`, `format_compliance.json`, 날조 탐지 결과) 일치
+
+| 기존 경로 | 새 경로 | 실행 명령 |
+| :--- | :--- | :--- |
+| `src/run_eval_v2.py` | `src/triage_eval/pipeline/run.py` | `uv run triage-run` |
+| `src/score_v2.py` | `src/triage_eval/pipeline/score.py` | `uv run triage-score` |
+| `src/gate_v13.py` | `src/triage_eval/pipeline/gate.py` | `uv run triage-gate` |
+| `src/contract_v2.py` | `src/triage_eval/pipeline/contract.py` | — |
+| `src/prompt_v2.py` | `src/triage_eval/pipeline/prompt.py` | — |
+| `src/guardrail_v2.py` | `src/triage_eval/pipeline/guardrail.py` | — |
+| `src/run_eval.py` | `src/triage_eval/bench_v1/run_eval.py` | `uv run bench-run` |
+| `src/compare_runs.py` | `src/triage_eval/bench_v1/compare_runs.py` | `uv run bench-gate` |
+| `src/summarize_eval.py` | `src/triage_eval/bench_v1/summarize_eval.py` | `uv run bench-summarize` |
+| `src/capture_env.py` | `src/triage_eval/bench_v1/capture_env.py` | `uv run bench-capture-env` |
+| `src/score_format.py` | `src/triage_eval/common/score_format.py` | `uv run bench-score-format` |
+| `src/detect_hallucination.py` | `src/triage_eval/common/detect_hallucination.py` | `uv run bench-hallucination` |
+| `src/preflight.py` | `src/triage_eval/common/preflight.py` | — |
+| `src/01_ollama_chat.py`, `02_luna_chat.py`, `test_fewshot.py` | `scripts/legacy/` | `uv run python scripts/legacy/<파일>` |
+| `tests/test_contract_v2.py` 등 v1.3 테스트 5개 | `tests/test_pipeline_*.py` | — |
+
+이 대응표보다 앞선 기록(위 1~3단계와 이전 버전)의 파일 경로는 당시 경로입니다.
+
 ### 하지 않은 것
 - 로드맵에 있던 "변형"(AI로 말투·오타 변형) 단계 — 63건 모두 사람이 검토한 원문만 사용
 

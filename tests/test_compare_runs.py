@@ -10,12 +10,12 @@ import tomllib
 
 import pytest
 
-import compare_runs as cr
-from compare_runs import (
+from triage_eval.bench_v1 import compare_runs as cr
+from triage_eval.bench_v1.compare_runs import (
     ComparabilityError, CriteriaError, compute_metrics, check_comparability, environment_warnings,
     evaluate_gate, formal_rows, latest_history, seeds_match, validate_criteria, verdict_changes,
 )
-from summarize_eval import aggregate_local
+from triage_eval.bench_v1.summarize_eval import aggregate_local
 
 from conftest import LLAMA, QWEN, ROOT
 

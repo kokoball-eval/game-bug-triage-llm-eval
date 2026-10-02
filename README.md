@@ -131,12 +131,12 @@
 > **지연 시간의 역설** — 토큰 생성 속도는 Llama가 15% 빠릅니다. 그런데 최종 응답 시간은 Qwen이 23% 짧습니다.
 > Llama가 평균 117.6토큰을 쓰는 동안 Qwen은 76.4토큰으로 끝내기 때문입니다. 초당 처리량이 높아도 더 많이 쓰면 총 시간은 길어집니다.
 
-> **포맷 준수율 산출 기준** — `src/score_format.py`가 원본 응답 45건을 6개 규칙(R1~R6)으로 자동 채점한 값입니다.<br>
+> **포맷 준수율 산출 기준** — `src/triage_eval/common/score_format.py`가 원본 응답 45건을 6개 규칙(R1~R6)으로 자동 채점한 값입니다.<br>
 > **엄격** 기준은 필드 사이 빈 줄까지 금지, **파서 호환** 기준은 빈 줄을 허용합니다.<br>
 > Llama의 실패 사유는 전량 '필드 사이 빈 줄'이며, **서두 사족은 45건 전수에서 0건**이었습니다.<br>
 > 규칙 정의와 회차별 판정은 [`report/format_compliance.md`](report/format_compliance.md) 참조.
 >
-> **성능 수치 산출 기준** — 지연·속도·토큰·VRAM은 `src/summarize_eval.py`가 원본 로그에서 재집계한 값입니다.
+> **성능 수치 산출 기준** — 지연·속도·토큰·VRAM은 `src/triage_eval/bench_v1/summarize_eval.py`가 원본 로그에서 재집계한 값입니다.
 > 워밍업은 제외했고, 평균 속도는 회차별 `tokens_per_sec`의 단순 평균입니다. 집계 결과는 `data/results/benchmark_summary.json`에 저장됩니다.
 >
 > **워밍업 로딩 시간은 비교 지표가 아닙니다.** 디스크 캐시 상태에 따라 실행마다 달라지므로(재실행 시 4.065초 / 4.672초 관측) 값만 참고로 싣고 본 통계와 우열 판정에서 제외했습니다.
@@ -206,24 +206,26 @@ cd game-bug-triage-llm-eval
 uv sync
 ```
 
+> `uv sync`는 의존성과 함께 이 저장소의 패키지(`src/triage_eval`)를 편집 가능 모드로 설치합니다. 이후 실행 명령은 `uv run <명령>` 형태입니다(`bench-run`, `triage-run` 등, 목록은 `pyproject.toml`의 `[project.scripts]`). 같은 동작을 `uv run python -m triage_eval.pipeline.run`처럼 모듈 경로로도 실행할 수 있습니다.
+
 ### 3) 실험 실행
 
 ```powershell
 # 로컬 40회 본 실험 (워밍업 2회 자동 분리 · 10문항 × 2모델 × 2회)
-uv run python src/run_eval.py
+uv run bench-run
 # (v1.2) seed 고정 모드 — 1회차 seed=1, 2회차 seed=2. 측정 환경 경고가 있으면 멈춤
-uv run python src/run_eval.py --seed 1 --strict-env
+uv run bench-run --seed 1 --strict-env
 # 결과를 문서 수치의 새 기준으로 삼을 때만
-uv run python src/run_eval.py --update-latest
+uv run bench-run --update-latest
 
 # Cloud 대조군 (선택) — 실행 후 프롬프트에 OpenAI API Key 입력 (화면 미노출)
-uv run python src/02_luna_chat.py
+uv run python scripts/legacy/02_luna_chat.py
 
 # 4일차 Few-Shot 단문 결함 교정 재실험
-uv run python src/test_fewshot.py
+uv run python scripts/legacy/test_fewshot.py
 ```
 
-> ℹ️ `src/run_eval.py` 는 실행 결과를 `data/results/history/local_eval_results_<실행시각>.json` 에만 저장합니다 (v1.1.1부터).
+> ℹ️ `src/triage_eval/bench_v1/run_eval.py` 는 실행 결과를 `data/results/history/local_eval_results_<실행시각>.json` 에만 저장합니다 (v1.1.1부터).
 > `data/results/local_eval_results.json` 은 README·보고서 수치의 출처이므로, `--update-latest` 를 준 경우에만 교체됩니다.
 
 ### 4) 재현 검증 (Reproducibility Check)
@@ -233,26 +235,26 @@ uv run python src/test_fewshot.py
 
 ```powershell
 # 성능 지표 재집계 (문서에 기재된 지연·속도·토큰 수치를 원본 로그에서 다시 계산)
-uv run python src/summarize_eval.py
+uv run bench-summarize
 
 # 포맷 계약 준수율 재채점 (원본 응답 45건을 R1~R6 규칙으로 다시 채점)
-uv run python src/score_format.py
+uv run bench-score-format
 
 # 실행 환경 및 자원 점유 재측정 (CLI/Python 경로 검증 포함)
-uv run python src/capture_env.py
+uv run bench-capture-env
 
 # (v1.2) 환각 탐지 — 입력에 근거 없는 기기·OS·조작·시간 조건을 응답에서 찾음
-uv run python src/detect_hallucination.py
+uv run bench-hallucination
 ```
 
 | 스크립트 | 입력 | 산출물 | 재현 확인 방법 |
 | :--- | :--- | :--- | :--- |
-| `src/summarize_eval.py` | `data/results/local_eval_results.json`, `cloud_eval_results.json` | `data/results/benchmark_summary.json`, 표준 출력 | 출력 표의 값이 3절 벤치마크 표 및 보고서 수치와 일치하는지 대조 |
-| `src/score_format.py` | `data/results/local_eval_results.json`, `cloud_eval_results.json` | `data/results/format_compliance.json`, `report/format_compliance.md` | 회차별 판정과 집계율이 보고서 수치와 일치하는지 대조 |
-| `src/capture_env.py` | 실행 중인 Ollama 런타임 | `data/results/environment.json`, `report/environment.md` | 산출 파일의 `captured_at` 으로 재실행 시점 확인 |
-| `src/test_fewshot.py` | 고정 프롬프트 (Q08 단문) | `data/results/fewshot_verify.json` | `verdict.corrected` 값으로 교정 성공 여부 확인 |
-| `src/compare_runs.py` | 기준선·후보 실행 로그, `gate_criteria.toml` | `data/results/gate_result.json`, `report/regression_gate.md` | 종료 코드(0/1/2)와 기준별 판정 확인 |
-| `src/detect_hallucination.py` | 실행 로그, `data/questions.json` | `data/results/hallucination_report.json`, 표준 출력 | v1.0 로그에서 Llama Q08 2건만 탐지되고 Qwen·Cloud는 0건인지 확인 |
+| `src/triage_eval/bench_v1/summarize_eval.py` | `data/results/local_eval_results.json`, `cloud_eval_results.json` | `data/results/benchmark_summary.json`, 표준 출력 | 출력 표의 값이 3절 벤치마크 표 및 보고서 수치와 일치하는지 대조 |
+| `src/triage_eval/common/score_format.py` | `data/results/local_eval_results.json`, `cloud_eval_results.json` | `data/results/format_compliance.json`, `report/format_compliance.md` | 회차별 판정과 집계율이 보고서 수치와 일치하는지 대조 |
+| `src/triage_eval/bench_v1/capture_env.py` | 실행 중인 Ollama 런타임 | `data/results/environment.json`, `report/environment.md` | 산출 파일의 `captured_at` 으로 재실행 시점 확인 |
+| `scripts/legacy/test_fewshot.py` | 고정 프롬프트 (Q08 단문) | `data/results/fewshot_verify.json` | `verdict.corrected` 값으로 교정 성공 여부 확인 |
+| `src/triage_eval/bench_v1/compare_runs.py` | 기준선·후보 실행 로그, `gate_criteria.toml` | `data/results/gate_result.json`, `report/regression_gate.md` | 종료 코드(0/1/2)와 기준별 판정 확인 |
+| `src/triage_eval/common/detect_hallucination.py` | 실행 로그, `data/questions.json` | `data/results/hallucination_report.json`, 표준 출력 | v1.0 로그에서 Llama Q08 2건만 탐지되고 Qwen·Cloud는 0건인지 확인 |
 
 ### 5) 회귀 게이트 — 두 실행 비교 (v1.1)
 
@@ -261,12 +263,12 @@ uv run python src/detect_hallucination.py
 
 ```powershell
 # 1) 새 실행 → 2) 고정 기준선(v1.2 seed=1)과 비교 (후보 기본값: history/ 의 가장 최근 실행)
-uv run python src/run_eval.py --seed 1 --strict-env
-uv run python src/compare_runs.py
+uv run bench-run --seed 1 --strict-env
+uv run bench-gate
 
 # 파일 직접 지정 / 대조군 모델까지 판정
-uv run python src/compare_runs.py --baseline <기준선.json> --candidate <후보.json>
-uv run python src/compare_runs.py --model llama3.1:8b
+uv run bench-gate --baseline <기준선.json> --candidate <후보.json>
+uv run bench-gate --model llama3.1:8b
 ```
 
 | 종료 코드 | 의미 |
@@ -318,9 +320,9 @@ uv run pytest -v     # 테스트별 결과 표시
 **seed 재현성 확인 방법** — 같은 seed로 두 번 돌린 결과를 비교하면, 판정 변화가 0건이어야 합니다.
 
 ```powershell
-uv run python src/run_eval.py --seed 1 --strict-env      # 1차
-uv run python src/run_eval.py --seed 1 --strict-env      # 2차
-uv run python src/compare_runs.py --baseline data/results/history/<1차 파일>.json
+uv run bench-run --seed 1 --strict-env      # 1차
+uv run bench-run --seed 1 --strict-env      # 2차
+uv run bench-gate --baseline data/results/history/<1차 파일>.json
 ```
 
 **실측 결과 (2026-10-01, RTX 5060 Laptop · 전원 연결 · Ollama 외 VRAM 362~485 MiB)**
@@ -340,9 +342,9 @@ uv run python src/compare_runs.py --baseline data/results/history/<1차 파일>.
 
 ```powershell
 ollama stop qwen2.5:7b                                                       # 재현성 조건 (OBS-002)
-uv run python src/run_eval_v2.py --seed 1 --strict-env --model qwen2.5:7b    # 개발용 32건 × 2회
-uv run python src/score_v2.py                                                # 정답 대조 채점
-uv run python src/gate_v13.py; echo "종료 코드: $LASTEXITCODE"               # 고정 기준선 대비 판정 (0 PASS · 1 FAIL · 2 판정 불가)
+uv run triage-run --seed 1 --strict-env --model qwen2.5:7b   # 개발용 32건 × 2회
+uv run triage-score                                          # 정답 대조 채점
+uv run triage-gate; echo "종료 코드: $LASTEXITCODE"           # 고정 기준선 대비 판정 (0 PASS · 1 FAIL · 2 판정 불가)
 ```
 
 * 평가용(test) 문항은 `--final`을 줘야만 실행됩니다. 게이트는 개발용 실행만 판정합니다.
@@ -422,23 +424,29 @@ game-bug-triage-llm-eval/
 │   ├── eval_v13_baseline.md     # (v1.3) 기준선 측정 보고서 (원인 분석)
 │   ├── eval_v13.md              # (v1.3) 정답 대조 채점 요약 (score_v2.py 생성)
 │   └── regression_gate_v13.md   # (v1.3) 회귀 게이트 판정 근거 (gate_v13.py 생성)
-├── src/
+├── scripts/legacy/               # 5일 실험 당시의 일회용 스크립트 (v1.3 구조 정리 때 src/ 에서 이동)
 │   ├── 01_ollama_chat.py         # 단일 모델 적재/VRAM 측정 스모크 테스트
 │   ├── 02_luna_chat.py           # OpenAI Responses API Cloud 비교 스크립트
-│   ├── run_eval.py               # 워밍업 분리 및 40회 로컬 자동 벤치마크 스크립트
-│   ├── test_fewshot.py           # 4일차 Qwen 단문 결함 교정 Few-Shot 검증 스크립트
-│   ├── score_format.py           # 포맷 계약 준수율 자동 채점 (R1~R6 규칙)
-│   ├── summarize_eval.py         # 성능 지표(지연·속도·토큰) 재집계
-│   ├── compare_runs.py           # (v1.1) 두 실행 비교 + 회귀 게이트 판정
-│   ├── detect_hallucination.py   # (v1.2) 입력에 근거 없는 구체 사실(기기·OS·조작·시간) 탐지
-│   ├── preflight.py              # (v1.2) 실행 전 측정 환경 점검 (GPU 점유·전원)
-│   ├── contract_v2.py            # (v1.3) 출력 형식 v2 — 8칸 정의·파싱·형식 채점
-│   ├── prompt_v2.py              # (v1.3) 판정 기준서 요약 프롬프트와 입력 조립
-│   ├── run_eval_v2.py            # (v1.3) 평가셋 실행 (개발용 기본, 평가용은 --final)
-│   ├── score_v2.py               # (v1.3) 정답 대조 채점 (칸별 정답률·위험 건·과잉 상신·날조)
-│   ├── guardrail_v2.py           # (v1.3) 후처리 안전장치 — [처리] 규칙 보정 (정답 라벨 미사용)
-│   ├── gate_v13.py               # (v1.3) 평가셋 회귀 게이트 판정
-│   └── capture_env.py            # 실행 환경/자원 점유 실측 캡처
+│   └── test_fewshot.py           # 4일차 Qwen 단문 결함 교정 Few-Shot 검증 스크립트
+├── src/triage_eval/              # (v1.3 구조 정리) 패키지 — 실행 명령은 pyproject.toml [project.scripts]
+│   ├── common/                   # v1.0 벤치마크와 현역 파이프라인이 함께 쓰는 도구
+│   │   ├── paths.py              # 저장소 루트 경로 (한 곳에서만 정의)
+│   │   ├── ollama_runtime.py     # 모델 digest·VRAM·프롬프트 지문 수집
+│   │   ├── score_format.py       # 응답 줄 파서 + v1.0 포맷 계약 채점 (R1~R6)   → bench-score-format
+│   │   ├── detect_hallucination.py # (v1.2) 입력에 근거 없는 구체 사실 탐지      → bench-hallucination
+│   │   └── preflight.py          # (v1.2) 실행 전 측정 환경 점검 (GPU 점유·전원)
+│   ├── bench_v1/                 # v1.0 모델 선정 벤치마크 (동결 — README 3절 수치의 출처)
+│   │   ├── run_eval.py           # 워밍업 분리 40회 로컬 벤치마크                 → bench-run
+│   │   ├── summarize_eval.py     # 성능 지표(지연·속도·토큰) 재집계              → bench-summarize
+│   │   ├── compare_runs.py       # (v1.1) 두 실행 비교 + 회귀 게이트             → bench-gate
+│   │   └── capture_env.py        # 실행 환경/자원 점유 실측 캡처                 → bench-capture-env
+│   └── pipeline/                 # 현역 트리아지 파이프라인 (버전은 파일 이름이 아니라 코드 안 상수로 관리)
+│       ├── contract.py           # 출력 형식 v2 — 8칸 정의·파싱·형식 채점 (R1~R7)
+│       ├── prompt.py             # 판정 기준서 요약 프롬프트(v2.3)와 재요청·폐기 확인 질문 조립
+│       ├── run.py                # 평가셋 실행 — 형식 재요청, 폐기 확인, 후처리 안전장치  → triage-run
+│       ├── guardrail.py          # 후처리 안전장치 g2 — [처리] 규칙 보정 (정답 라벨 미사용)
+│       ├── score.py              # 정답 대조 채점 (칸별 정답률·위험 건·과잉 상신·날조)   → triage-score
+│       └── gate.py               # 평가셋 회귀 게이트 판정                               → triage-gate
 ├── tools/
 │   └── dataset_v13/              # (v1.3) 평가셋 생성·병합·검증 스크립트 (정답 라벨의 원본)
 └── tests/                        # (v1.1.1) 평가 도구 단위 테스트 (pytest)
@@ -450,11 +458,11 @@ game-bug-triage-llm-eval/
     ├── test_preflight.py         # (v1.2) 측정 환경 경고 판정
     ├── test_run_eval.py          # (v1.2) seed 고정 모드
     ├── test_dataset_v13.py       # (v1.3) 평가셋 = 생성 스크립트 결과, 라벨 규칙 일관성, 분할 균형
-    ├── test_contract_v2.py       # (v1.3) 출력 형식 v2 채점 규칙
-    ├── test_score_v2.py          # (v1.3) 정답 대조 채점, 가짜 모델로 실행→채점 전 과정
-    ├── test_run_eval_v2.py       # (v1.3) 평가용 실행 차단, 문항 유출 없음, 형식 재요청·폐기 확인
-    ├── test_guardrail_v2.py      # (v1.3) 후처리 안전장치 규칙, 정답 라벨 미사용, 원본 보존
-    └── test_gate_v13.py          # (v1.3) 게이트 판정·비교 조건·기준 파일 검증
+    ├── test_pipeline_contract.py # (v1.3) 출력 형식 v2 채점 규칙 (R1~R7)
+    ├── test_pipeline_score.py    # (v1.3) 정답 대조 채점, 가짜 모델로 실행→채점 전 과정
+    ├── test_pipeline_run.py      # (v1.3) 평가용 실행 차단, 문항 유출 없음, 형식 재요청·폐기 확인
+    ├── test_pipeline_guardrail.py # (v1.3) 후처리 안전장치 규칙, 정답 라벨 미사용, 원본 보존
+    └── test_pipeline_gate.py     # (v1.3) 게이트 판정·비교 조건·기준 파일 검증
 ```
 
 </details>
@@ -507,7 +515,7 @@ v1.0은 "지금 어떤 모델이 이 업무에 맞는가"를 **한 번** 측정�
 | ✅&nbsp;v1.1 | 무언가 바꿨을 때 나빠졌는가? | 두 실행 비교 회귀 게이트 (`compare_runs.py`, `gate_criteria.toml`) |
 | ✅&nbsp;v1.1.1 | 평가 도구 자체는 믿을 수 있는가? | 채점·게이트 로직 단위 테스트(pytest) + GitHub Actions CI |
 | ✅&nbsp;v1.2 | 가장 위험한 결함(날조)을 사람 없이 잡을 수 있는가? | 환각 자동 탐지 + seed 고정 모드 + 측정 환경 체크리스트 |
-| 🔨&nbsp;v1.3 | 평가셋이 실제 현업 인입을 대표하는가? | ✅ 현업 기반 평가셋 63건 (분류 체계 → 판정 기준서 → 시드 케이스·정답 라벨), 개발용/평가용 분리 · ✅ 출력 형식 v2와 기준선 측정 · ✅ v1.3 게이트·실사용 시나리오 · 🔨 저장소 구조 정리, 평가용 세트 최종 측정 |
+| 🔨&nbsp;v1.3 | 평가셋이 실제 현업 인입을 대표하는가? | ✅ 현업 기반 평가셋 63건 (분류 체계 → 판정 기준서 → 시드 케이스·정답 라벨), 개발용/평가용 분리 · ✅ 출력 형식 v2와 기준선 측정 · ✅ v1.3 게이트·실사용 시나리오 · ✅ 저장소 구조 정리 · 🔨 평가용 세트 최종 측정 |
 | ⏳&nbsp;v1.4 | 정답 라벨과 자동 채점을 믿을 수 있는가? | 채점자 간 라벨 일치율 + LLM-as-judge와 사람 채점의 일치율 |
 | ⏳&nbsp;v1.5 | 무엇을 자동 처리하고 무엇을 사람에게 넘길지 시스템이 판단할 수 있는가? | 확신도 기반 라우팅 + 자동 처리율·정확도·위험 건 누락 측정 |
 | ⏳&nbsp;v2.0 | 사람이 보지 않는 동안에도 BTS에 올바르게 인입되는가? | BTS 자동 인입 (Redmine) + 중복 티켓 감지(RAG) + 무인 운영 데모 |
@@ -524,16 +532,16 @@ v1.0은 "지금 어떤 모델이 이 업무에 맞는가"를 **한 번** 측정�
   3. ✅ **시드 케이스와 정답 라벨** — 63건(대표 세트 40 + 집중 세트 23). 문항 원문은 인터뷰에서 정한 시나리오를 바탕으로 Claude가 작성했고, 운영 불만형 5건은 직접 작성했습니다. 모든 문항과 라벨은 배치 검토 5회와 전체 검토 5회로 확정했으며, 쟁점과 판단, 반영 내용을 [`review_log.md`](docs/dataset/review_log.md)에 기록했습니다
   4. ⏭️ **변형** — v1.3에서는 하지 않았습니다. 63건 모두 사람이 문항별로 검토한 원문이라, 검수되지 않은 변형으로 수를 늘리기보다 검토된 원문만 쓰는 쪽을 택했습니다
   5. ✅ **개발용/평가용 분리** — 세트마다 반씩(대표 20/20, 집중 12/11) 나누되, 위험 건 측정 문항(Critical, 사람 검토)을 먼저 번갈아 배정해 양쪽에 고르게 들어가게 했습니다. 난수를 쓰지 않아 다시 실행해도 같은 분할이 나옵니다
-  6. ✅ **출력 형식 v2와 기준선 측정** — 새 판정 체계용 8칸 출력 형식(`src/contract_v2.py`), 판정 기준서 요약 프롬프트(`src/prompt_v2.py`), 정답 대조 채점기(`src/score_v2.py`)를 만들고 개발용 32건으로 기준선을 쟀습니다. v1.0 파일은 수정하지 않고 별도 파일로 두어 v1.0 수치의 재현성을 유지했습니다. 평가용 세트는 `--final` 없이 실행되지 않습니다
+  6. ✅ **출력 형식 v2와 기준선 측정** — 새 판정 체계용 8칸 출력 형식(`src/triage_eval/pipeline/contract.py`), 판정 기준서 요약 프롬프트(`src/triage_eval/pipeline/prompt.py`), 정답 대조 채점기(`src/triage_eval/pipeline/score.py`)를 만들고 개발용 32건으로 기준선을 쟀습니다. v1.0 파일은 수정하지 않고 별도 파일로 두어 v1.0 수치의 재현성을 유지했습니다. 평가용 세트는 `--final` 없이 실행되지 않습니다
      - Qwen2.5-7B 기준선: 형식 STRICT 89.1%, 처리 정답률 40.6%, **X-1 누락(Critical 미상신) 13/22**, 날조·결함 폐기·경계 건 확정 0건
      - 주원인: Critical 인식 실패(악용·이중 결제·필터 우회 등 피해가 쌓이는 유형을 Major로 판정), 명백한 결함을 "버그 아님"으로 분류, `개발 배정` 미사용 (→ [`report/eval_v13_baseline.md`](report/eval_v13_baseline.md))
      - 대조군 Llama3.1-8B는 형식 붕괴(대괄호 누락 16/64)와 판정 불안정(seed가 다른 두 회차에서 19/32문항 변화)으로, 새 평가셋에서도 Qwen 선정 판단이 유지됩니다
-  7. ✅ **v1.3 회귀 게이트와 실사용 시나리오** — 위 기준선으로 합격 기준을 정하고(`gate_criteria_v13.toml`, `src/gate_v13.py`), 프롬프트 개선 과정을 게이트로 판정했습니다. 게이트 FAIL 5회를 거쳐 PASS에 이른 과정과 원인 분석은 [ISSUE-007](docs/issue_log.md#issue-007)에 기록했습니다
+  7. ✅ **v1.3 회귀 게이트와 실사용 시나리오** — 위 기준선으로 합격 기준을 정하고(`gate_criteria_v13.toml`, `src/triage_eval/pipeline/gate.py`), 프롬프트 개선 과정을 게이트로 판정했습니다. 게이트 FAIL 5회를 거쳐 PASS에 이른 과정과 원인 분석은 [ISSUE-007](docs/issue_log.md#issue-007)에 기록했습니다
      - 기준선 → 최종(seed 1): X-1 누락 13 → 2, 처리 정답 26 → 48/64, 6칸 모두 정답 6 → 18, 형식 STRICT 57 → 64, 허용 값 위반 7 → 0, 날조·결함 폐기·경계 건 확정·언어 위반 0건, 평균 지연 +4.6%. seed 11·21에서도 절대 기준 0건 유지
      - 확인한 것: 7B 모델은 프롬프트 문장 1~2줄만 바꿔도 응답 64개 중 29~49개가 바뀌고, 규칙을 문장으로 강제하면 분류를 바꿔 규칙을 피해 갑니다. 형식 오류는 판단 오류를 가리고, "다시 써 달라"는 재요청은 같은 오류를 되풀이합니다
-     - 그래서 **모델은 판단하고, 절차와 형식은 코드가 강제하는 구조**로 정리했습니다: 프롬프트 v2.3 → 형식 위반 필드만 재요청(구조화 출력의 enum·pattern으로 생성 단계 제한) → 폐기 직전 확인 질문 → 후처리 안전장치(`src/guardrail_v2.py`, [처리]만 보정)
+     - 그래서 **모델은 판단하고, 절차와 형식은 코드가 강제하는 구조**로 정리했습니다: 프롬프트 v2.3 → 형식 위반 필드만 재요청(구조화 출력의 enum·pattern으로 생성 단계 제한) → 폐기 직전 확인 질문 → 후처리 안전장치(`src/triage_eval/pipeline/guardrail.py`, [처리]만 보정)
      - 선택지 표기를 고친 프롬프트 v2.4는 seed 3쌍 비교에서 우선순위·처리 정답 하락과 과잉 상신 증가가 일관되게 나타나 기각했습니다
-  8. 🔨 **저장소 구조 정리 (v1.3 태그 전)** — `src/`를 공용 도구(`common/`), 동결된 v1.0 벤치마크(`bench_v1/`), 현역 평가 파이프라인(`eval/`)으로 나누고, 5일 실험 당시의 일회용 스크립트는 `scripts/legacy/`로 옮깁니다. 이후 버전은 현역 파이프라인 하나를 고쳐 나가고 이전 버전은 태그로 보존해, 버전마다 같은 역할의 파일이 늘어나지 않게 합니다
+  8. ✅ **저장소 구조 정리 (v1.3 태그 전)** — `src/`를 패키지 `src/triage_eval/` 아래 공용 도구(`common/`), 동결된 v1.0 벤치마크(`bench_v1/`), 현역 파이프라인(`pipeline/`)으로 나누고, 일회용 스크립트는 `scripts/legacy/`로 옮겼습니다. 현역 파이프라인 파일 이름에서 버전을 빼(`run_eval_v2.py` → `pipeline/run.py` 등) 이후 버전은 같은 파일을 고쳐 나가고, 이전 버전은 git 태그로 보존합니다. 실행 명령은 `uv run triage-run`처럼 짧아졌습니다. 정리 전후의 동작이 같은지는 저장된 실행 기록 22건 재채점, 게이트 판정, 기록된 모델 응답 재생, 실제 모델 재측정으로 확인했습니다. 기존 경로 → 새 경로 대응표는 [`CHANGELOG.md`](CHANGELOG.md)에 있습니다
 
   정답 라벨의 원본은 생성 스크립트([`tools/dataset_v13/`](tools/dataset_v13/))이고 JSON은 그 결과물입니다. 테스트가 둘의 일치와 라벨 규칙 간 일관성을 CI에서 확인합니다.
 

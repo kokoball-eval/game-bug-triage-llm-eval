@@ -1,7 +1,7 @@
 # v1.3 기준선 측정 보고서 — 출력 형식 v2, 개발용 세트
 
 > 측정일 2026-10-02 · 실행 기록 `data/results/v13/history/v13_dev_20261002_081612.json` · 채점 결과 `data/results/v13/score_v13_dev_20261002_081612.json`
-> 채점 요약표는 [`eval_v13.md`](eval_v13.md)(`src/score_v2.py` 생성)에 있으며, 이 문서는 그 결과의 원인 분석이다.
+> 채점 요약표는 [`eval_v13.md`](eval_v13.md)(`src/triage_eval/pipeline/score.py` 생성)에 있으며, 이 문서는 그 결과의 원인 분석이다.
 
 ## 1. 측정 조건
 
@@ -11,7 +11,7 @@
 | 모델 | qwen2.5:7b (선정 모델), llama3.1:8b (대조군) |
 | 반복 | 2회 (seed 1, 2) — 모델당 64회, 총 128회 |
 | 생성 옵션 | temperature 0.2, num_predict 512, num_ctx 8192 |
-| 프롬프트 | `src/prompt_v2.py` (판정 기준서 요약본, 예시 문항 없음) |
+| 프롬프트 | `src/triage_eval/pipeline/prompt.py` (판정 기준서 요약본, 예시 문항 없음) |
 | 측정 환경 | 측정 환경 점검 경고 없음 (`--strict-env`) |
 | 입력 길이 | 최대 2,290 토큰 (Qwen) — num_ctx 대비 여유 있음, 잘림 없음 |
 

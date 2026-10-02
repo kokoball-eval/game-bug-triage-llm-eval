@@ -30,4 +30,4 @@ jobs:
       # 커밋된 최신 실행 기록을 기준선과 비교 — 판정 결과를 로그로 남기기만 하고 CI 성패에는 넣지 않는다.
       # (FAIL 판정도 기록할 가치가 있는 데이터이기 때문. 도구 자체의 고장은 위 pytest 가 잡는다)
       - name: Regression gate report (informational)
-        run: uv run python src/compare_runs.py --no-write || true
+        run: uv run bench-gate --no-write || true

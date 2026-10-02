@@ -19,7 +19,7 @@
 
 사용법
 ------
-    uv run python src/test_fewshot.py
+    uv run python scripts/legacy/test_fewshot.py
 
 출력
 ----
@@ -94,7 +94,7 @@ def evaluate(text: str) -> dict:
 
 
 def main():
-    root = Path(__file__).resolve().parent.parent
+    root = Path(__file__).resolve().parents[2]  # scripts/legacy/ → 저장소 루트
 
     print(f"[{MODEL}] 4일차 Few-Shot 교정 검증 실행 중...")
     start = time.perf_counter()

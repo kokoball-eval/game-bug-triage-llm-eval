@@ -6,7 +6,7 @@ README 표의 성능 수치(지연·속도·토큰)가 원본 로그에서 그�
 
 import pytest
 
-from summarize_eval import aggregate_local, rnd
+from triage_eval.bench_v1.summarize_eval import aggregate_local, rnd
 
 
 @pytest.mark.parametrize("value, digits, expected", [

@@ -1,6 +1,6 @@
 """run_eval.py seed 고정 모드 테스트 (모델은 호출하지 않는다)."""
 
-from run_eval import OPTIONS, options_for_run
+from triage_eval.bench_v1.run_eval import OPTIONS, options_for_run
 
 
 def test_no_seed_keeps_v1_0_options():

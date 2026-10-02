@@ -6,10 +6,10 @@
     10문항 x 2모델 x 2회 = 40회 (+ 모델별 워밍업 1회는 별도 집계)
 
 사용법:
-    uv run python src/run_eval.py                  # 이력만 저장 (기본)
-    uv run python src/run_eval.py --seed 1         # (v1.2) seed 고정 모드: 1회차 seed=1, 2회차 seed=2
-    uv run python src/run_eval.py --strict-env     # (v1.2) 측정 환경 경고가 있으면 실행하지 않음
-    uv run python src/run_eval.py --update-latest  # 이력 저장 + 문서 기준 파일도 교체
+    uv run bench-run                  # 이력만 저장 (기본)
+    uv run bench-run --seed 1         # (v1.2) seed 고정 모드: 1회차 seed=1, 2회차 seed=2
+    uv run bench-run --strict-env     # (v1.2) 측정 환경 경고가 있으면 실행하지 않음
+    uv run bench-run --update-latest  # 이력 저장 + 문서 기준 파일도 교체
 
 출력:
     data/results/history/local_eval_results_<시각>.json - 실행 기록 (항상 저장)
@@ -50,24 +50,25 @@
    seed 는 run_config.seeds 에 남고, compare_runs.py 는 두 실행의 seeds 가 같을 때만
    판정 변화를 합격 기준으로 쓴다. 기본 OPTIONS 는 그대로 두므로 seed 없는 실행과도 비교할 수 있다.
 10. (v1.2) 모델 호출 전에 측정 환경(GPU 점유·Ollama 적재 모델·전원)을 점검해 run_config.environment 에
-   남긴다(src/preflight.py). 경고가 있어도 기본은 계속 진행하고, --strict-env 일 때만 멈춘다.
+   남긴다(src/triage_eval/common/preflight.py). 경고가 있어도 기본은 계속 진행하고, --strict-env 일 때만 멈춘다.
 
 [Context 설정 관련 주의]
 본 40회 실험은 num_ctx를 명시하지 않고 Ollama 기본값 그대로 실행되었다.
-`src/capture_env.py` 실측 결과, 실제로 적용된 context length는 4,096 토큰이었다
+`src/triage_eval/bench_v1/capture_env.py` 실측 결과, 실제로 적용된 context length는 4,096 토큰이었다
 (상세: report/environment.md). 재현성을 위해 아래 주석을 해제할 경우 반드시 4096을 유지할 것.
 다른 값으로 바꾸면 기존 로그(data/results/local_eval_results.json)와 실행 조건이 달라져 40회 재실험이 필요하다.
 """
 
 import argparse
-import hashlib
 import json
 import time
 from datetime import datetime
 from pathlib import Path
 import ollama
 
-from preflight import snapshot as preflight_snapshot
+from triage_eval.common.ollama_runtime import get_model_digests, get_vram_mib, sha256_text  # noqa: F401 (v1.3에서 공용 모듈로 이동)
+from triage_eval.common.paths import ROOT
+from triage_eval.common.preflight import snapshot as preflight_snapshot
 
 # 1. 설정 상수
 MODELS = ["qwen2.5:7b", "llama3.1:8b"]
@@ -87,33 +88,6 @@ SYSTEM_PROMPT = """당신은 8년 차 게임 QA 엔지니어의 버그 리포트
 [재현 여부]: 발생(100%), 간헐적, 불명확, 재현 불가 중 택1
 [누락 정보 및 권장 조치]: 추가 확인이 필요한 기기/OS/재현스텝 또는 QA 권장 조치
 """
-
-def get_vram_mib(client: ollama.Client, model_name: str) -> float:
-    """추론 직후 ollama ps에서 해당 모델의 VRAM 점유량(MiB)을 추출합니다."""
-    try:
-        ps = client.ps()
-        for m in ps.get("models", []):
-            name = m.get("name", "")
-            if name == model_name or name.startswith(model_name.split(":")[0]):
-                return round(m.get("size_vram", 0) / (1024 * 1024), 2)
-    except Exception:
-        pass
-    return 0.0
-
-def sha256_text(text: str) -> str:
-    return hashlib.sha256(text.encode("utf-8")).hexdigest()
-
-def get_model_digests(client: ollama.Client, models: list[str]) -> dict:
-    """ollama list 에서 모델별 digest 앞 12자리를 읽는다. 같은 태그라도 재pull 하면 바뀔 수 있다."""
-    digests = {}
-    try:
-        for m in client.list().get("models", []):
-            name = m.get("model") or m.get("name", "")
-            if name in models:
-                digests[name] = (m.get("digest") or "")[:12] or None
-    except Exception:
-        pass
-    return {model: digests.get(model) for model in models}
 
 def options_for_run(seed_base: int | None, run_idx: int) -> dict:
     """회차별 생성 옵션. seed 고정 모드면 OPTIONS 에 회차별 seed 를 더한다 (설계 의도 9)."""
@@ -180,7 +154,7 @@ def main():
                         help="측정 환경 경고(다른 프로그램의 GPU 사용, 배터리 구동 등)가 있으면 실행하지 않음")
     args = parser.parse_args()
 
-    root_dir = Path(__file__).resolve().parent.parent
+    root_dir = ROOT
     data_path = root_dir / "data" / "questions.json"
     results_dir = root_dir / "data" / "results"
     results_dir.mkdir(parents=True, exist_ok=True)
@@ -300,7 +274,7 @@ def main():
         print("  → README·보고서 수치를 summarize_eval.py / score_format.py 로 다시 맞춰야 합니다.")
     else:
         print("문서 기준 파일(local_eval_results.json)은 그대로 두었습니다. 교체하려면 --update-latest")
-    print("회귀 판정: uv run python src/compare_runs.py")
+    print("회귀 판정: uv run bench-gate")
 
 if __name__ == "__main__":
     main()

@@ -40,7 +40,7 @@ v1.3 판정 체계(docs/dataset/triage_guideline.md)에 맞춘 8필드 형식을
 
 import re
 
-from score_format import parse_lines
+from triage_eval.common.score_format import parse_lines
 
 FIELDS_V2 = ["요약", "분류", "모듈", "우선순위", "재현 정보", "발생 빈도", "처리", "누락 정보 및 권장 조치"]
 
@@ -70,7 +70,7 @@ FORBIDDEN_SCRIPTS = {
     "en": re.compile(f"[^{_COMMON}]"),
 }
 
-# 한 줄 자유 서술 값의 허용 문자 패턴 (JSON 스키마 pattern 용, run_eval_v2 설계 의도 6).
+# 한 줄 자유 서술 값의 허용 문자 패턴 (JSON 스키마 pattern 용, run.py 설계 의도 6).
 # 위 허용 목록에서 줄바꿈·탭과 JSON 문자열을 깨뜨리는 큰따옴표(")·역슬래시(\)를 뺀 것이다.
 # 문법 변환기가 \u 이스케이프를 읽지 못할 수 있어 실제 문자로 쓴다.
 _LINE_ASCII = " !#-\\[\\]-~"                       # 0x20, 0x21, 0x23-0x5B, 0x5D-0x7E (" 와 \ 제외)
@@ -115,7 +115,7 @@ def parse_v2(text: str) -> dict:
 
 
 def enum_errors(values: dict) -> list[tuple[str, str | None]]:
-    """R6 판정의 단일 정의 — 허용 값 밖인 (필드, 값) 목록. 형식 채점과 재요청 안내문(prompt_v2)이 함께 쓴다."""
+    """R6 판정의 단일 정의 — 허용 값 밖인 (필드, 값) 목록. 형식 채점과 재요청 안내문(prompt.py)이 함께 쓴다."""
     bad = [(f, values.get(f)) for f, allowed in ENUMS_V2.items() if values.get(f) not in allowed]
     mods = split_modules(values.get("모듈", ""))
     if not mods or any(m not in MODULES + [NO_MODULE] for m in mods) or (NO_MODULE in mods and len(mods) > 1):

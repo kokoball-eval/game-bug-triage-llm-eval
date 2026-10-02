@@ -1,11 +1,11 @@
-"""run_eval_v2.py / prompt_v2.py 테스트 (모델은 호출하지 않는다)."""
+"""run.py / prompt.py 테스트 (모델은 호출하지 않는다)."""
 
 import json
 from pathlib import Path
 
-from contract_v2 import ENUMS_V2, MODULES, NO_MODULE, enum_errors, parse_v2
-from prompt_v2 import SYSTEM_PROMPT_V2, build_input, build_prompt, build_retry_prompt
-from run_eval_v2 import OPTIONS_V2, check_split_guard, generate_triage, generate_with_retry, options_for, select_items
+from triage_eval.pipeline.contract import ENUMS_V2, MODULES, NO_MODULE, enum_errors, parse_v2
+from triage_eval.pipeline.prompt import SYSTEM_PROMPT_V2, build_input, build_prompt, build_retry_prompt
+from triage_eval.pipeline.run import OPTIONS_V2, check_split_guard, generate_triage, generate_with_retry, options_for, select_items
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = json.loads((ROOT / "data/eval_v13/aether_raid_v13.json").read_text(encoding="utf-8"))
@@ -160,7 +160,7 @@ def test_retry_with_unreadable_json_keeps_first_response():
 
 
 def test_module_schema_lists_single_modules():
-    from run_eval_v2 import retry_schema
+    from triage_eval.pipeline.run import retry_schema
     s = retry_schema(["모듈"])
     assert s["properties"]["모듈"]["enum"] == MODULES + [NO_MODULE]
 
@@ -211,7 +211,7 @@ def test_discard_check_runs_after_format_retry():
 
 
 def test_discard_check_question_has_no_dataset_text():
-    from prompt_v2 import build_discard_check_prompt
+    from triage_eval.pipeline.prompt import build_discard_check_prompt
     q = build_discard_check_prompt(DATA["items"][0])[len(build_prompt(DATA["items"][0])):]
     for item in DATA["items"]:
         assert item["input"]["title"] not in q
@@ -226,7 +226,7 @@ def test_r7_retry_rewrites_only_summary():
     res = generate_with_retry(client, "m", DATA["items"][0], {})
     assert res["retried"] and res["retry_adopted"]
     assert parse_v2(res["response_text"])["요약"] == "접속 시 과열 후 튕김"
-    from contract_v2 import LINE_PATTERNS
+    from triage_eval.pipeline.contract import LINE_PATTERNS
     assert client.formats[1]["properties"]["요약"] == {"type": "string", "pattern": LINE_PATTERNS["ko"]}
     assert "'熱'" in client.prompts[1] and res["attempts"][1]["lang_errors"] == [{"field": "요약", "chars": "熱"}]
 
@@ -259,7 +259,7 @@ def test_r7_outside_fields_is_not_retried():
 def test_line_pattern_matches_allowlist():
     """JSON 스키마 pattern 은 R7 허용 목록과 같은 문자 집합에서 줄바꿈·큰따옴표·역슬래시만 뺀 것이다."""
     import re
-    from contract_v2 import FORBIDDEN_SCRIPTS, LINE_PATTERNS
+    from triage_eval.pipeline.contract import FORBIDDEN_SCRIPTS, LINE_PATTERNS
     pat = re.compile(LINE_PATTERNS["ko"])
     for ok in ("폰 업데이트 이후 10분만에 과열", "계정·로그인 → ① ★ 50%", "Critical (SSR) PvP: 재현 3/3 [참고]"):
         assert pat.match(ok) and not FORBIDDEN_SCRIPTS["ko"].search(ok)

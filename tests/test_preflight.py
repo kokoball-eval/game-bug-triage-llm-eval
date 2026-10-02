@@ -6,7 +6,7 @@
 
 import pytest
 
-from preflight import OTHER_VRAM_WARN_MIB, evaluate
+from triage_eval.common.preflight import OTHER_VRAM_WARN_MIB, evaluate
 
 
 def test_clean_environment_has_no_warning():

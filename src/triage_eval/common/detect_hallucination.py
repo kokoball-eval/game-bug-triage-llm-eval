@@ -25,8 +25,8 @@ v1.0과 9/30 재실행에서 Llama-3.1-8B가 단문 리포트 "크래시남"에 
 
 사용법
 ------
-    uv run python src/detect_hallucination.py                  # 문서 기준 로그 + Cloud 로그
-    uv run python src/detect_hallucination.py --log <로그.json>  # 특정 실행 로그
+    uv run bench-hallucination                  # 문서 기준 로그 + Cloud 로그
+    uv run bench-hallucination --log <로그.json>  # 특정 실행 로그
 
 출력
 ----
@@ -55,9 +55,8 @@ import re
 from collections import defaultdict
 from pathlib import Path
 
-from score_format import parse_lines
-
-ROOT = Path(__file__).resolve().parent.parent
+from triage_eval.common.paths import ROOT
+from triage_eval.common.score_format import parse_lines
 
 SCANNED_FIELDS = ("요약", "누락 정보 및 권장 조치")
 

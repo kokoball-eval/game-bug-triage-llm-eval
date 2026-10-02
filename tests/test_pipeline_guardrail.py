@@ -1,11 +1,11 @@
-"""guardrail_v2.py 테스트 — 규칙 동작, 라벨 미사용, 원본 보존, 형식 위반 비보정, H-0 안전 규칙."""
+"""guardrail.py 테스트 — 규칙 동작, 라벨 미사용, 원본 보존, 형식 위반 비보정, H-0 안전 규칙."""
 
 import copy
 import json
 from pathlib import Path
 
-from contract_v2 import parse_v2, score_format_v2
-from guardrail_v2 import GUARDRAIL_VERSION, apply, apply_record
+from triage_eval.pipeline.contract import parse_v2, score_format_v2
+from triage_eval.pipeline.guardrail import GUARDRAIL_VERSION, apply, apply_record
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = {i["id"]: i for i in json.loads((ROOT / "data/eval_v13/aether_raid_v13.json").read_text(encoding="utf-8"))["items"]}

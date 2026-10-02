@@ -1,7 +1,7 @@
 # ─────────────────────────────────────────────────────────────
 # 회귀 게이트 합격 기준 (v1.1)
 #
-# src/compare_runs.py 가 이 파일을 읽어 "후보 실행(candidate)"의 합격 여부를 판정한다.
+# src/triage_eval/bench_v1/compare_runs.py 가 이 파일을 읽어 "후보 실행(candidate)"의 합격 여부를 판정한다.
 # 숫자를 코드에 박지 않고 이 파일로 뺀 이유:
 #   - 기준을 바꿀 때 코드를 건드리지 않는다 (기준 변경 = 이 파일의 git diff 한 줄)
 #   - 기준마다 "왜 이 값인지"를 주석으로 옆에 남길 수 있다 (JSON은 주석 불가)
@@ -38,7 +38,7 @@ enum_fail_max = 0
 # 절대값은 장비에 묶이므로, 다른 PC에서 돌릴 때는 이 값을 먼저 조정할 것.
 latency_sec_max = 2.0
 
-# (v1.2) 날조 응답 수 — 입력에 없는 기기·OS·조작·시간 조건 등을 지어낸 응답 (src/detect_hallucination.py)
+# (v1.2) 날조 응답 수 — 입력에 없는 기기·OS·조작·시간 조건 등을 지어낸 응답 (src/triage_eval/common/detect_hallucination.py)
 # 날조된 티켓은 개발자가 존재하지 않는 조건으로 재현을 시도하게 만든다. 1건도 허용하지 않는다.
 hallucination_max = 0
 

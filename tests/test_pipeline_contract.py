@@ -1,9 +1,9 @@
-"""출력 형식 v2 (contract_v2.py) 테스트."""
+"""출력 형식 v2 (contract.py) 테스트."""
 
 import sys
 from pathlib import Path
 
-from contract_v2 import ENUMS_V2, FIELDS_V2, MODULES, parse_v2, score_format_v2, split_modules
+from triage_eval.pipeline.contract import ENUMS_V2, FIELDS_V2, MODULES, parse_v2, score_format_v2, split_modules
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools" / "dataset_v13"))
@@ -79,12 +79,12 @@ def test_r7_target_language_is_configurable():
 
 
 def test_prompt_states_output_language():
-    from prompt_v2 import SYSTEM_PROMPT_V2
+    from triage_eval.pipeline.prompt import SYSTEM_PROMPT_V2
     assert "모든 필드는 한국어로 작성하세요" in SYSTEM_PROMPT_V2 and "{output_language}" not in SYSTEM_PROMPT_V2
 
 
 def test_language_errors_point_to_free_text_field():
-    from contract_v2 import language_errors
+    from triage_eval.pipeline.contract import language_errors
     vals = {"요약": "폰이 10분만에 과熱", "누락 정보 및 권장 조치": "기기 정보", "분류": "결함"}
     assert language_errors(vals) == [("요약", "熱")]
     assert language_errors({"요약": "Critical 크래시 SSR"}) == []
@@ -92,7 +92,7 @@ def test_language_errors_point_to_free_text_field():
 
 def test_r7_allowlist_catches_any_foreign_script():
     """허용 목록 방식 — 한자·가나·키릴뿐 아니라 그 밖의 문자 체계와 전각 구두점·이모지도 잡는다."""
-    from contract_v2 import FORBIDDEN_SCRIPTS
+    from triage_eval.pipeline.contract import FORBIDDEN_SCRIPTS
     ko = FORBIDDEN_SCRIPTS["ko"]
     for foreign in ("過熱", "ログイン", "ошибка", "เกม", "لعبة", "λάθος", "lỗi", "，", "：", "\uf900", "\U00020000", "😀"):
         assert ko.search(foreign), foreign
@@ -104,7 +104,7 @@ def test_r7_allowlist_has_no_false_positive_on_inputs():
     """평가셋 입력 원문에 쓰인 문자는 모두 허용 목록 안에 있다 (모델이 입력을 인용해도 오탐하지 않는다)."""
     import json
     from pathlib import Path
-    from contract_v2 import FORBIDDEN_SCRIPTS
+    from triage_eval.pipeline.contract import FORBIDDEN_SCRIPTS
     data = json.loads((Path(__file__).resolve().parent.parent / "data/eval_v13/aether_raid_v13.json").read_text(encoding="utf-8"))
     for item in data["items"]:
         assert not FORBIDDEN_SCRIPTS["ko"].search(json.dumps(item["input"], ensure_ascii=False)), item["id"]

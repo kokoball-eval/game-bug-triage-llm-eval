@@ -1,6 +1,6 @@
 # 실행 환경 및 자원 점유 실측 (Environment Capture)
 
-> `src/capture_env.py` 자동 생성 · 측정 시각 2026-09-15T12:08:12.900895
+> `src/triage_eval/bench_v1/capture_env.py` 자동 생성 · 측정 시각 2026-09-15T12:08:12.900895
 > 40회 본 실험 종료 후 동일 모델 태그·동일 양자화 조건에서 수행한 **사후 측정**이며,
 > 본 실험의 품질·성능 집계 수치에는 영향을 주지 않습니다. 원본: `data/results/environment.json`
 
@@ -35,7 +35,7 @@
 | 경로 | 확인 방법 | 결과 |
 | :--- | :--- | :--- |
 | **CLI 경로** | `ollama run qwen2.5:7b "설정 메뉴 텍스트 오타 제보의 심각도를 Blocker/Critical/Major/Minor/Trivial 중 한 단어로만 답하라."` | ✅ 성공 (종료 코드 0) · 응답: `Critical` |
-| **Python 경로** | `src/01_ollama_chat.py`, `src/run_eval.py` | ✅ 성공 — 결과가 `data/results/*_verify.json`, `data/results/local_eval_results.json`에 저장됨 |
+| **Python 경로** | `scripts/legacy/01_ollama_chat.py`, `src/triage_eval/bench_v1/run_eval.py` | ✅ 성공 — 결과가 `data/results/*_verify.json`, `data/results/local_eval_results.json`에 저장됨 |
 
 * CLI 응답 전문은 `data/results/environment.json`의 `cli_path_check` 항목에 보존됩니다.
 * 본 실험(40회)은 Python 경로로만 수행했으며, CLI 경로는 실행 가능 여부 확인용입니다.

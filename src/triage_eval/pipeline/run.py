@@ -1,15 +1,15 @@
 """v1.3 평가셋(data/eval_v13/aether_raid_v13.json) 실행 스크립트 — 출력 형식 v2.
 
 사용법:
-    uv run python src/run_eval_v2.py --seed 1 --strict-env                 # 개발용(dev) 전체, Qwen·Llama
-    uv run python src/run_eval_v2.py --seed 1 --model qwen2.5:7b           # 모델 하나만
-    uv run python src/run_eval_v2.py --seed 1 --set focused                # 집중 세트만
-    uv run python src/run_eval_v2.py --seed 1 --split test --final         # 평가용(test) — 최종 측정 때만
+    uv run triage-run --seed 1 --strict-env                 # 개발용(dev) 전체, Qwen·Llama
+    uv run triage-run --seed 1 --model qwen2.5:7b           # 모델 하나만
+    uv run triage-run --seed 1 --set focused                # 집중 세트만
+    uv run triage-run --seed 1 --split test --final         # 평가용(test) — 최종 측정 때만
 
 출력:
     data/results/v13/history/v13_<split>_<시각>.json   실행 기록 (항상 새 파일)
 
-채점: uv run python src/score_v2.py
+채점: uv run triage-score
 
 [설계 의도]
 1. 기본 대상은 개발용(dev)이다. 평가용(test)은 --final 을 함께 줘야만 실행된다.
@@ -26,7 +26,7 @@
    입력+출력 상한이 num_ctx 를 넘을 수 있으면 경고한다.
 4. num_predict 를 512로 둔다. v2는 필드가 8개라 v1(350)보다 출력이 길다.
    잘린 응답은 형식 채점에서 R2(필드 누락)로 드러나므로, 상한에 걸린 회차 수도 기록한다.
-5. 모델 응답에 후처리 안전장치(guardrail_v2.py)를 적용한 결과를 response_text 로 기록하고,
+5. 모델 응답에 후처리 안전장치(guardrail.py)를 적용한 결과를 response_text 로 기록하고,
    모델 원본은 raw_response_text 에 남긴다. 채점·게이트는 실제 BTS에 들어가는 response_text 를 판정한다.
    --no-guardrail 을 주면 원본을 그대로 기록한다(모델 단독 성능 측정용).
 6. 응답이 R6(허용 값)을 어기면 틀린 필드와 허용 값을 알려 주고, 그 필드만 1회 다시 요청한다(generate_with_retry).
@@ -48,7 +48,7 @@
    - 재요청은 같은 seed로 호출한다. 프롬프트가 달라지므로 응답이 바뀌고, 같은 조건으로 다시 실행하면 재현된다.
    - 출력 언어 위반(R7)도 같은 방식으로 재요청한다. 다른 문자가 섞인 자유 서술 필드([요약], [누락 정보 및 권장 조치])만
      한국어로 다시 쓰게 하고, 새 값이 한 줄이며 출력 언어 밖 문자가 없을 때만 넣는다. 자유 서술은 enum 으로 제한할 수
-     없으므로 허용 문자 패턴(JSON 스키마 pattern, contract_v2.LINE_PATTERNS)으로 제한하고, 받은 뒤에도 다시 검증한다.
+     없으므로 허용 문자 패턴(JSON 스키마 pattern, contract.LINE_PATTERNS)으로 제한하고, 받은 뒤에도 다시 검증한다.
      처음에는 문자열 제한 없이 "한국어로 다시 쓰라"고만 했는데, v2.3 seed 11 A10에서 모델이 '과熱'을 그대로 되풀이했다
      ('무관 중'을 텍스트 재요청이 고치지 못한 것과 같은 현상). 실행 환경이 pattern 을 지원하지 않아 호출이 실패하면
      pattern 없이 한 번 더 호출하고 그 사실을 기록한다. 지금까지 측정된 R7 위반 6건은 모두 [요약]에서 시작했다
@@ -78,15 +78,15 @@ import time
 
 import ollama
 
-from contract_v2 import (ENUMS_V2, FORBIDDEN_SCRIPTS, LINE_PATTERNS, MODULES, NO_MODULE, OUTPUT_LANG, enum_errors,
-                         language_errors, parse_v2, replace_field, score_format_v2)
-from guardrail_v2 import GUARDRAIL_VERSION, apply_record
-from preflight import snapshot as preflight_snapshot
-from prompt_v2 import (DISCARD_CHECK_CHOICES, PROMPT_VERSION, SYSTEM_PROMPT_V2, build_discard_check_prompt,
-                       build_prompt, build_retry_prompt)
-from run_eval import get_model_digests, get_vram_mib, sha256_text
+from triage_eval.common.ollama_runtime import get_model_digests, get_vram_mib, sha256_text
+from triage_eval.common.paths import ROOT
+from triage_eval.common.preflight import snapshot as preflight_snapshot
+from triage_eval.pipeline.contract import (ENUMS_V2, FORBIDDEN_SCRIPTS, LINE_PATTERNS, MODULES, NO_MODULE, OUTPUT_LANG,
+                                           enum_errors, language_errors, parse_v2, replace_field, score_format_v2)
+from triage_eval.pipeline.guardrail import GUARDRAIL_VERSION, apply_record
+from triage_eval.pipeline.prompt import (DISCARD_CHECK_CHOICES, PROMPT_VERSION, SYSTEM_PROMPT_V2,
+                                         build_discard_check_prompt, build_prompt, build_retry_prompt)
 
-ROOT = Path(__file__).resolve().parent.parent
 DATASET = ROOT / "data" / "eval_v13" / "aether_raid_v13.json"
 OUT_DIR = ROOT / "data" / "results" / "v13" / "history"
 
@@ -379,7 +379,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  ⚠️  입력+출력 상한이 num_ctx 를 넘을 수 있는 회차 {near}건 — 프롬프트 길이를 확인하세요")
     if capped:
         print(f"  ⚠️  출력이 num_predict({OPTIONS_V2['num_predict']}) 상한에 걸린 회차 {capped}건")
-    print("채점: uv run python src/score_v2.py")
+    print("채점: uv run triage-score")
     return 0
 
 

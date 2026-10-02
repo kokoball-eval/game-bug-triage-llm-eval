@@ -7,7 +7,7 @@
 
 import pytest
 
-from score_format import score_response
+from triage_eval.common.score_format import score_response
 
 # 5개 필드를 규격대로 모두 지킨 응답 (모든 테스트의 출발점)
 GOOD = "\n".join([

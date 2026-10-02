@@ -21,7 +21,7 @@
    모델이 틀린 판단을 숨기게 되어 측정이 의미를 잃는다.
 4. 형식 위반은 고치지 않는다. 허용 값 밖인 값을 비슷한 허용 값으로 바꾸지 않으며, [처리]가 허용 값이 아니거나
    [처리] 줄이 없으면 아무것도 하지 않는다. 형식 위반은 형식 채점(R2·R6)에서 그대로 드러나야 한다
-   (contract_v2 설계 의도 3과 같은 원칙).
+   (contract.py 설계 의도 3과 같은 원칙).
    단, 판단 필드를 읽을 수 없는 응답이 확정 처리로 끝나는 것은 막는다(H-0). 고치는 것은 [처리]뿐이고
    허용 값 밖인 값은 그대로 남으므로 R6 위반은 계속 집계된다. 프롬프트 v2.3 측정에서 분류 '무관 중'(허용 값 밖)과
    함께 폐기된 결함 제보(A10)가 나와 추가했다 (docs/issue_log.md ISSUE-007).
@@ -31,11 +31,11 @@
 
 import re
 
-from contract_v2 import ENUMS_V2, parse_v2
+from triage_eval.pipeline.contract import ENUMS_V2, parse_v2
 
 GUARDRAIL_VERSION = "g2"  # g1: H-1·H-2·H-2b / g2: H-0 추가
 QA_REPORTERS = ("내부 QA", "퍼블리셔 QA")
-CLOSING = ("폐기", "CS 응대", "개발 배정")  # 사람 확인 없이 끝나는 처리 (score_v2 의 X-3 정의와 같다)
+CLOSING = ("폐기", "CS 응대", "개발 배정")  # 사람 확인 없이 끝나는 처리 (score.py 의 X-3 정의와 같다)
 JUDGED = ("분류", "우선순위", "재현 정보")
 ACTION_LINE = re.compile(r"^(\s*\[처리\]\s*[:：]).*$", re.M)
 

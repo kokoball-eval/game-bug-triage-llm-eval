@@ -1,13 +1,13 @@
 """v1.3 회귀 게이트 — 평가셋 aether_raid_v13 / 출력 형식 v2.
 
-기준선 실행과 후보 실행을 같은 채점기(score_v2.score_one)로 다시 채점해 비교하고,
+기준선 실행과 후보 실행을 같은 채점기(score.score_one)로 다시 채점해 비교하고,
 gate_criteria_v13.toml 의 합격 기준으로 판정한다.
 
 사용법
 ------
-    uv run python src/gate_v13.py                                   # 고정 기준선 vs 가장 최근 개발용 실행
-    uv run python src/gate_v13.py --candidate <실행 기록.json>
-    uv run python src/gate_v13.py --model llama3.1:8b              # 대조군 확인용
+    uv run triage-gate                                   # 고정 기준선 vs 가장 최근 개발용 실행
+    uv run triage-gate --candidate <실행 기록.json>
+    uv run triage-gate --model llama3.1:8b              # 대조군 확인용
 
 종료 코드
 ---------
@@ -19,7 +19,7 @@ gate_criteria_v13.toml 의 합격 기준으로 판정한다.
     report/regression_gate_v13.md           사람이 읽는 판정 근거 (문항 단위 변화 포함)
 
 [설계 의도]
-1. 채점은 score_v2.score_one 을 그대로 쓴다. 게이트가 채점 규칙을 따로 가지면 채점 결과와 판정이 어긋난다.
+1. 채점은 score.score_one 을 그대로 쓴다. 게이트가 채점 규칙을 따로 가지면 채점 결과와 판정이 어긋난다.
    실행 기록(원본 응답)만 저장하고 채점 결과 파일은 읽지 않으므로, 채점기를 고치면 두 실행 모두 같은 규칙으로 다시 채점된다.
 2. 비교 전에 "비교해도 되는가"를 확인한다. 평가셋·생성 옵션·seed·모델 digest 중 하나라도 다르면
    차이가 프롬프트 탓인지 조건 탓인지 구분할 수 없으므로 판정하지 않는다(종료 코드 2).
@@ -39,9 +39,9 @@ import tomllib
 from pathlib import Path
 from statistics import mean
 
-from score_v2 import JUDGED, score_one
+from triage_eval.common.paths import ROOT
+from triage_eval.pipeline.score import JUDGED, score_one
 
-ROOT = Path(__file__).resolve().parent.parent
 CRITERIA = ROOT / "gate_criteria_v13.toml"
 DATASET = ROOT / "data" / "eval_v13" / "aether_raid_v13.json"
 HISTORY = ROOT / "data" / "results" / "v13" / "history"
@@ -102,7 +102,7 @@ def load_log(path: Path) -> dict:
 def latest_candidate(baseline: Path) -> Path:
     logs = [p for p in sorted(HISTORY.glob("v13_dev_*.json")) if p.resolve() != baseline.resolve()]
     if not logs:
-        raise GateError("비교할 후보 실행이 없습니다. run_eval_v2.py 로 개발용 실행을 먼저 하세요.")
+        raise GateError("비교할 후보 실행이 없습니다. uv run triage-run 으로 개발용 실행을 먼저 하세요.")
     return logs[-1]
 
 
@@ -233,7 +233,7 @@ def judge(bc: dict, cc: dict, changes: dict, crit: dict) -> list[dict]:
 
 def render(model, base_path, cand_path, notes, bc, cc, checks, changes, verdict) -> str:
     L = ["# v1.3 회귀 게이트 판정", "",
-         f"> 기준선 `{rel(base_path)}` · 후보 `{rel(cand_path)}` · 대상 `{model}` · `src/gate_v13.py` 생성", "",
+         f"> 기준선 `{rel(base_path)}` · 후보 `{rel(cand_path)}` · 대상 `{model}` · `src/triage_eval/pipeline/gate.py` 생성", "",
          f"## 판정: **{verdict}**", ""]
     for n in notes:
         L.append(f"- {n}")

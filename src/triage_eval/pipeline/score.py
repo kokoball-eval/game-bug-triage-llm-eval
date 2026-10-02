@@ -1,11 +1,11 @@
 """v1.3 평가셋 정답 대조 채점 — 출력 형식 v2.
 
-run_eval_v2.py 실행 기록을 정답 라벨(data/eval_v13/aether_raid_v13.json)과 대조해
+run.py 실행 기록을 정답 라벨(data/eval_v13/aether_raid_v13.json)과 대조해
 형식 준수, 칸별 정답률, 위험 건, 과잉 상신, 날조를 계산한다.
 
 사용법:
-    uv run python src/score_v2.py                       # data/results/v13/history/ 의 가장 최근 실행
-    uv run python src/score_v2.py --log <실행 기록.json>
+    uv run triage-score                       # data/results/v13/history/ 의 가장 최근 실행
+    uv run triage-score --log <실행 기록.json>
 
 출력:
     data/results/v13/score_<실행 기록 이름>.json   기계 판독용 채점 결과 (문항별 상세 포함)
@@ -21,7 +21,7 @@ run_eval_v2.py 실행 기록을 정답 라벨(data/eval_v13/aether_raid_v13.json
     X-3 누락        사람 검토 측정 문항(risk X-3)을 사람 확인 없이 끝냄 (개발 배정·CS 응대·폐기)
     과잉 상신       허용 답에 없는데 긴급 사인 요청으로 보냄 (리드 QA 사인 큐를 불필요하게 채움)
     날조            [요약]·[누락 정보]에 입력에 없는 구체 사실 (detect_hallucination.py 규칙 그대로)
-    출력 언어 위반  지정된 출력 언어 외의 문자 체계가 섞인 응답 (contract_v2 R7)
+    출력 언어 위반  지정된 출력 언어 외의 문자 체계가 섞인 응답 (contract.py R7)
     요청·권장 반영  반드시 요청할 정보·권장 조치의 핵심어가 [누락 정보 및 권장 조치]에 있는 비율 (참고 지표)
 
 [설계 의도]
@@ -35,7 +35,7 @@ run_eval_v2.py 실행 기록을 정답 라벨(data/eval_v13/aether_raid_v13.json
 5. 요청·권장 반영률은 핵심어 포함 여부라 표현이 다르면 놓친다. 그래서 합격 기준에 넣지 않는 참고 지표로만 둔다.
    정식 채점은 v1.4(LLM-as-judge와 사람 채점의 일치율 측정)에서 한다.
 6. 날조 판정은 detect_hallucination.detect() 를 그대로 쓰고, 근거 원문은 모델에 실제로 들어간 입력
-   (prompt_v2.build_input) 전체로 한다. 공지·기존 이슈에 있는 사실을 인용한 것은 날조가 아니다.
+   (prompt.build_input) 전체로 한다. 공지·기존 이슈에 있는 사실을 인용한 것은 날조가 아니다.
 """
 
 import argparse
@@ -45,11 +45,11 @@ from collections import defaultdict
 from pathlib import Path
 from statistics import mean
 
-from contract_v2 import ENUMS_V2, NO_MODULE, parse_v2, score_format_v2, split_modules
-from detect_hallucination import detect
-from prompt_v2 import build_input
+from triage_eval.common.detect_hallucination import detect
+from triage_eval.common.paths import ROOT
+from triage_eval.pipeline.contract import ENUMS_V2, NO_MODULE, parse_v2, score_format_v2, split_modules
+from triage_eval.pipeline.prompt import build_input
 
-ROOT = Path(__file__).resolve().parent.parent
 DATASET = ROOT / "data" / "eval_v13" / "aether_raid_v13.json"
 HISTORY = ROOT / "data" / "results" / "v13" / "history"
 REPORT = ROOT / "report" / "eval_v13.md"
@@ -165,7 +165,7 @@ def latest_log() -> Path | None:
 
 def render_report(log_path: Path, summary: dict, rows: list[dict]) -> str:
     L = [f"# v1.3 평가셋 채점 결과", "",
-         f"> 실행 기록: `{rel(log_path)}` · `src/score_v2.py` 생성", ""]
+         f"> 실행 기록: `{rel(log_path)}` · `src/triage_eval/pipeline/score.py` 생성", ""]
     for model, by_set in summary.items():
         L += [f"## {model}", "", "| 지표 | " + " | ".join(by_set) + " |", "| :--- |" + " ---: |" * len(by_set)]
 
@@ -204,7 +204,7 @@ def main(argv: list[str] | None = None) -> int:
 
     log_path = args.log or latest_log()
     if not log_path or not log_path.exists():
-        print("채점할 실행 기록이 없습니다. 먼저 uv run python src/run_eval_v2.py 를 실행하세요.")
+        print("채점할 실행 기록이 없습니다. 먼저 uv run triage-run 을 실행하세요.")
         return 2
     payload = json.loads(log_path.read_text(encoding="utf-8"))
     items = {i["id"]: i for i in json.loads(DATASET.read_text(encoding="utf-8"))["items"]}

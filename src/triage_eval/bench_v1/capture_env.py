@@ -17,7 +17,7 @@
 
 사용법
 ------
-    uv run python src/capture_env.py
+    uv run bench-capture-env
 
 출력
 ----
@@ -34,6 +34,8 @@ from datetime import datetime
 from pathlib import Path
 
 import ollama
+
+from triage_eval.common.paths import ROOT
 
 MODELS = ["qwen2.5:7b", "llama3.1:8b"]
 MIB = 1024 * 1024
@@ -232,7 +234,7 @@ def measure_model(client: ollama.Client, model: str) -> dict:
 
 
 def main():
-    root = Path(__file__).resolve().parent.parent
+    root = ROOT
     client = ollama.Client()
 
     print("=== 실행 환경 / 자원 점유 실측 캡처 ===")
@@ -288,7 +290,7 @@ def main():
     L = []
     A = L.append
     A("# 실행 환경 및 자원 점유 실측 (Environment Capture)\n")
-    A(f"> `src/capture_env.py` 자동 생성 · 측정 시각 {payload['captured_at']}")
+    A(f"> `src/triage_eval/bench_v1/capture_env.py` 자동 생성 · 측정 시각 {payload['captured_at']}")
     A("> 40회 본 실험 종료 후 동일 모델 태그·동일 양자화 조건에서 수행한 **사후 측정**이며,")
     A("> 본 실험의 품질·성능 집계 수치에는 영향을 주지 않습니다. 원본: `data/results/environment.json`\n")
 
@@ -341,7 +343,7 @@ def main():
     else:
         reason = cli_check.get("note") or cli_check.get("stderr") or "사유 미상"
         A(f"| **CLI 경로** | `ollama run {MODELS[0]} ...` | ❌ 실패 — {reason} |")
-    A("| **Python 경로** | `src/01_ollama_chat.py`, `src/run_eval.py` | ✅ 성공 — 결과가 "
+    A("| **Python 경로** | `scripts/legacy/01_ollama_chat.py`, `src/triage_eval/bench_v1/run_eval.py` | ✅ 성공 — 결과가 "
       "`data/results/*_verify.json`, `data/results/local_eval_results.json`에 저장됨 |")
     A("")
     A("* CLI 응답 전문은 `data/results/environment.json`의 `cli_path_check` 항목에 보존됩니다.")

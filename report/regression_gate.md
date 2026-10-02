@@ -1,6 +1,6 @@
 # 회귀 게이트 판정 결과 (Regression Gate)
 
-> `src/compare_runs.py` 자동 생성 · 판정 시각 2026-10-01T10:05:14.632111
+> `src/triage_eval/bench_v1/compare_runs.py` 자동 생성 · 판정 시각 2026-10-01T10:05:14.632111
 > 기준선: `data/results/baseline/v1.2_seed1_local_eval_results.json`
 > 후보: `data/results/history/local_eval_results_20261001_100030.json`
 > 합격 기준: `gate_criteria.toml` (v1.2)

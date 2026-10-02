@@ -82,7 +82,7 @@ def execute_cloud_inference(client: OpenAI, report_text: str) -> dict:
         }
 
 def main():
-    root_dir = Path(__file__).resolve().parent.parent
+    root_dir = Path(__file__).resolve().parents[2]  # scripts/legacy/ → 저장소 루트
     data_path = root_dir / "data" / "questions.json"
     results_dir = root_dir / "data" / "results"
     results_dir.mkdir(parents=True, exist_ok=True)

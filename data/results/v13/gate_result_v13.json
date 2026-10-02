@@ -1,6 +1,6 @@
 {
   "baseline": "data/results/v13/baseline/v13_dev_seed1_baseline.json",
-  "candidate": "data/results/v13/history/v13_dev_20261002_124559.json",
+  "candidate": "data/results/v13/history/v13_dev_20261002_160511.json",
   "notes": [
     "프롬프트 변경됨 (이 게이트가 판정하려는 변경)",
     "후처리 안전장치 변경됨 (없음 → g2)",
@@ -95,8 +95,8 @@
           "name": "평균 지연(초)",
           "kind": "회귀",
           "baseline": 1.684,
-          "candidate": 1.762,
-          "limit": "증가 ≤ 20.0% (실제 +4.63%)",
+          "candidate": 1.742,
+          "limit": "증가 ≤ 20.0% (실제 +3.44%)",
           "passed": true
         },
         {
@@ -216,7 +216,7 @@
         "halluc": 0,
         "lang": 0,
         "enum": 0,
-        "latency": 1.762
+        "latency": 1.742
       },
       "item_changes": {
         "분류": {

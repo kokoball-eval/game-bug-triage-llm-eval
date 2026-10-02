@@ -1,6 +1,6 @@
 # v1.3 회귀 게이트 판정
 
-> 기준선 `data/results/v13/baseline/v13_dev_seed1_baseline.json` · 후보 `data/results/v13/history/v13_dev_20261002_124559.json` · 대상 `qwen2.5:7b` · `src/gate_v13.py` 생성
+> 기준선 `data/results/v13/baseline/v13_dev_seed1_baseline.json` · 후보 `data/results/v13/history/v13_dev_20261002_160511.json` · 대상 `qwen2.5:7b` · `src/triage_eval/pipeline/gate.py` 생성
 
 ## 판정: **PASS**
 
@@ -21,7 +21,7 @@
 | 과잉 상신 | 회귀 | 2 | 4 | 증가 ≤ 2 | ✅ |
 | 형식 STRICT(응답 수) | 회귀 | 57 | 64 | 하락 ≤ 2 | ✅ |
 | 형식 PARSABLE(응답 수) | 회귀 | 57 | 64 | 하락 ≤ 2 | ✅ |
-| 평균 지연(초) | 회귀 | 1.684 | 1.762 | 증가 ≤ 20.0% (실제 +4.63%) | ✅ |
+| 평균 지연(초) | 회귀 | 1.684 | 1.742 | 증가 ≤ 20.0% (실제 +3.44%) | ✅ |
 | 처리 정답(응답 수) | 회귀 | 26 | 48 | 하락 ≤ 0 | ✅ |
 | 분류 정답(응답 수) | 회귀 | 30 | 44 | 하락 ≤ 0 | ✅ |
 | 우선순위 정답(응답 수) | 회귀 | 27 | 40 | 하락 ≤ 1 | ✅ |

@@ -28,7 +28,7 @@
 ### 1) 실행 환경 및 데이터셋 구성
 
 * **실행 환경**: Windows 11 (AMD64), NVIDIA GeForce RTX 5060 Laptop GPU (VRAM 8,151 MiB, 드라이버 592.01), 시스템 RAM 31.4 GB, **Ollama 0.34.0**, Python 3.12.13 (`uv`), 패키지 `ollama 0.6.2` · `openai 3.13.0` — 실측 근거: [`report/environment.md`](environment.md)
-* **실행 경로 검증**: CLI 경로(`ollama run`)와 Python 경로(`src/run_eval.py`) 각각 호출 성공을 확인했습니다. 본 실험 40회는 Python 경로로만 수행했고, CLI 경로는 실행 가능 여부 확인용입니다. (근거: `report/environment.md` §3)
+* **실행 경로 검증**: CLI 경로(`ollama run`)와 Python 경로(`src/triage_eval/bench_v1/run_eval.py`) 각각 호출 성공을 확인했습니다. 본 실험 40회는 Python 경로로만 수행했고, CLI 경로는 실행 가능 여부 확인용입니다. (근거: `report/environment.md` §3)
 * **평가 데이터셋 (`data/questions.json`)**: 총 10건 고정 질문 — 문항별 입력 원문과 검증 목적은 아래 3)에 있습니다.
   * **정상 케이스 (6건)**: 크래시(Q01), 결제 미지급(Q02), UI 오타(Q03), 기기 한정 결함(Q04), 프레임 드랍(Q05), 중복 의심(Q10)
   * **경계 케이스 (2건)**: 복합 이슈 혼재(Q06), 모호한 성능 불만(Q07)
@@ -87,7 +87,7 @@
 
 > **자원 점유 및 Context 실측 안내**
 >
-> 40회 본 실험 로그(`local_eval_results.json`)에는 `ollama ps`의 `size_vram`만 기록되어 있습니다. 발제문이 요구하는 **시스템 RAM / VRAM 구분 기록**과 **실제 적용된 context length**는 `src/capture_env.py`로 사후 실측해 보완했습니다. 동일 모델 태그·동일 양자화 조건에서 수행한 읽기 전용 측정이므로 본 실험 집계 결과는 바뀌지 않았습니다. 측정 전문은 [`report/environment.md`](environment.md), 원본은 `data/results/environment.json`에 있습니다.
+> 40회 본 실험 로그(`local_eval_results.json`)에는 `ollama ps`의 `size_vram`만 기록되어 있습니다. 발제문이 요구하는 **시스템 RAM / VRAM 구분 기록**과 **실제 적용된 context length**는 `src/triage_eval/bench_v1/capture_env.py`로 사후 실측해 보완했습니다. 동일 모델 태그·동일 양자화 조건에서 수행한 읽기 전용 측정이므로 본 실험 집계 결과는 바뀌지 않았습니다. 측정 전문은 [`report/environment.md`](environment.md), 원본은 `data/results/environment.json`에 있습니다.
 >
 > 실측으로 확인한 사항은 세 가지입니다.
 >
@@ -293,7 +293,7 @@
 | **호출 성공률** | **100% (20/20)** | **100% (20/20)** | **동등**<br>두 모델 모두 런타임 크래시 없이 완주 |
 | 워밍업 로딩 시간 (Cold) | 2.145초 | 3.429초 | **판정 보류**<br>디스크 캐시 상태에 따라 실행마다 변동<br>(재실행 시 4.065 / 4.672초 — 격차 0.61초로 축소)<br>본 통계 제외 항목 |
 
-> **산출 기준**: 위 수치는 `src/summarize_eval.py`가 `data/results/local_eval_results.json`에서 재집계한 값입니다. 워밍업은 본 통계에서 제외했고, 평균 속도는 회차별 `tokens_per_sec`의 단순 평균입니다(총토큰/총생성시간의 가중 평균이 아닙니다). 집계 결과는 `data/results/benchmark_summary.json`에 저장됩니다.
+> **산출 기준**: 위 수치는 `src/triage_eval/bench_v1/summarize_eval.py`가 `data/results/local_eval_results.json`에서 재집계한 값입니다. 워밍업은 본 통계에서 제외했고, 평균 속도는 회차별 `tokens_per_sec`의 단순 평균입니다(총토큰/총생성시간의 가중 평균이 아닙니다). 집계 결과는 `data/results/benchmark_summary.json`에 저장됩니다.
 
 ---
 
@@ -302,7 +302,7 @@
 **1. 포맷 계약 준수율 및 가드레일 한계 (Formatting Contract & Guardrail Limits)**
 `[ Qwen 2.5-7B 우세 ]`
 
-* **현상** — 가드레일 주입 후 Qwen은 20회 전수에서 빈 줄·사족 없이 5개 필드 규격을 100% 준수했습니다. Llama도 1일차에 문제였던 **서두 사족은 0건으로 통제**됐습니다. 다만 20회 중 19회에서 필드 사이에 빈 줄을 삽입해, 엄격 기준 준수율은 5%(1/20), 빈 줄을 허용하는 파서 호환 기준으로는 100%(20/20)로 측정됐습니다. (`src/score_format.py` 자동 채점, 근거: [`report/format_compliance.md`](format_compliance.md))
+* **현상** — 가드레일 주입 후 Qwen은 20회 전수에서 빈 줄·사족 없이 5개 필드 규격을 100% 준수했습니다. Llama도 1일차에 문제였던 **서두 사족은 0건으로 통제**됐습니다. 다만 20회 중 19회에서 필드 사이에 빈 줄을 삽입해, 엄격 기준 준수율은 5%(1/20), 빈 줄을 허용하는 파서 호환 기준으로는 100%(20/20)로 측정됐습니다. (`src/triage_eval/common/score_format.py` 자동 채점, 근거: [`report/format_compliance.md`](format_compliance.md))
 * **실무 영향** — Llama도 필드 누락·순서 오류·Enum 위반은 0건이라 파싱 자체는 가능합니다. 다만 동일 프롬프트·동일 설정에서 Q05(간헐적 프레임 드랍)의 2회차 실행 한 번만 빈 줄 없이 출력되는 등 개행 스타일이 회차마다 흔들립니다. 줄 단위 파서에는 빈 줄 정규화 전처리가 필요합니다.
 * **판정** — **Qwen 우세.** 파싱 에러 0건으로 백엔드 파이프라인 안전성 확보.
 
@@ -374,7 +374,7 @@ QA 엔지니어링 관점에서 정의한 5개 평가 영역에 따라 전수 �
 | **한국어 표현** | 15 | 13 | **15** | **15** | Llama: 자연스러운 기술체 / Qwen: Q08 비문("앱이 발생...") 발생(-2) |
 | **총점** | **100** | **81점** | **77점** | **99점** | **Qwen2.5-7B 로컬 1위 달성** |
 
-> 채점은 평가자 1인(QA 8년 차)이 수행했으므로 주관이 포함됩니다. 주관이 개입하지 않는 포맷 준수율은 별도로 `src/score_format.py`가 기계 채점했습니다. (근거: [`report/format_compliance.md`](format_compliance.md))
+> 채점은 평가자 1인(QA 8년 차)이 수행했으므로 주관이 포함됩니다. 주관이 개입하지 않는 포맷 준수율은 별도로 `src/triage_eval/common/score_format.py`가 기계 채점했습니다. (근거: [`report/format_compliance.md`](format_compliance.md))
 
 ---
 

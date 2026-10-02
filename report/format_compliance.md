@@ -1,8 +1,8 @@
 # 포맷 계약 준수율 채점 근거 (Format Contract Audit Trail)
 
-> 본 문서는 `src/score_format.py`가 원본 응답 로그(`data/results/local_eval_results.json`, `cloud_eval_results.json`)를
+> 본 문서는 `src/triage_eval/common/score_format.py`가 원본 응답 로그(`data/results/local_eval_results.json`, `cloud_eval_results.json`)를
 > 기계적으로 재채점한 결과입니다. 수치를 눈으로 세지 않고 스크립트로 산출하므로, 아래 표의 모든 판정은
-> `uv run python src/score_format.py` 재실행으로 그대로 재현됩니다. 원본 데이터는 `data/results/format_compliance.json`.
+> `uv run bench-score-format` 재실행으로 그대로 재현됩니다. 원본 데이터는 `data/results/format_compliance.json`.
 
 ## 1. 채점 규칙
 

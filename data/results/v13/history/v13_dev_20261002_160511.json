@@ -1,0 +1,2859 @@
+{
+  "metadata": {
+    "project": "Aether Raid 버그 트리아지 평가셋",
+    "dataset_version": "v1.3",
+    "executed_at": "2026-10-02T16:05:11.608088",
+    "models": [
+      "qwen2.5:7b"
+    ],
+    "total_formal_runs": 64,
+    "warmup_runs": 1,
+    "run_config": {
+      "contract": "v2",
+      "options": {
+        "temperature": 0.2,
+        "num_predict": 512,
+        "num_ctx": 8192
+      },
+      "repeat_count": 2,
+      "split": "dev",
+      "set": "all",
+      "prompt_version": "v2.3",
+      "guardrail_version": "g2",
+      "retry_policy": {
+        "trigger": [
+          "R6_enum_valid",
+          "R7_output_language"
+        ],
+        "max_retries": 1,
+        "scope": "field",
+        "output": "json_schema_enum+line_pattern",
+        "num_predict": 256
+      },
+      "discard_check_policy": {
+        "trigger": "처리=폐기, 분류≠중복 의심",
+        "choices": [
+          "이상 현상 제보",
+          "무관"
+        ],
+        "on_report": "정보 요청 후 보류",
+        "num_predict": 32
+      },
+      "system_prompt_sha256": "f512ddaab04df8609586c7ebef6043178e4a2e955e1d685d6a0dbdbbf82102f2",
+      "dataset_sha256": "59c665725cf2b97217560ffe970b5f73b561774099ec195cdbe0e171bbdfd434",
+      "item_ids": [
+        "A01",
+        "A03",
+        "A05",
+        "A06",
+        "A08",
+        "A10",
+        "A11",
+        "A13",
+        "A17",
+        "A19",
+        "B01",
+        "B03",
+        "B05",
+        "B07",
+        "B09",
+        "B11",
+        "B12",
+        "B13",
+        "B14",
+        "B17",
+        "S01",
+        "S02",
+        "S03",
+        "S04b",
+        "S05",
+        "S08",
+        "S10",
+        "S10c",
+        "S12",
+        "S15",
+        "S18",
+        "S20"
+      ],
+      "model_digests": {
+        "qwen2.5:7b": "845dbda0ea48"
+      },
+      "seeds": {
+        "1": 1,
+        "2": 2
+      },
+      "environment": {
+        "gpu_used_mib": 0.0,
+        "ollama_loaded": [],
+        "other_vram_mib": 0.0,
+        "on_ac_power": true,
+        "warnings": [],
+        "notes": []
+      }
+    }
+  },
+  "warmup_runs": [
+    {
+      "model": "qwen2.5:7b",
+      "is_warmup": true,
+      "success": true,
+      "response_text": "[요약]: 게임 시작 시 클라이언트 안정성 문제 발생\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 4.471,
+      "load_duration_sec": 2.386,
+      "prompt_eval_count": 2107,
+      "eval_count": 87,
+      "tokens_per_sec": 67.49,
+      "vram_mib": 4756.1,
+      "error_message": null
+    }
+  ],
+  "results": [
+    {
+      "eval_id": "qwen2.5_7b_A01_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "A01",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:21.615856",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 다이아 패키지 결제 후 다이아가 게임 내에 반영되지 않았습니다.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.57,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2496,
+      "eval_count": 95,
+      "tokens_per_sec": 68.9,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 다이아 패키지 결제 후 다이아가 게임 내에 반영되지 않았습니다.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.57
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 다이아 패키지 결제 후 다이아가 게임 내에 반영되지 않았습니다.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_A03_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "A03",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:23.678483",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: PC에서 로그인 실패\n[분류]: 버그 아님\n[모듈]: 계정·로그인\n[우선순위]: Minor\n[재현 정보]: 부족\n[발생 빈도]: 1회\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 플랫폼, 발생 상황, 로그인 시도 방법",
+      "elapsed_sec": 2.061,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2341,
+      "eval_count": 97,
+      "tokens_per_sec": 68.36,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: PC에서 로그인 실패\n[분류]: 버그 아님\n[모듈]: 계정·로그인\n[우선순위]: 중간\n[재현 정보]: 부족\n[발생 빈도]: 1회\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 플랫폼, 발생 상황, 로그인 시도 방법",
+          "failed_rules": [
+            "R6_enum_valid"
+          ],
+          "elapsed_sec": 1.525
+        },
+        {
+          "kind": "retry",
+          "response_text": "{\n  \"우선순위\": \"Minor\",\n  \"처리\": \"등록(재현 대기)\"\n}",
+          "elapsed_sec": 0.536,
+          "eval_count": 26,
+          "error_message": null,
+          "errors": [
+            {
+              "field": "우선순위",
+              "value": "중간"
+            }
+          ],
+          "recheck": [
+            "처리"
+          ],
+          "lang_errors": [],
+          "fixed": {
+            "우선순위": "Minor",
+            "처리": "등록(재현 대기)"
+          },
+          "pattern_fallback": false,
+          "pattern_error": null
+        }
+      ],
+      "retried": true,
+      "retry_adopted": true,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: PC에서 로그인 실패\n[분류]: 버그 아님\n[모듈]: 계정·로그인\n[우선순위]: Minor\n[재현 정보]: 부족\n[발생 빈도]: 1회\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 플랫폼, 발생 상황, 로그인 시도 방법",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_A05_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "A05",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:25.326018",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 태블릿에서 상점 화면 오른쪽 버튼이 화면 밖으로 잘려서 누를 수 없음\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.647,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2376,
+      "eval_count": 102,
+      "tokens_per_sec": 66.73,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 태블릿에서 상점 화면 오른쪽 버튼이 화면 밖으로 잘려서 누를 수 없음\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.647
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 태블릿에서 상점 화면 오른쪽 버튼이 화면 밖으로 잘려서 누를 수 없음\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_A06_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "A06",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:26.939946",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 추석 패키지 구매 후 아이템 수령 실패 및 과금 유도 비난\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.613,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2441,
+      "eval_count": 98,
+      "tokens_per_sec": 66.88,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 추석 패키지 구매 후 아이템 수령 실패 및 과금 유도 비난\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.613
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 추석 패키지 구매 후 아이템 수령 실패 및 과금 유도 비난\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": [
+          {
+            "rule": "H-1",
+            "field": "처리",
+            "from": "등록(재현 대기)",
+            "to": "긴급 사인 요청"
+          }
+        ]
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_A08_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "A08",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:28.684207",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 4장 엔딩 컷신에서 세라의 얼굴 텍스처가 누락되어 눈알과 이빨만 노출됨\n[분류]: 결함\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.743,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2436,
+      "eval_count": 107,
+      "tokens_per_sec": 66.96,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 4장 엔딩 컷신에서 세라의 얼굴 텍스처가 누락되어 눈알과 이빨만 노출됨\n[분류]: 결함\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.743
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 4장 엔딩 컷신에서 세라의 얼굴 텍스처가 누락되어 눈알과 이빨만 노출됨\n[분류]: 결함\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_A10_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "A10",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:31.002192",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 폰이 뜨거워져 게임을 할 수 없는 문제가 발생함\n[분류]: 버그 아님\n[모듈]: 플랫폼 호환성\n[우선순위]: Minor\n[재현 정보]: 부족\n[발생 빈도]: 1회\n[처리]: 정보 요청 후 보류\n[누락 정보 및 권장 조치]: 플랫폼, 기기 모델, 업데이트 후 버전 확인 방법",
+      "elapsed_sec": 2.317,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2393,
+      "eval_count": 112,
+      "tokens_per_sec": 67.07,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 폰이 뜨거워져 게임을 할 수 없는 문제가 발생함\n[분류]: 버그 아님\n[모듈]: 플랫폼 호환성\n[우선순위]: 중소\n[재현 정보]: 부족\n[발생 빈도]: 1회\n[처리]: 정보 요청 후 보류\n[누락 정보 및 권장 조치]: 플랫폼, 기기 모델, 업데이트 후 버전 확인 방법",
+          "failed_rules": [
+            "R6_enum_valid"
+          ],
+          "elapsed_sec": 1.791
+        },
+        {
+          "kind": "retry",
+          "response_text": "{\n  \"우선순위\": \"Minor\",\n  \"처리\": \"정보 요청 후 보류\"\n}",
+          "elapsed_sec": 0.526,
+          "eval_count": 24,
+          "error_message": null,
+          "errors": [
+            {
+              "field": "우선순위",
+              "value": "중소"
+            }
+          ],
+          "recheck": [
+            "처리"
+          ],
+          "lang_errors": [],
+          "fixed": {
+            "우선순위": "Minor",
+            "처리": "정보 요청 후 보류"
+          },
+          "pattern_fallback": false,
+          "pattern_error": null
+        }
+      ],
+      "retried": true,
+      "retry_adopted": true,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 폰이 뜨거워져 게임을 할 수 없는 문제가 발생함\n[분류]: 버그 아님\n[모듈]: 플랫폼 호환성\n[우선순위]: Minor\n[재현 정보]: 부족\n[발생 빈도]: 1회\n[처리]: 정보 요청 후 보류\n[누락 정보 및 권장 조치]: 플랫폼, 기기 모델, 업데이트 후 버전 확인 방법",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_A11_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "A11",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:32.691448",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 로그인 문제, 상점 가격 오류, 친구 목록 문제 발생\n[분류]: 결함\n[모듈]: 네트워크/클라이언트 안정성\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.688,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2454,
+      "eval_count": 103,
+      "tokens_per_sec": 66.86,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 로그인 문제, 상점 가격 오류, 친구 목록 문제 발생\n[분류]: 결함\n[모듈]: 네트워크/클라이언트 안정성\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.688
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 로그인 문제, 상점 가격 오류, 친구 목록 문제 발생\n[분류]: 결함\n[모듈]: 네트워크/클라이언트 안정성\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_A13_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "A13",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:34.212300",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 신규 레이드 보스방 입장 후 앱 강제종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.52,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2424,
+      "eval_count": 92,
+      "tokens_per_sec": 66.96,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 신규 레이드 보스방 입장 후 앱 강제종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.52
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 신규 레이드 보스방 입장 후 앱 강제종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_A17_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "A17",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:36.509964",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 다이아 대리충전 제보.\n[분류]: 무관\n[모듈]: 해당 없음\n[우선순위]: 해당 없음\n[재현 정보]: 부족\n[발생 빈도]: 미기재\n[처리]: 폐기\n[누락 정보 및 권장 조치]: 플랫폼, 발생 상황, 대리충전 방식 등 재현에 필요한 정보 누락.",
+      "elapsed_sec": 2.295,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2375,
+      "eval_count": 102,
+      "tokens_per_sec": 66.83,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 다이아 대리충전 제보.\n[분류]: 무관 중\n[모듈]: 해당 없음\n[우선순위]: 해당 없음\n[재현 정보]: 부족\n[발생 빈도]: 미기재\n[처리]: 폐기\n[누락 정보 및 권장 조치]: 플랫폼, 발생 상황, 대리충전 방식 등 재현에 필요한 정보 누락.",
+          "failed_rules": [
+            "R6_enum_valid"
+          ],
+          "elapsed_sec": 1.644
+        },
+        {
+          "kind": "retry",
+          "response_text": "{\n  \"분류\": \"무관\",\n  \"처리\": \"폐기\"\n}",
+          "elapsed_sec": 0.452,
+          "eval_count": 20,
+          "error_message": null,
+          "errors": [
+            {
+              "field": "분류",
+              "value": "무관 중"
+            }
+          ],
+          "recheck": [
+            "처리"
+          ],
+          "lang_errors": [],
+          "fixed": {
+            "분류": "무관",
+            "처리": "폐기"
+          },
+          "pattern_fallback": false,
+          "pattern_error": null
+        },
+        {
+          "kind": "discard_check",
+          "response_text": "{\"판정\":\"무관\"}",
+          "verdict": "무관",
+          "held": false,
+          "elapsed_sec": 0.199,
+          "error_message": null
+        }
+      ],
+      "retried": true,
+      "retry_adopted": true,
+      "discard_checked": true,
+      "discard_held": false,
+      "raw_response_text": "[요약]: 다이아 대리충전 제보.\n[분류]: 무관\n[모듈]: 해당 없음\n[우선순위]: 해당 없음\n[재현 정보]: 부족\n[발생 빈도]: 미기재\n[처리]: 폐기\n[누락 정보 및 권장 조치]: 플랫폼, 발생 상황, 대리충전 방식 등 재현에 필요한 정보 누락.",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_A19_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "A19",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:38.585696",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 유저가 길드원에게 피해를 주는 방법을 공유하고 있으며, 캡처 이미지가 첨부되어 있음\n[분류]: 문의·건의\n[모듈]: 보안·어뷰징\n[우선순위]: 판단보류\n[재현 정보]: 충분\n[발생 빈도]: 미기재\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.075,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2377,
+      "eval_count": 106,
+      "tokens_per_sec": 66.73,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 유저가 길드원에게 피해를 주는 방법을 공유하고 있으며, 캡처 이미지가 첨부되어 있음\n[분류]: 문의·건의\n[모듈]: 없음\n[우선순위]: 판단보류\n[재현 정보]: 충분\n[발생 빈도]: 미기재\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [
+            "R6_enum_valid"
+          ],
+          "elapsed_sec": 1.706
+        },
+        {
+          "kind": "retry",
+          "response_text": "{\n  \"모듈\": \"보안·어뷰징\"\n}",
+          "elapsed_sec": 0.369,
+          "eval_count": 16,
+          "error_message": null,
+          "errors": [
+            {
+              "field": "모듈",
+              "value": "없음"
+            }
+          ],
+          "recheck": [],
+          "lang_errors": [],
+          "fixed": {
+            "모듈": "보안·어뷰징"
+          },
+          "pattern_fallback": false,
+          "pattern_error": null
+        }
+      ],
+      "retried": true,
+      "retry_adopted": true,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 유저가 길드원에게 피해를 주는 방법을 공유하고 있으며, 캡처 이미지가 첨부되어 있음\n[분류]: 문의·건의\n[모듈]: 보안·어뷰징\n[우선순위]: 판단보류\n[재현 정보]: 충분\n[발생 빈도]: 미기재\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B01_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "B01",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:40.209066",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 신규 계정 생성 후 첫 로딩 화면에서 앱이 강제 종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.623,
+      "load_duration_sec": 0.002,
+      "prompt_eval_count": 2546,
+      "eval_count": 95,
+      "tokens_per_sec": 66.3,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 신규 계정 생성 후 첫 로딩 화면에서 앱이 강제 종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.623
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 신규 계정 생성 후 첫 로딩 화면에서 앱이 강제 종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B03_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "B03",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:41.647488",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 결제 취소 시 아이템 지급 오류\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.438,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2526,
+      "eval_count": 83,
+      "tokens_per_sec": 66.5,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 결제 취소 시 아이템 지급 오류\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.438
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 결제 취소 시 아이템 지급 오류\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B05_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "B05",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:43.163032",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 서브 퀘스트 '잃어버린 등불' 완료 불가\n[분류]: 결함\n[모듈]: 콘텐츠 진행\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.514,
+      "load_duration_sec": 0.002,
+      "prompt_eval_count": 2502,
+      "eval_count": 90,
+      "tokens_per_sec": 66.57,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 서브 퀘스트 '잃어버린 등불' 완료 불가\n[분류]: 결함\n[모듈]: 콘텐츠 진행\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.514
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 서브 퀘스트 '잃어버린 등불' 완료 불가\n[분류]: 결함\n[모듈]: 콘텐츠 진행\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B07_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "B07",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:44.741704",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 아이템 툴팁 설명 텍스트가 툴팁 상자 밖으로 넘침\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.578,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2494,
+      "eval_count": 94,
+      "tokens_per_sec": 66.53,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 아이템 툴팁 설명 텍스트가 툴팁 상자 밖으로 넘침\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.578
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 아이템 툴팁 설명 텍스트가 툴팁 상자 밖으로 넘침\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": [
+          {
+            "rule": "H-2b",
+            "field": "처리",
+            "from": "등록(재현 대기)",
+            "to": "개발 배정"
+          }
+        ]
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B09_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "B09",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:46.242673",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 팔이 벽을 통과하는 클리핑 버그\n[분류]: 버그 아님\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.5,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2462,
+      "eval_count": 90,
+      "tokens_per_sec": 66.67,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 팔이 벽을 통과하는 클리핑 버그\n[분류]: 버그 아님\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.5
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 팔이 벽을 통과하는 클리핑 버그\n[분류]: 버그 아님\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B11_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "B11",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:47.655816",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 분수대 그림자 미출력\n[분류]: 결함\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.413,
+      "load_duration_sec": 0.005,
+      "prompt_eval_count": 2487,
+      "eval_count": 83,
+      "tokens_per_sec": 66.49,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 분수대 그림자 미출력\n[분류]: 결함\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.413
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 분수대 그림자 미출력\n[분류]: 결함\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": [
+          {
+            "rule": "H-2b",
+            "field": "처리",
+            "from": "등록(재현 대기)",
+            "to": "개발 배정"
+          }
+        ]
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B12_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "B12",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:49.355646",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 갤럭시 S8에서 레이드 보스전 진입 시 앱이 강제 종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.699,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2574,
+      "eval_count": 99,
+      "tokens_per_sec": 66.46,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 갤럭시 S8에서 레이드 보스전 진입 시 앱이 강제 종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.699
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 갤럭시 S8에서 레이드 보스전 진입 시 앱이 강제 종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B13_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "B13",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:51.705663",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 네트워크 연결이 와이파이에서 LTE로 바뀌면 끊김 발생\n[분류]: 버그 아님\n[모듈]: 네트워크\n[우선순위]: Minor\n[재현 정보]: 부족\n[발생 빈도]: 간헐적\n[처리]: 정보 요청 후 보류\n[누락 정보 및 권장 조치]: 테스트 환경, 재현율, 기대 결과, 실제 결과",
+      "elapsed_sec": 2.349,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2360,
+      "eval_count": 114,
+      "tokens_per_sec": 66.7,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 네트워크 연결이 와이파이에서 LTE로 바뀌면 끊김 발생\n[분류]: 버그 아님\n[모듈]: 네트워크\n[우선순위]: 중소\n[재현 정보]: 부족\n[발생 빈도]: 간헐적\n[처리]: 정보 요청 후 보류\n[누락 정보 및 권장 조치]: 테스트 환경, 재현율, 기대 결과, 실제 결과",
+          "failed_rules": [
+            "R6_enum_valid"
+          ],
+          "elapsed_sec": 1.826
+        },
+        {
+          "kind": "retry",
+          "response_text": "{\n  \"우선순위\": \"Minor\",\n  \"처리\": \"정보 요청 후 보류\"\n}",
+          "elapsed_sec": 0.523,
+          "eval_count": 24,
+          "error_message": null,
+          "errors": [
+            {
+              "field": "우선순위",
+              "value": "중소"
+            }
+          ],
+          "recheck": [
+            "처리"
+          ],
+          "lang_errors": [],
+          "fixed": {
+            "우선순위": "Minor",
+            "처리": "정보 요청 후 보류"
+          },
+          "pattern_fallback": false,
+          "pattern_error": null
+        }
+      ],
+      "retried": true,
+      "retry_adopted": true,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 네트워크 연결이 와이파이에서 LTE로 바뀌면 끊김 발생\n[분류]: 버그 아님\n[모듈]: 네트워크\n[우선순위]: Minor\n[재현 정보]: 부족\n[발생 빈도]: 간헐적\n[처리]: 정보 요청 후 보류\n[누락 정보 및 권장 조치]: 테스트 환경, 재현율, 기대 결과, 실제 결과",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B14_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "B14",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:53.528719",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 폴드 펼친 화면에서 스킬 버튼이 화면 밖으로 잘리는 버그.\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 재현에 필요한 테스트 기기 요청",
+      "elapsed_sec": 1.822,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2615,
+      "eval_count": 107,
+      "tokens_per_sec": 66.59,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 폴드 펼친 화면에서 스킬 버튼이 화면 밖으로 잘리는 버그.\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 재현에 필요한 테스트 기기 요청",
+          "failed_rules": [],
+          "elapsed_sec": 1.822
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 폴드 펼친 화면에서 스킬 버튼이 화면 밖으로 잘리는 버그.\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 재현에 필요한 테스트 기기 요청",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B17_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "B17",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:55.354001",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 전투 중 전화 수신 후 복귀 시 사운드 끊김과 화면 정지 발생\n[분류]: 결함\n[모듈]: 클라이언트 안정성/그래픽·사운드\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.824,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2577,
+      "eval_count": 107,
+      "tokens_per_sec": 66.37,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 전투 중 전화 수신 후 복귀 시 사운드 끊김과 화면 정지 발생\n[분류]: 결함\n[모듈]: 클라이언트 안정성/그래픽·사운드\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.824
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 전투 중 전화 수신 후 복귀 시 사운드 끊김과 화면 정지 발생\n[분류]: 결함\n[모듈]: 클라이언트 안정성/그래픽·사운드\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S01_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "S01",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:57.336991",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 경매장 수령액이나 우편함 보상을 받을 때, 특정 길드원들이 와이파이를 껐다 켜면서 중복으로 보상을 타먹는 현상.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.982,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2434,
+      "eval_count": 122,
+      "tokens_per_sec": 66.74,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 경매장 수령액이나 우편함 보상을 받을 때, 특정 길드원들이 와이파이를 껐다 켜면서 중복으로 보상을 타먹는 현상.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.982
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 경매장 수령액이나 우편함 보상을 받을 때, 특정 길드원들이 와이파이를 껐다 켜면서 중복으로 보상을 타먹는 현상.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S02_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "S02",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:03:59.445849",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 부계정들이 매칭 시스템을 악용하여 랭킹 점수를 부정적으로 영향을 미침\n[분류]: 결함\n[모듈]: 보안·어뷰징\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.107,
+      "load_duration_sec": 0.005,
+      "prompt_eval_count": 2446,
+      "eval_count": 106,
+      "tokens_per_sec": 66.76,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 부계정들이 매칭 시스템을 악용하여 랭킹 점수를 부정적으로 영향을 미침\n[분류]: 결함\n[모듈]: 매칭 시스템\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [
+            "R6_enum_valid"
+          ],
+          "elapsed_sec": 1.736
+        },
+        {
+          "kind": "retry",
+          "response_text": "{\n  \"모듈\": \"보안·어뷰징\"\n}",
+          "elapsed_sec": 0.371,
+          "eval_count": 16,
+          "error_message": null,
+          "errors": [
+            {
+              "field": "모듈",
+              "value": "매칭 시스템"
+            }
+          ],
+          "recheck": [],
+          "lang_errors": [],
+          "fixed": {
+            "모듈": "보안·어뷰징"
+          },
+          "pattern_fallback": false,
+          "pattern_error": null
+        }
+      ],
+      "retried": true,
+      "retry_adopted": true,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 부계정들이 매칭 시스템을 악용하여 랭킹 점수를 부정적으로 영향을 미침\n[분류]: 결함\n[모듈]: 보안·어뷰징\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S03_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "S03",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:04:01.150683",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 보스전 맵 구석의 뾰족한 바위 위에 점프하면 보스가 공격을 멈춥니다.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.704,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2454,
+      "eval_count": 104,
+      "tokens_per_sec": 66.81,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 보스전 맵 구석의 뾰족한 바위 위에 점프하면 보스가 공격을 멈춥니다.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.704
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 보스전 맵 구석의 뾰족한 바위 위에 점프하면 보스가 공격을 멈춥니다.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": [
+          {
+            "rule": "H-2",
+            "field": "처리",
+            "from": "개발 배정",
+            "to": "등록(재현 대기)"
+          }
+        ]
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S04b_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "S04b",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:04:02.561136",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 입장권 횟수 초기화 버그 제보\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.409,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2441,
+      "eval_count": 84,
+      "tokens_per_sec": 66.96,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 입장권 횟수 초기화 버그 제보\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.409
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 입장권 횟수 초기화 버그 제보\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S05_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "S05",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:04:03.965570",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 강화 시스템 개선 제안\n[분류]: 개선 제안\n[모듈]: 게임플레이·밸런스\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.404,
+      "load_duration_sec": 0.002,
+      "prompt_eval_count": 2423,
+      "eval_count": 84,
+      "tokens_per_sec": 66.67,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 강화 시스템 개선 제안\n[분류]: 개선 제안\n[모듈]: 게임플레이·밸런스\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.404
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 강화 시스템 개선 제안\n[분류]: 개선 제안\n[모듈]: 게임플레이·밸런스\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S08_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "S08",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:04:05.524464",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 월드 채팅에서 욕설을 숫자나 점으로 필터 회피 가능\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.558,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2428,
+      "eval_count": 94,
+      "tokens_per_sec": 66.7,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 월드 채팅에서 욕설을 숫자나 점으로 필터 회피 가능\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.558
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 월드 채팅에서 욕설을 숫자나 점으로 필터 회피 가능\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S10_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "S10",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:04:07.056180",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 스킬 데미지 감소에 대해 버그인지 확인 요청.\n[분류]: 개선 제안\n[모듈]: 게임플레이·밸런스\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 미기재\n[처리]: 정보 요청 후 보류\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.531,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2393,
+      "eval_count": 94,
+      "tokens_per_sec": 66.65,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 스킬 데미지 감소에 대해 버그인지 확인 요청.\n[분류]: 개선 제안\n[모듈]: 게임플레이·밸런스\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 미기재\n[처리]: 정보 요청 후 보류\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.531
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 스킬 데미지 감소에 대해 버그인지 확인 요청.\n[분류]: 개선 제안\n[모듈]: 게임플레이·밸런스\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 미기재\n[처리]: 정보 요청 후 보류\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S10c_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "S10c",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:04:08.803639",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 방어력이 50% 감소한 것으로 보이지만 패치노트에는 5% 감소라고 명시되어 있습니다.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.747,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2465,
+      "eval_count": 106,
+      "tokens_per_sec": 66.36,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 방어력이 50% 감소한 것으로 보이지만 패치노트에는 5% 감소라고 명시되어 있습니다.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.747
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 방어력이 50% 감소한 것으로 보이지만 패치노트에는 5% 감소라고 명시되어 있습니다.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S12_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "S12",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:04:10.167878",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 과금 시 두 번 결제됨\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.363,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2429,
+      "eval_count": 81,
+      "tokens_per_sec": 66.67,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 과금 시 두 번 결제됨\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.363
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 과금 시 두 번 결제됨\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S15_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "S15",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:04:11.988407",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 신규 레이드 보스 싸움 시 앱 꺼짐으로 인해 보상 미수령 및 입장권 소실\n[분류]: 결함\n[모듈]: 클라이언트 안정성/결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.82,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2424,
+      "eval_count": 112,
+      "tokens_per_sec": 66.48,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 신규 레이드 보스 싸움 시 앱 꺼짐으로 인해 보상 미수령 및 입장권 소실\n[분류]: 결함\n[모듈]: 클라이언트 안정성/결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.82
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 신규 레이드 보스 싸움 시 앱 꺼짐으로 인해 보상 미수령 및 입장권 소실\n[분류]: 결함\n[모듈]: 클라이언트 안정성/결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S18_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "S18",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:04:13.670628",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 같은 템의 경우 다른 플레이어에게 훨씬 높은 데미지를 입힌다.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.681,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2408,
+      "eval_count": 103,
+      "tokens_per_sec": 66.68,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 같은 템의 경우 다른 플레이어에게 훨씬 높은 데미지를 입힌다.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.681
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 같은 템의 경우 다른 플레이어에게 훨씬 높은 데미지를 입힌다.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S20_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "S20",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 1,
+      "timestamp": "2026-10-02T16:04:15.244866",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 파티 4명이 물약 다 써도 보스를 잡지 못함.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.573,
+      "load_duration_sec": 0.002,
+      "prompt_eval_count": 2390,
+      "eval_count": 97,
+      "tokens_per_sec": 66.76,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 파티 4명이 물약 다 써도 보스를 잡지 못함.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.573
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 파티 4명이 물약 다 써도 보스를 잡지 못함.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_A01_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "A01",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:16.837515",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 다이아 패키지 결제 후 다이아가 보유량에 반영되지 않았습니다.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.592,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2496,
+      "eval_count": 95,
+      "tokens_per_sec": 66.48,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 다이아 패키지 결제 후 다이아가 보유량에 반영되지 않았습니다.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.592
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 다이아 패키지 결제 후 다이아가 보유량에 반영되지 않았습니다.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_A03_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "A03",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:19.044271",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: PC에서 로그인 불가\n[분류]: 버그 아님\n[모듈]: 계정·로그인\n[우선순위]: 판단보류\n[재현 정보]: 부족\n[발생 빈도]: 1회\n[처리]: 정보 요청 후 보류\n[누락 정보 및 권장 조치]: 플랫폼, 기기 정보, 로그인 시도 방법과 실패 사유",
+      "elapsed_sec": 2.205,
+      "load_duration_sec": 0.005,
+      "prompt_eval_count": 2341,
+      "eval_count": 102,
+      "tokens_per_sec": 66.67,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: PC에서 로그인 불가\n[분류]: 버그 아님\n[모듈]: 계정·로그인\n[우선순위]: 중간\n[재현 정보]: 부족\n[발생 빈도]: 1회\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 플랫폼, 기기 정보, 로그인 시도 방법과 실패 사유",
+          "failed_rules": [
+            "R6_enum_valid"
+          ],
+          "elapsed_sec": 1.642
+        },
+        {
+          "kind": "retry",
+          "response_text": "{\n  \"우선순위\": \"판단보류\",\n  \"처리\": \"정보 요청 후 보류\"\n}",
+          "elapsed_sec": 0.563,
+          "eval_count": 27,
+          "error_message": null,
+          "errors": [
+            {
+              "field": "우선순위",
+              "value": "중간"
+            }
+          ],
+          "recheck": [
+            "처리"
+          ],
+          "lang_errors": [],
+          "fixed": {
+            "우선순위": "판단보류",
+            "처리": "정보 요청 후 보류"
+          },
+          "pattern_fallback": false,
+          "pattern_error": null
+        }
+      ],
+      "retried": true,
+      "retry_adopted": true,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: PC에서 로그인 불가\n[분류]: 버그 아님\n[모듈]: 계정·로그인\n[우선순위]: 판단보류\n[재현 정보]: 부족\n[발생 빈도]: 1회\n[처리]: 정보 요청 후 보류\n[누락 정보 및 권장 조치]: 플랫폼, 기기 정보, 로그인 시도 방법과 실패 사유",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_A05_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "A05",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:21.503033",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 태블릿에서 상점 화면 오른쪽 버튼이 화면 밖으로 잘려서 누를 수 없음\n[분류]: 버그 아님\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 플랫폼, 기기 모델, 빌드 버전",
+      "elapsed_sec": 2.457,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2376,
+      "eval_count": 120,
+      "tokens_per_sec": 66.51,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 태블릿에서 상점 화면 오른쪽 버튼이 화면 밖으로 잘려서 누를 수 없음\n[분류]: 버그 아님\n[모듈]: UI·텍스트\n[우선순위]: 미기재\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 플랫폼, 기기 모델, 빌드 버전",
+          "failed_rules": [
+            "R6_enum_valid"
+          ],
+          "elapsed_sec": 1.924
+        },
+        {
+          "kind": "retry",
+          "response_text": "{\n  \"우선순위\": \"Minor\",\n  \"처리\": \"등록(재현 대기)\"\n}",
+          "elapsed_sec": 0.533,
+          "eval_count": 26,
+          "error_message": null,
+          "errors": [
+            {
+              "field": "우선순위",
+              "value": "미기재"
+            }
+          ],
+          "recheck": [
+            "처리"
+          ],
+          "lang_errors": [],
+          "fixed": {
+            "우선순위": "Minor",
+            "처리": "등록(재현 대기)"
+          },
+          "pattern_fallback": false,
+          "pattern_error": null
+        }
+      ],
+      "retried": true,
+      "retry_adopted": true,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 태블릿에서 상점 화면 오른쪽 버튼이 화면 밖으로 잘려서 누를 수 없음\n[분류]: 버그 아님\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 플랫폼, 기기 모델, 빌드 버전",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_A06_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "A06",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:23.156549",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 추석 패키지 구매 후 아이템 수령 실패와 과금 유도에 대한 불만.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.652,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2441,
+      "eval_count": 100,
+      "tokens_per_sec": 66.59,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 추석 패키지 구매 후 아이템 수령 실패와 과금 유도에 대한 불만.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.652
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 추석 패키지 구매 후 아이템 수령 실패와 과금 유도에 대한 불만.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": [
+          {
+            "rule": "H-1",
+            "field": "처리",
+            "from": "등록(재현 대기)",
+            "to": "긴급 사인 요청"
+          }
+        ]
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_A08_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "A08",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:24.916643",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 4장 엔딩 컷신에서 세라의 얼굴 텍스처가 누락되어 눈알과 이빨만 노출됨\n[분류]: 결함\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.76,
+      "load_duration_sec": 0.005,
+      "prompt_eval_count": 2436,
+      "eval_count": 107,
+      "tokens_per_sec": 66.56,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 4장 엔딩 컷신에서 세라의 얼굴 텍스처가 누락되어 눈알과 이빨만 노출됨\n[분류]: 결함\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.76
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 4장 엔딩 컷신에서 세라의 얼굴 텍스처가 누락되어 눈알과 이빨만 노출됨\n[분류]: 결함\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_A10_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "A10",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:27.672205",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 폰이 업데이트 이후 10분만에 뜨거워짐\n[분류]: 무관\n[모듈]: 플랫폼 호환성\n[우선순위]: 해당 없음\n[재현 정보]: 부족\n[발생 빈도]: 1회\n[처리]: 정보 요청 후 보류\n[누락 정보 및 권장 조치]: 플랫폼, 기기 정보, 업데이트 전후의 폰 온도 차이, 동영상 등 재현에 필요한 정보",
+      "elapsed_sec": 2.753,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2393,
+      "eval_count": 125,
+      "tokens_per_sec": 66.44,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 폰이 업데이트 이후 10분만에 뜨거워짐\n[분류]: 무관 중\n[모듈]: 플랫폼 호환성\n[우선순위]: 해당 없음\n[재현 정보]: 부족\n[발생 빈도]: 1회\n[처리]: 폐기\n[누락 정보 및 권장 조치]: 플랫폼, 기기 정보, 업데이트 전후의 폰 온도 차이, 동영상 등 재현에 필요한 정보",
+          "failed_rules": [
+            "R6_enum_valid"
+          ],
+          "elapsed_sec": 2.001
+        },
+        {
+          "kind": "retry",
+          "response_text": "{\n  \"분류\": \"무관\",\n  \"처리\": \"폐기\"\n}",
+          "elapsed_sec": 0.456,
+          "eval_count": 20,
+          "error_message": null,
+          "errors": [
+            {
+              "field": "분류",
+              "value": "무관 중"
+            }
+          ],
+          "recheck": [
+            "처리"
+          ],
+          "lang_errors": [],
+          "fixed": {
+            "분류": "무관",
+            "처리": "폐기"
+          },
+          "pattern_fallback": false,
+          "pattern_error": null
+        },
+        {
+          "kind": "discard_check",
+          "response_text": "{\"판정\": \"이상 현상 제보\"}",
+          "verdict": "이상 현상 제보",
+          "held": true,
+          "elapsed_sec": 0.296,
+          "error_message": null
+        }
+      ],
+      "retried": true,
+      "retry_adopted": true,
+      "discard_checked": true,
+      "discard_held": true,
+      "raw_response_text": "[요약]: 폰이 업데이트 이후 10분만에 뜨거워짐\n[분류]: 무관\n[모듈]: 플랫폼 호환성\n[우선순위]: 해당 없음\n[재현 정보]: 부족\n[발생 빈도]: 1회\n[처리]: 정보 요청 후 보류\n[누락 정보 및 권장 조치]: 플랫폼, 기기 정보, 업데이트 전후의 폰 온도 차이, 동영상 등 재현에 필요한 정보",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_A11_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "A11",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:29.325645",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 로그인 문제, 상점 가격 오류, 친구 목록 문제 발생\n[분류]: 결함\n[모듈]: 네트워크/클라이언트 안정성\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.652,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2454,
+      "eval_count": 100,
+      "tokens_per_sec": 66.55,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 로그인 문제, 상점 가격 오류, 친구 목록 문제 발생\n[분류]: 결함\n[모듈]: 네트워크/클라이언트 안정성\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.652
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 로그인 문제, 상점 가격 오류, 친구 목록 문제 발생\n[분류]: 결함\n[모듈]: 네트워크/클라이언트 안정성\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_A13_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "A13",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:30.885083",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 신규 레이드 보스방 입장 후 앱이 강제 종료됨.\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.559,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2424,
+      "eval_count": 94,
+      "tokens_per_sec": 66.67,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 신규 레이드 보스방 입장 후 앱이 강제 종료됨.\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.559
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 신규 레이드 보스방 입장 후 앱이 강제 종료됨.\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_A17_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "A17",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:33.274674",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 다이아 대리충전 제보.\n[분류]: 무관\n[모듈]: 해당 없음\n[우선순위]: 해당 없음\n[재현 정보]: 부족\n[발생 빈도]: 미기재\n[처리]: 폐기\n[누락 정보 및 권장 조치]: 플랫폼, 발생 상황, 대리충전 시스템 사용 방법 등 재현에 필요한 정보 누락.",
+      "elapsed_sec": 2.388,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2375,
+      "eval_count": 105,
+      "tokens_per_sec": 66.52,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 다이아 대리충전 제보.\n[분류]: 무관 중\n[모듈]: 해당 없음\n[우선순위]: 해당 없음\n[재현 정보]: 부족\n[발생 빈도]: 미기재\n[처리]: 폐기\n[누락 정보 및 권장 조치]: 플랫폼, 발생 상황, 대리충전 시스템 사용 방법 등 재현에 필요한 정보 누락.",
+          "failed_rules": [
+            "R6_enum_valid"
+          ],
+          "elapsed_sec": 1.697
+        },
+        {
+          "kind": "retry",
+          "response_text": "{\n  \"분류\": \"무관\",\n  \"처리\": \"폐기\"\n}",
+          "elapsed_sec": 0.456,
+          "eval_count": 20,
+          "error_message": null,
+          "errors": [
+            {
+              "field": "분류",
+              "value": "무관 중"
+            }
+          ],
+          "recheck": [
+            "처리"
+          ],
+          "lang_errors": [],
+          "fixed": {
+            "분류": "무관",
+            "처리": "폐기"
+          },
+          "pattern_fallback": false,
+          "pattern_error": null
+        },
+        {
+          "kind": "discard_check",
+          "response_text": "{\"판정\": \"무관\"}",
+          "verdict": "무관",
+          "held": false,
+          "elapsed_sec": 0.235,
+          "error_message": null
+        }
+      ],
+      "retried": true,
+      "retry_adopted": true,
+      "discard_checked": true,
+      "discard_held": false,
+      "raw_response_text": "[요약]: 다이아 대리충전 제보.\n[분류]: 무관\n[모듈]: 해당 없음\n[우선순위]: 해당 없음\n[재현 정보]: 부족\n[발생 빈도]: 미기재\n[처리]: 폐기\n[누락 정보 및 권장 조치]: 플랫폼, 발생 상황, 대리충전 시스템 사용 방법 등 재현에 필요한 정보 누락.",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_A19_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "A19",
+      "set": "representative",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:35.048058",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 유저가 길드원을 비난하는 글이며, 크래시나 데이터 손실 등의 결함 정보가 없습니다.\n[분류]: 문의·건의\n[모듈]: 해당 없음\n[우선순위]: Trivial\n[재현 정보]: 부족\n[발생 빈도]: 미기재\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 발생 상황과 재현 정보가 필요합니다.",
+      "elapsed_sec": 1.773,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2377,
+      "eval_count": 110,
+      "tokens_per_sec": 66.43,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 유저가 길드원을 비난하는 글이며, 크래시나 데이터 손실 등의 결함 정보가 없습니다.\n[분류]: 문의·건의\n[모듈]: 해당 없음\n[우선순위]: Trivial\n[재현 정보]: 부족\n[발생 빈도]: 미기재\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 발생 상황과 재현 정보가 필요합니다.",
+          "failed_rules": [],
+          "elapsed_sec": 1.773
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 유저가 길드원을 비난하는 글이며, 크래시나 데이터 손실 등의 결함 정보가 없습니다.\n[분류]: 문의·건의\n[모듈]: 해당 없음\n[우선순위]: Trivial\n[재현 정보]: 부족\n[발생 빈도]: 미기재\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 발생 상황과 재현 정보가 필요합니다.",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B01_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "B01",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:36.681925",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 신규 계정 생성 후 첫 로딩 화면에서 앱이 강제 종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.633,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2546,
+      "eval_count": 95,
+      "tokens_per_sec": 66.24,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 신규 계정 생성 후 첫 로딩 화면에서 앱이 강제 종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.633
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 신규 계정 생성 후 첫 로딩 화면에서 앱이 강제 종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B03_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "B03",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:38.124082",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 결제 취소 시 아이템 지급 오류\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.442,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2526,
+      "eval_count": 83,
+      "tokens_per_sec": 66.39,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 결제 취소 시 아이템 지급 오류\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.442
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 결제 취소 시 아이템 지급 오류\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B05_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "B05",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:39.643811",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 서브 퀘스트 '잃어버린 등불' 완료 불가\n[분류]: 결함\n[모듈]: 콘텐츠 진행\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.519,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2502,
+      "eval_count": 90,
+      "tokens_per_sec": 66.52,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 서브 퀘스트 '잃어버린 등불' 완료 불가\n[분류]: 결함\n[모듈]: 콘텐츠 진행\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.519
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 서브 퀘스트 '잃어버린 등불' 완료 불가\n[분류]: 결함\n[모듈]: 콘텐츠 진행\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B07_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "B07",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:41.226255",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 아이템 툴팁 설명 텍스트가 툴팁 상자 바깥으로 넘침\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.582,
+      "load_duration_sec": 0.002,
+      "prompt_eval_count": 2494,
+      "eval_count": 94,
+      "tokens_per_sec": 66.29,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 아이템 툴팁 설명 텍스트가 툴팁 상자 바깥으로 넘침\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.582
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 아이템 툴팁 설명 텍스트가 툴팁 상자 바깥으로 넘침\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": [
+          {
+            "rule": "H-2b",
+            "field": "처리",
+            "from": "등록(재현 대기)",
+            "to": "개발 배정"
+          }
+        ]
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B09_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "B09",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:42.730261",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 팔이 벽을 통과하는 클리핑 버그\n[분류]: 버그 아님\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.503,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2462,
+      "eval_count": 90,
+      "tokens_per_sec": 66.62,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 팔이 벽을 통과하는 클리핑 버그\n[분류]: 버그 아님\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.503
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 팔이 벽을 통과하는 클리핑 버그\n[분류]: 버그 아님\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B11_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "B11",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:44.372180",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 분수대 그림자 미출력\n[분류]: 버그 아님\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 기대 결과와 실제 결과가 명확하게 기재되어 있습니다.",
+      "elapsed_sec": 1.641,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2487,
+      "eval_count": 98,
+      "tokens_per_sec": 66.42,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 분수대 그림자 미출력\n[분류]: 버그 아님\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 기대 결과와 실제 결과가 명확하게 기재되어 있습니다.",
+          "failed_rules": [],
+          "elapsed_sec": 1.641
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 분수대 그림자 미출력\n[분류]: 버그 아님\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 기대 결과와 실제 결과가 명확하게 기재되어 있습니다.",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B12_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "B12",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:46.076454",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 갤럭시 S8에서 레이드 보스전 진입 시 앱이 강제 종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.703,
+      "load_duration_sec": 0.005,
+      "prompt_eval_count": 2574,
+      "eval_count": 99,
+      "tokens_per_sec": 66.5,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 갤럭시 S8에서 레이드 보스전 진입 시 앱이 강제 종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.703
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 갤럭시 S8에서 레이드 보스전 진입 시 앱이 강제 종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B13_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "B13",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:48.431073",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 네트워크 연결이 와이파이에서 LTE로 변경되면 끊김 발생\n[분류]: 버그 아님\n[모듈]: 네트워크\n[우선순위]: Minor\n[재현 정보]: 부족\n[발생 빈도]: 간헐적\n[처리]: 정보 요청 후 보류\n[누락 정보 및 권장 조치]: 테스트 환경, 재현율, 기대 결과, 실제 결과 작성 요청",
+      "elapsed_sec": 2.353,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2360,
+      "eval_count": 115,
+      "tokens_per_sec": 66.55,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 네트워크 연결이 와이파이에서 LTE로 변경되면 끊김 발생\n[분류]: 버그 아님\n[모듈]: 네트워크\n[우선순위]: 중소\n[재현 정보]: 부족\n[발생 빈도]: 간헐적\n[처리]: 정보 요청 후 보류\n[누락 정보 및 권장 조치]: 테스트 환경, 재현율, 기대 결과, 실제 결과 작성 요청",
+          "failed_rules": [
+            "R6_enum_valid"
+          ],
+          "elapsed_sec": 1.847
+        },
+        {
+          "kind": "retry",
+          "response_text": "{\n  \"우선순위\": \"Minor\",\n  \"처리\": \"정보 요청 후 보류\"\n}",
+          "elapsed_sec": 0.506,
+          "eval_count": 24,
+          "error_message": null,
+          "errors": [
+            {
+              "field": "우선순위",
+              "value": "중소"
+            }
+          ],
+          "recheck": [
+            "처리"
+          ],
+          "lang_errors": [],
+          "fixed": {
+            "우선순위": "Minor",
+            "처리": "정보 요청 후 보류"
+          },
+          "pattern_fallback": false,
+          "pattern_error": null
+        }
+      ],
+      "retried": true,
+      "retry_adopted": true,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 네트워크 연결이 와이파이에서 LTE로 변경되면 끊김 발생\n[분류]: 버그 아님\n[모듈]: 네트워크\n[우선순위]: Minor\n[재현 정보]: 부족\n[발생 빈도]: 간헐적\n[처리]: 정보 요청 후 보류\n[누락 정보 및 권장 조치]: 테스트 환경, 재현율, 기대 결과, 실제 결과 작성 요청",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B14_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "B14",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:50.234024",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 폴드 펼친 화면에서 스킬 버튼이 화면 밖으로 잘림.\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 재현에 필요한 테스트 기기 요청",
+      "elapsed_sec": 1.802,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2615,
+      "eval_count": 105,
+      "tokens_per_sec": 66.23,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 폴드 펼친 화면에서 스킬 버튼이 화면 밖으로 잘림.\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 재현에 필요한 테스트 기기 요청",
+          "failed_rules": [],
+          "elapsed_sec": 1.802
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 폴드 펼친 화면에서 스킬 버튼이 화면 밖으로 잘림.\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 재현에 필요한 테스트 기기 요청",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_B17_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "B17",
+      "set": "representative",
+      "track": "B",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:51.992038",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 전투 중 전화 수신 후 복귀 시 사운드 끊김과 화면 정지 현상 발생\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.757,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2577,
+      "eval_count": 102,
+      "tokens_per_sec": 66.35,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 전투 중 전화 수신 후 복귀 시 사운드 끊김과 화면 정지 현상 발생\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.757
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 전투 중 전화 수신 후 복귀 시 사운드 끊김과 화면 정지 현상 발생\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S01_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "S01",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:53.937345",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 경매장 수령액이나 우편함 보상을 받을 때, 특정 길드원들이 와이파이를 껐다 켜면서 중복 수령을 시도합니다.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.945,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2434,
+      "eval_count": 119,
+      "tokens_per_sec": 66.46,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 경매장 수령액이나 우편함 보상을 받을 때, 특정 길드원들이 와이파이를 껐다 켜면서 중복 수령을 시도합니다.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.945
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 경매장 수령액이나 우편함 보상을 받을 때, 특정 길드원들이 와이파이를 껐다 켜면서 중복 수령을 시도합니다.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S02_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "S02",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:55.927991",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 부계정을 이용해 매칭을 잡아 승점을 빼앗는 현상\n[분류]: 결함\n[모듈]: 보안·어뷰징\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.989,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2446,
+      "eval_count": 98,
+      "tokens_per_sec": 66.76,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 부계정을 이용해 매칭을 잡아 승점을 빼앗는 현상\n[분류]: 결함\n[모듈]: 매칭 시스템\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [
+            "R6_enum_valid"
+          ],
+          "elapsed_sec": 1.616
+        },
+        {
+          "kind": "retry",
+          "response_text": "{\n  \"모듈\": \"보안·어뷰징\"\n}",
+          "elapsed_sec": 0.373,
+          "eval_count": 16,
+          "error_message": null,
+          "errors": [
+            {
+              "field": "모듈",
+              "value": "매칭 시스템"
+            }
+          ],
+          "recheck": [],
+          "lang_errors": [],
+          "fixed": {
+            "모듈": "보안·어뷰징"
+          },
+          "pattern_fallback": false,
+          "pattern_error": null
+        }
+      ],
+      "retried": true,
+      "retry_adopted": true,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 부계정을 이용해 매칭을 잡아 승점을 빼앗는 현상\n[분류]: 결함\n[모듈]: 보안·어뷰징\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S03_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "S03",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:57.640452",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 보스전 맵 구석의 뾰족한 바위 위에 점프하면 보스가 공격을 멈춥니다.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.712,
+      "load_duration_sec": 0.002,
+      "prompt_eval_count": 2454,
+      "eval_count": 104,
+      "tokens_per_sec": 66.49,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 보스전 맵 구석의 뾰족한 바위 위에 점프하면 보스가 공격을 멈춥니다.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.712
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 보스전 맵 구석의 뾰족한 바위 위에 점프하면 보스가 공격을 멈춥니다.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": [
+          {
+            "rule": "H-2",
+            "field": "처리",
+            "from": "개발 배정",
+            "to": "등록(재현 대기)"
+          }
+        ]
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S04b_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "S04b",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:04:59.092859",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 입장권 횟수 초기화 버그 제보\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.451,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2441,
+      "eval_count": 87,
+      "tokens_per_sec": 66.75,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 입장권 횟수 초기화 버그 제보\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.451
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 입장권 횟수 초기화 버그 제보\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S05_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "S05",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:05:00.625550",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 강화 재료 자동 채우기 기능 부재에 대한 유저 제보\n[분류]: 개선 제안\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.532,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2423,
+      "eval_count": 92,
+      "tokens_per_sec": 66.52,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 강화 재료 자동 채우기 기능 부재에 대한 유저 제보\n[분류]: 개선 제안\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.532
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 강화 재료 자동 채우기 기능 부재에 대한 유저 제보\n[분류]: 개선 제안\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S08_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "S08",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:05:02.187403",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 월드 채팅에서 욕설을 숫자나 점으로 필터 회피 가능\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.561,
+      "load_duration_sec": 0.005,
+      "prompt_eval_count": 2428,
+      "eval_count": 94,
+      "tokens_per_sec": 66.6,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 월드 채팅에서 욕설을 숫자나 점으로 필터 회피 가능\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.561
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 월드 채팅에서 욕설을 숫자나 점으로 필터 회피 가능\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S10_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "S10",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:05:03.734847",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 스킬 데미지 감소에 대해 버그인지 문의\n[분류]: 개선 제안\n[모듈]: 게임플레이·밸런스\n[우선순위]: Trivial\n[재현 정보]: 충분\n[발생 빈도]: 미기재\n[처리]: 정보 요청 후 보류\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.547,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2393,
+      "eval_count": 95,
+      "tokens_per_sec": 66.51,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 스킬 데미지 감소에 대해 버그인지 문의\n[분류]: 개선 제안\n[모듈]: 게임플레이·밸런스\n[우선순위]: Trivial\n[재현 정보]: 충분\n[발생 빈도]: 미기재\n[처리]: 정보 요청 후 보류\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.547
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 스킬 데미지 감소에 대해 버그인지 문의\n[분류]: 개선 제안\n[모듈]: 게임플레이·밸런스\n[우선순위]: Trivial\n[재현 정보]: 충분\n[발생 빈도]: 미기재\n[처리]: 정보 요청 후 보류\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S10c_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "S10c",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:05:05.483162",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 방어력이 50% 감소한 것으로 보이지만 패치노트에는 5% 감소라고 명시되어 있습니다.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.747,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2465,
+      "eval_count": 106,
+      "tokens_per_sec": 66.39,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 방어력이 50% 감소한 것으로 보이지만 패치노트에는 5% 감소라고 명시되어 있습니다.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.747
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 방어력이 50% 감소한 것으로 보이지만 패치노트에는 5% 감소라고 명시되어 있습니다.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S12_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "S12",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:05:06.850754",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 과금 시 두 번 결제됨.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.367,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2429,
+      "eval_count": 81,
+      "tokens_per_sec": 66.62,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 과금 시 두 번 결제됨.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.367
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 과금 시 두 번 결제됨.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S15_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "S15",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:05:08.551841",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 신규 레이드 보스 싸우면 앱 꺼짐, 보상 없음.\n[분류]: 결함\n[모듈]: 클라이언트 안정성/결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.7,
+      "load_duration_sec": 0.002,
+      "prompt_eval_count": 2424,
+      "eval_count": 104,
+      "tokens_per_sec": 66.44,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 신규 레이드 보스 싸우면 앱 꺼짐, 보상 없음.\n[분류]: 결함\n[모듈]: 클라이언트 안정성/결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.7
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 신규 레이드 보스 싸우면 앱 꺼짐, 보상 없음.\n[분류]: 결함\n[모듈]: 클라이언트 안정성/결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S18_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "S18",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:05:10.029759",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 같은 템의 데미지 차이 확인 요청\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.477,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2408,
+      "eval_count": 89,
+      "tokens_per_sec": 66.59,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 같은 템의 데미지 차이 확인 요청\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.477
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 같은 템의 데미지 차이 확인 요청\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_S20_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "S20",
+      "set": "focused",
+      "track": "A",
+      "split": "dev",
+      "seed": 2,
+      "timestamp": "2026-10-02T16:05:11.608088",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 파티 4명이 물약 다 써도 보스를 잡지 못함.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.577,
+      "load_duration_sec": 0.002,
+      "prompt_eval_count": 2390,
+      "eval_count": 97,
+      "tokens_per_sec": 66.48,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 파티 4명이 물약 다 써도 보스를 잡지 못함.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.577
+        }
+      ],
+      "retried": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 파티 4명이 물약 다 써도 보스를 잡지 못함.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    }
+  ]
+}

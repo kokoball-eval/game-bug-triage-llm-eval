@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from detect_hallucination import detect, is_grounded, load_questions, scan_log
+from triage_eval.common.detect_hallucination import detect, is_grounded, load_questions, scan_log
 
 from conftest import BASELINE_FILE, ROOT
 

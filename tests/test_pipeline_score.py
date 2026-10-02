@@ -1,9 +1,9 @@
-"""정답 대조 채점 (score_v2.py) 테스트 — 정답 라벨로 만든 응답과 일부러 틀린 응답으로 확인한다."""
+"""정답 대조 채점 (score.py) 테스트 — 정답 라벨로 만든 응답과 일부러 틀린 응답으로 확인한다."""
 
 import json
 from pathlib import Path
 
-from score_v2 import aggregate, field_correct, score_one
+from triage_eval.pipeline.score import aggregate, field_correct, score_one
 
 ROOT = Path(__file__).resolve().parent.parent
 ITEMS = {i["id"]: i for i in json.loads((ROOT / "data/eval_v13/aether_raid_v13.json").read_text(encoding="utf-8"))["items"]}
@@ -80,8 +80,8 @@ def test_hallucinated_device_detected_but_context_quote_is_not():
 
 def test_pipeline_end_to_end_with_fake_model(tmp_path, monkeypatch):
     """모델 대신 정답 응답을 돌려주는 가짜 클라이언트로 실행 → 채점까지 한 번에 돌린다."""
-    import run_eval_v2
-    import score_v2
+    from triage_eval.pipeline import run as pipeline_run
+    from triage_eval.pipeline import score as pipeline_score
 
     by_title = {i["input"]["title"]: i for i in ITEMS.values()}
 
@@ -98,12 +98,12 @@ def test_pipeline_end_to_end_with_fake_model(tmp_path, monkeypatch):
         def list(self):
             return {"models": []}
 
-    monkeypatch.setattr(run_eval_v2.ollama, "Client", FakeClient)
-    monkeypatch.setattr(run_eval_v2, "preflight_snapshot", lambda c: {"warnings": [], "notes": []})
-    monkeypatch.setattr(run_eval_v2, "OUT_DIR", tmp_path / "history")
-    assert run_eval_v2.main(["--seed", "1", "--model", "fake", "--repeat", "1"]) == 0
+    monkeypatch.setattr(pipeline_run.ollama, "Client", FakeClient)
+    monkeypatch.setattr(pipeline_run, "preflight_snapshot", lambda c: {"warnings": [], "notes": []})
+    monkeypatch.setattr(pipeline_run, "OUT_DIR", tmp_path / "history")
+    assert pipeline_run.main(["--seed", "1", "--model", "fake", "--repeat", "1"]) == 0
     log = next((tmp_path / "history").glob("v13_dev_*.json"))
-    assert score_v2.main(["--log", str(log), "--no-report"]) == 0
+    assert pipeline_score.main(["--log", str(log), "--no-report"]) == 0
     result = json.loads(next(tmp_path.glob("score_*.json")).read_text(encoding="utf-8"))
     total = result["summary"]["fake"]["전체"]
     assert total["n"] == 32 and total["all_fields_ok_rate"] == 100.0 and total["risk_miss"]["X-1"] == 0

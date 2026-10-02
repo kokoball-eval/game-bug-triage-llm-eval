@@ -8,12 +8,35 @@ dependencies = [
     "openai>=3.13.0",
 ]
 
+# 실행 명령 — `uv run <명령>` 으로 실행한다 (v1.3 구조 정리). `uv run python -m <모듈>` 로도 실행할 수 있다.
+[project.scripts]
+# 현역 트리아지 파이프라인 (평가셋 aether_raid_v13)
+triage-run = "triage_eval.pipeline.run:main"
+triage-score = "triage_eval.pipeline.score:main"
+triage-gate = "triage_eval.pipeline.gate:main"
+# v1.0 모델 선정 벤치마크 (동결)
+bench-run = "triage_eval.bench_v1.run_eval:main"
+bench-gate = "triage_eval.bench_v1.compare_runs:main"
+bench-summarize = "triage_eval.bench_v1.summarize_eval:main"
+bench-capture-env = "triage_eval.bench_v1.capture_env:main"
+bench-score-format = "triage_eval.common.score_format:main"
+bench-hallucination = "triage_eval.common.detect_hallucination:main"
+
+# src/triage_eval 을 패키지로 설치한다. uv 가 편집 가능 모드로 설치하므로 코드를 고치면 바로 반영되고,
+# 폴더 깊이와 관계없이 `triage_eval.<하위 패키지>` 로 import 된다.
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/triage_eval"]
+
 [dependency-groups]
 dev = [
     "pytest>=9.1.1",
 ]
 
 [tool.pytest.ini_options]
-# src/ 의 스크립트를 테스트에서 import 할 수 있게 경로에 추가
+# 패키지 설치 전에도 테스트가 src/triage_eval 을 import 할 수 있게 경로에 추가
 pythonpath = ["src"]
 testpaths = ["tests"]

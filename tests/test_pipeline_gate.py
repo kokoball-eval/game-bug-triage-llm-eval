@@ -1,4 +1,4 @@
-"""v1.3 회귀 게이트 (gate_v13.py) 테스트 — 고정 기준선 실행 기록을 고쳐 후보를 만든다."""
+"""v1.3 회귀 게이트 (gate.py) 테스트 — 고정 기준선 실행 기록을 고쳐 후보를 만든다."""
 
 import copy
 import json
@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-import gate_v13 as g
+from triage_eval.pipeline import gate as g
 
 ROOT = Path(__file__).resolve().parent.parent
 BASELINE = ROOT / "data/results/v13/baseline/v13_dev_seed1_baseline.json"

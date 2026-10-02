@@ -8,13 +8,13 @@
 사용법
 ------
     # 기본: 고정 기준선(v1.2 seed=1) vs history/ 의 가장 최근 실행
-    uv run python src/compare_runs.py
+    uv run bench-gate
 
     # 파일 직접 지정
-    uv run python src/compare_runs.py --baseline <기준선.json> --candidate <후보.json>
+    uv run bench-gate --baseline <기준선.json> --candidate <후보.json>
 
     # 게이트 대상 모델 지정 (기본은 gate_criteria.toml 의 target_models)
-    uv run python src/compare_runs.py --model llama3.1:8b
+    uv run bench-gate --model llama3.1:8b
 
 종료 코드
 ---------
@@ -77,11 +77,11 @@ from datetime import datetime
 from pathlib import Path
 from statistics import mean
 
-from score_format import parse_lines, score_response, FIELDS
-from summarize_eval import rnd
-from detect_hallucination import detect, load_questions
+from triage_eval.bench_v1.summarize_eval import rnd
+from triage_eval.common.detect_hallucination import detect, load_questions
+from triage_eval.common.paths import ROOT
+from triage_eval.common.score_format import parse_lines, score_response, FIELDS
 
-ROOT = Path(__file__).resolve().parent.parent
 # (v1.2) 기본 기준선을 v1.0 → v1.2 seed 고정 실행으로 바꿨다.
 # v1.0 로그에는 seed·실행 조건(run_config)이 없어서, 이 기준선으로는 판정 변화 기준이 항상 SKIP 이 된다.
 # v1.2 기준선은 seed=1·깨끗한 측정 환경에서 찍었고, 같은 조건 재실행 시 응답 40건이 모두 같음을 확인했다.
@@ -412,7 +412,7 @@ def print_model_report(model, base_m, cand_m, checks, changes, warnings):
 def write_markdown(path: Path, result: dict):
     L = []
     L.append("# 회귀 게이트 판정 결과 (Regression Gate)\n")
-    L.append(f"> `src/compare_runs.py` 자동 생성 · 판정 시각 {result['judged_at']}")
+    L.append(f"> `src/triage_eval/bench_v1/compare_runs.py` 자동 생성 · 판정 시각 {result['judged_at']}")
     L.append(f"> 기준선: `{result['baseline_file']}`")
     L.append(f"> 후보: `{result['candidate_file']}`")
     L.append(f"> 합격 기준: `{result['criteria_file']}` (v{result['criteria_version']})\n")

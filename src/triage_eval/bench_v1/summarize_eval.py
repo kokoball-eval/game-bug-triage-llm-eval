@@ -25,6 +25,8 @@ from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 from statistics import mean
 
+from triage_eval.common.paths import ROOT
+
 
 def rnd(value, digits):
     """금융권 반올림(은행가 반올림)이 아닌 일반 반올림(half-up)을 쓴다.
@@ -88,7 +90,7 @@ def aggregate_cloud(payload) -> dict:
 
 
 def main():
-    root = Path(__file__).resolve().parent.parent
+    root = ROOT
     results_dir = root / "data" / "results"
 
     with (results_dir / "local_eval_results.json").open(encoding="utf-8") as f:

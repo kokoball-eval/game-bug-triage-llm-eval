@@ -16,17 +16,17 @@
    시스템 프롬프트는 바꾸지 않으므로 형식에 문제가 없는 응답에는 영향이 없다.
 6. v2.3의 선택지 표기("…, 무관 중 택1")는 마지막 값 뒤에 "중 택1"이 붙어 모델이 '무관 중'을 출력하는 원인이 된다.
    표기를 고친 v2.4는 판단 품질을 떨어뜨려 기각했다. 그래서 첫 응답의 표기는 그대로 두고, 재요청은 응답 형식을
-   JSON 스키마(허용 값 enum)로 제한한다(run_eval_v2 설계 의도 6). 재요청 안내문은 값을 JSON으로 달라고만 한다.
+   JSON 스키마(허용 값 enum)로 제한한다(run.py 설계 의도 6). 재요청 안내문은 값을 JSON으로 달라고만 한다.
 7. 폐기 확인 질문(build_discard_check_prompt)은 시스템 프롬프트의 [분류] 규칙에 있는 '무관' 정의를 그대로 쓴다.
    평가셋 문항에 맞춘 예시(특정 증상 이름)를 넣지 않는다. 개발용 문항 하나를 맞히려고 질문을 고치면
    평가용 문항에서 같은 효과가 난다는 보장이 없다.
 """
 
-from contract_v2 import ENUMS_V2, LANG_NAMES, MODULES, NO_MODULE, OUTPUT_LANG
+from triage_eval.pipeline.contract import ENUMS_V2, LANG_NAMES, MODULES, NO_MODULE, OUTPUT_LANG
 
 PROMPT_VERSION = "v2.3"  # v2.0 → v2.1: 기준선 원인 분석(report/eval_v13_baseline.md §3) 반영
 #                         v2.1 → v2.2: v2.1 게이트 FAIL 원인(트랙 A 개발 배정, 중국어 전환) 반영 (docs/issue_log.md ISSUE-007)
-#                         v2.2 → v2.3: v2.1 + 출력 언어 1줄. 트랙 A 개발 배정 금지 문장은 후처리(guardrail_v2.py)로 옮김
+#                         v2.2 → v2.3: v2.1 + 출력 언어 1줄. 트랙 A 개발 배정 금지 문장은 후처리(guardrail.py)로 옮김
 #                         v2.4(기각): 선택지 표기를 " | " 나열로 바꿔 '무관 중'은 사라졌으나, seed 3쌍 측정에서
 #                                     우선순위·처리 정답 하락과 X-3·과잉 상신 증가가 일관되게 나타남 (docs/issue_log.md ISSUE-007)
 #                                     → v2.3 표기를 유지하고 허용 값 밖 출력은 구조화 출력 재요청으로 막는다 (설계 의도 6)
@@ -77,7 +77,7 @@ SYSTEM_PROMPT_V2 = """당신은 모바일·PC 크로스플랫폼 RPG "Aether Rai
 - 폐기: 무관한 글, 그리고 중복 의심(기존 이슈에 없는 새 정보가 있으면 기존 이슈에 덧붙이라고 권장 조치에 적는다). 결함일 가능성이 있는 제보는 폐기하지 말고 보류한다.
 - 부서마다 판정이 갈리는 경계 사례(조롱거리가 될 만한 시각 결함, 구형 기기의 확정 크래시, 지형지물을 이용한 공략, 패치 후 능력치 하락 제보 등)는 개발 배정·CS 응대·폐기로 끝내지 말고 사람이 확인하는 처리(긴급 사인 요청, 등록(재현 대기), 정보 요청 후 보류)로 보낸다.
 """
-SYSTEM_PROMPT_V2 = SYSTEM_PROMPT_V2.replace("{output_language}", LANG_NAMES[OUTPUT_LANG])  # 출력 언어 (contract_v2 R7)
+SYSTEM_PROMPT_V2 = SYSTEM_PROMPT_V2.replace("{output_language}", LANG_NAMES[OUTPUT_LANG])  # 출력 언어 (contract.py R7)
 
 # 대응 조항 — [분류] C-1~C-9 / [우선순위] §4.1, F-2 / [재현 정보] R-1·R-2·R-5 / [발생 빈도] F-1
 #            [처리] H-1·H-1b, H-2·H-2c·H-10, H-2b·H-2d, H-3·H-3a·H-7, H-6·C-8, H-4·H-5·H-9, H-8(§4.2)
@@ -133,7 +133,7 @@ DISCARD_CHECK_CHOICES = ["이상 현상 제보", "무관"]
 
 
 def build_discard_check_prompt(item: dict) -> str:
-    """폐기 직전 확인 질문 (설계 의도 7, 판정 기준서 H-9). 답은 run_eval_v2 가 JSON 스키마로 제한한다."""
+    """폐기 직전 확인 질문 (설계 의도 7, 판정 기준서 H-9). 답은 run.py 가 JSON 스키마로 제한한다."""
     return build_prompt(item) + "\n".join([
         "",
         "[확인 질문]",
