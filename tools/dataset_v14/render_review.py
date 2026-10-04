@@ -4,8 +4,10 @@
 출력: docs/dataset/final_v14_review.md
 
 문서는 final_v14_items.py에서 만들어지므로 라벨과 문서가 어긋나지 않는다.
+평가셋 JSON과 같게 Minor↔Trivial 상호 허용(build_v14.relax_minor_trivial)을 적용한 라벨을 보여 준다.
 """
 
+import copy
 import sys
 from collections import Counter
 from pathlib import Path
@@ -13,7 +15,12 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 sys.path.insert(0, str(HERE))
-from final_v14_items import ITEMS, KNOWN_BASE, UPDATE_NOTE  # noqa: E402
+from build_v14 import relax_minor_trivial  # noqa: E402
+from final_v14_items import ITEMS as RAW_ITEMS, KNOWN_BASE, UPDATE_NOTE  # noqa: E402
+
+ITEMS = copy.deepcopy(RAW_ITEMS)
+for _it in ITEMS:
+    relax_minor_trivial(_it)
 
 OUT = ROOT / "docs" / "dataset" / "final_v14_review.md"
 
@@ -36,6 +43,7 @@ def render() -> str:
         "- 첫 정답 우선순위: " + ", ".join(f"{k} {v}" for k, v in Counter(i["labels"]["우선순위"][0] for i in ITEMS).items()),
         f"- 공통 맥락: {UPDATE_NOTE}",
         "- 등록된 이슈(중복 판정용): " + " · ".join(KNOWN_BASE),
+        "- 우선순위의 첫 정답이 Minor 또는 Trivial인 문항은 다른 쪽도 정답으로 허용합니다(기준서 v1.4 §4.1, 2026-10-04 결정).",
         "- 기존 63건과 겹치지 않도록 업데이트 버전, 지역, 아이템 이름을 새로 정했고, 문항마다 기존 문항과의 겹침 정도를 표시했습니다(`new` 새 상황, `type` 유형만 같음, `overlap` 상황이 가까움).",
         "", "## 2. 라벨 요약 (각 칸은 허용 답, 첫 번째가 가장 바람직한 답)", "",
         "| 문항 | 트랙 | 제목 | 분류 | 우선순위 | 처리 | 빈도 | 위험 | 사람 검토 |",

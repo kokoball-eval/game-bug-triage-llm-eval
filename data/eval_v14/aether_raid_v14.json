@@ -6,6 +6,24 @@
   "review_log": "docs/dataset/review_log.md",
   "label_semantics": "labels의 각 필드는 허용 답 목록이며 첫 번째 값이 가장 바람직한 답",
   "split_policy": "dev = v1.3의 63건 전부(원래 분할은 split_v13), final = v1.4 신규 25건(방법 선택이 끝난 뒤 1회만 실행)",
+  "label_policy": "우선순위 첫 정답이 Minor 또는 Trivial인 문항은 다른 쪽도 허용 (label_relaxed 표시, 기준서 v1.4 §4.1)",
+  "label_relaxed_ids": [
+    "B06",
+    "B07",
+    "B08",
+    "B09",
+    "B10",
+    "B11",
+    "B19",
+    "S05",
+    "S06",
+    "F07",
+    "F11",
+    "F14",
+    "F15",
+    "F17",
+    "F20"
+  ],
   "counts": {
     "total": 88,
     "dev": 63,
@@ -1520,7 +1538,8 @@
           "결함"
         ],
         "우선순위": [
-          "Minor"
+          "Minor",
+          "Trivial"
         ],
         "모듈": [
           "UI·텍스트"
@@ -1546,7 +1565,10 @@
         "labels": "Claude 제안 → 검토자 승인"
       },
       "review": "approved",
-      "split_v13": "test"
+      "split_v13": "test",
+      "label_relaxed": [
+        "우선순위: Minor↔Trivial 상호 허용"
+      ]
     },
     {
       "id": "B07",
@@ -1575,7 +1597,8 @@
           "결함"
         ],
         "우선순위": [
-          "Minor"
+          "Minor",
+          "Trivial"
         ],
         "모듈": [
           "UI·텍스트"
@@ -1601,7 +1624,10 @@
         "labels": "Claude 제안 → 검토자 승인"
       },
       "review": "approved",
-      "split_v13": "dev"
+      "split_v13": "dev",
+      "label_relaxed": [
+        "우선순위: Minor↔Trivial 상호 허용"
+      ]
     },
     {
       "id": "B08",
@@ -1630,7 +1656,8 @@
           "결함"
         ],
         "우선순위": [
-          "Minor"
+          "Minor",
+          "Trivial"
         ],
         "모듈": [
           "그래픽·사운드"
@@ -1656,7 +1683,10 @@
         "labels": "Claude 제안 → 검토자 승인"
       },
       "review": "approved",
-      "split_v13": "test"
+      "split_v13": "test",
+      "label_relaxed": [
+        "우선순위: Minor↔Trivial 상호 허용"
+      ]
     },
     {
       "id": "B09",
@@ -1685,7 +1715,8 @@
           "결함"
         ],
         "우선순위": [
-          "Trivial"
+          "Trivial",
+          "Minor"
         ],
         "모듈": [
           "그래픽·사운드"
@@ -1711,7 +1742,10 @@
         "labels": "Claude 제안 → 검토자 승인"
       },
       "review": "approved",
-      "split_v13": "dev"
+      "split_v13": "dev",
+      "label_relaxed": [
+        "우선순위: Minor↔Trivial 상호 허용"
+      ]
     },
     {
       "id": "B10",
@@ -1740,7 +1774,8 @@
           "결함"
         ],
         "우선순위": [
-          "Trivial"
+          "Trivial",
+          "Minor"
         ],
         "모듈": [
           "UI·텍스트"
@@ -1766,7 +1801,10 @@
         "labels": "Claude 제안 → 검토자 승인"
       },
       "review": "approved",
-      "split_v13": "test"
+      "split_v13": "test",
+      "label_relaxed": [
+        "우선순위: Minor↔Trivial 상호 허용"
+      ]
     },
     {
       "id": "B11",
@@ -1795,7 +1833,8 @@
           "결함"
         ],
         "우선순위": [
-          "Trivial"
+          "Trivial",
+          "Minor"
         ],
         "모듈": [
           "그래픽·사운드"
@@ -1821,7 +1860,10 @@
         "labels": "Claude 제안 → 검토자 승인"
       },
       "review": "approved",
-      "split_v13": "dev"
+      "split_v13": "dev",
+      "label_relaxed": [
+        "우선순위: Minor↔Trivial 상호 허용"
+      ]
     },
     {
       "id": "B12",
@@ -2258,7 +2300,8 @@
           "개선 제안"
         ],
         "우선순위": [
-          "Trivial"
+          "Trivial",
+          "Minor"
         ],
         "모듈": [
           "UI·텍스트"
@@ -2284,7 +2327,10 @@
         "labels": "Claude 제안 → 검토자 승인"
       },
       "review": "approved",
-      "split_v13": "test"
+      "split_v13": "test",
+      "label_relaxed": [
+        "우선순위: Minor↔Trivial 상호 허용"
+      ]
     },
     {
       "id": "B20",
@@ -2680,7 +2726,8 @@
           "개선 제안"
         ],
         "우선순위": [
-          "Trivial"
+          "Trivial",
+          "Minor"
         ],
         "모듈": [
           "UI·텍스트"
@@ -2706,7 +2753,10 @@
         "labels": "Claude 제안 → 검토자 승인"
       },
       "review": "approved",
-      "split_v13": "dev"
+      "split_v13": "dev",
+      "label_relaxed": [
+        "우선순위: Minor↔Trivial 상호 허용"
+      ]
     },
     {
       "id": "S06",
@@ -2736,7 +2786,8 @@
           "개선 제안"
         ],
         "우선순위": [
-          "Trivial"
+          "Trivial",
+          "Minor"
         ],
         "모듈": [
           "UI·텍스트"
@@ -2762,7 +2813,10 @@
         "labels": "Claude 제안 → 검토자 승인"
       },
       "review": "approved",
-      "split_v13": "test"
+      "split_v13": "test",
+      "label_relaxed": [
+        "우선순위: Minor↔Trivial 상호 허용"
+      ]
     },
     {
       "id": "S07",
@@ -4110,7 +4164,8 @@
           "결함"
         ],
         "우선순위": [
-          "Minor"
+          "Minor",
+          "Trivial"
         ],
         "모듈": [
           "게임플레이·밸런스",
@@ -4137,7 +4192,10 @@
         "text": "Claude 작성",
         "labels": "Claude 제안 → 검토자 승인"
       },
-      "review": "approved"
+      "review": "approved",
+      "label_relaxed": [
+        "우선순위: Minor↔Trivial 상호 허용"
+      ]
     },
     {
       "id": "F08",
@@ -4341,7 +4399,8 @@
           "결함"
         ],
         "우선순위": [
-          "Minor"
+          "Minor",
+          "Trivial"
         ],
         "모듈": [
           "그래픽·사운드"
@@ -4367,7 +4426,10 @@
         "text": "Claude 작성",
         "labels": "Claude 제안 → 검토자 승인"
       },
-      "review": "approved"
+      "review": "approved",
+      "label_relaxed": [
+        "우선순위: Minor↔Trivial 상호 허용"
+      ]
     },
     {
       "id": "F12",
@@ -4514,7 +4576,8 @@
           "결함"
         ],
         "우선순위": [
-          "Minor"
+          "Minor",
+          "Trivial"
         ],
         "모듈": [
           "그래픽·사운드"
@@ -4540,7 +4603,10 @@
         "text": "Claude 작성",
         "labels": "Claude 제안 → 검토자 승인"
       },
-      "review": "approved"
+      "review": "approved",
+      "label_relaxed": [
+        "우선순위: Minor↔Trivial 상호 허용"
+      ]
     },
     {
       "id": "F15",
@@ -4569,7 +4635,8 @@
           "결함"
         ],
         "우선순위": [
-          "Minor"
+          "Minor",
+          "Trivial"
         ],
         "모듈": [
           "결제·재화",
@@ -4596,7 +4663,10 @@
         "text": "Claude 작성",
         "labels": "Claude 제안 → 검토자 승인"
       },
-      "review": "approved"
+      "review": "approved",
+      "label_relaxed": [
+        "우선순위: Minor↔Trivial 상호 허용"
+      ]
     },
     {
       "id": "F16",
@@ -4687,7 +4757,8 @@
           "결함"
         ],
         "우선순위": [
-          "Minor"
+          "Minor",
+          "Trivial"
         ],
         "모듈": [
           "UI·텍스트"
@@ -4713,7 +4784,10 @@
         "text": "Claude 작성",
         "labels": "Claude 제안 → 검토자 승인"
       },
-      "review": "approved"
+      "review": "approved",
+      "label_relaxed": [
+        "우선순위: Minor↔Trivial 상호 허용"
+      ]
     },
     {
       "id": "F18",
@@ -4859,7 +4933,8 @@
           "결함"
         ],
         "우선순위": [
-          "Minor"
+          "Minor",
+          "Trivial"
         ],
         "모듈": [
           "UI·텍스트",
@@ -4886,7 +4961,10 @@
         "text": "Claude 작성",
         "labels": "Claude 제안 → 검토자 승인"
       },
-      "review": "approved"
+      "review": "approved",
+      "label_relaxed": [
+        "우선순위: Minor↔Trivial 상호 허용"
+      ]
     },
     {
       "id": "F21",

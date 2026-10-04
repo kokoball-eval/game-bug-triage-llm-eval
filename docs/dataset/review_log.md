@@ -190,3 +190,13 @@ v1.3 평가용 31건은 v1.3 최종 측정에서 결과를 이미 확인했으�
 | F22가 v1.3 검증 규칙(트랙 A 개발 배정은 첫 정답이 개선 제안일 때만)에 걸림 | v1.4 생성기에서만 "허용 분류에 개선 제안이 있으면 허용"으로 완화한다. v1.3 도구는 바꾸지 않는다 | `tools/dataset_v14/build_v14.py`의 `validate`, `tests/test_dataset_v14.py` |
 
 이로써 v1.4 최종 평가용 세트 25건의 라벨이 확정되었습니다.
+
+## v1.4 방법 비교 계획 검토 (2026-10-04)
+
+| 쟁점 | 검토자 판단 | 반영 |
+| :--- | :--- | :--- |
+| Minor와 Trivial의 경계 | 두 등급의 경계는 완화해도 된다. 판정에서 가장 큰 기준은 결함인지 아닌지이며, 이 경계는 실무에서 큰 문제가 되지 않는다 | 기준서 v1.4 §4.1에 상호 허용 추가. v1.4 평가셋에서 첫 정답이 Minor 또는 Trivial인 15건(개발용 9, 최종 6)에 다른 쪽을 허용 답으로 추가(`label_relaxed`). 라벨 원본은 고치지 않고 생성 단계에서 적용 |
+| M1 판정 예시 4개 | 이견 없음 | [`docs/method/m1_examples.md`](../method/m1_examples.md) 확정 |
+| 방법 비교 계획·채택 기준 | 이견 없음. M2는 올리기만, X-2·X-3은 기준선 대비, 회귀 허용폭은 응답 수 비율 유지, M1+M2는 조건부 측정 | [`report/method_comparison_v14_plan.md`](../../report/method_comparison_v14_plan.md), [`method_selection_v14.toml`](../../method_selection_v14.toml) |
+
+이 결정은 모두 방법 비교 측정 전에 내렸습니다.

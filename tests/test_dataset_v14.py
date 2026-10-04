@@ -2,7 +2,7 @@
 
 모델을 호출하지 않으므로 CI에서 자동 실행된다.
 - 저장소에 올라간 JSON이 생성 스크립트(tools/dataset_v14/)의 결과와 같은가
-- v1.3의 63건이 라벨 변경 없이 모두 개발용으로 넘어왔는가 (v1.3 평가셋 파일은 그대로인가)
+- v1.3의 63건이 라벨 변경 없이 모두 개발용으로 넘어왔는가 (Minor↔Trivial 상호 허용 추가만 예외)
 - 최종 평가용 25건이 기존 문항과 ID·원문이 겹치지 않는가
 - 트랙 A 개발 배정 규칙의 완화가 의도한 범위에서만 동작하는가
 """
@@ -49,6 +49,10 @@ def test_v13_items_carried_over_unchanged():
         it = copy.deepcopy(it)
         assert it.pop("split_v13") == v13[it["id"]]["split"]
         it["split"] = v13[it["id"]]["split"]
+        if it.pop("label_relaxed", None):
+            pri = it["labels"]["우선순위"]
+            assert pri[:-1] == v13[it["id"]]["labels"]["우선순위"]   # 끝에 하나만 더해졌다
+            it["labels"]["우선순위"] = pri[:-1]
         assert it == v13[it["id"]], it["id"]
 
 
@@ -83,3 +87,17 @@ def test_v13_rules_still_apply():
     it = _final("F02")
     it["labels"]["처리"] = ["개발 배정"]   # X-1 측정 문항인데 긴급 사인 요청이 없음
     assert any("X-1" in e for e in m.validate([it]))
+
+
+def test_minor_trivial_relaxation_scope():
+    """첫 정답이 Minor/Trivial인 문항만 다른 쪽을 허용하고, 첫 정답은 그대로 둔다."""
+    for it in load()["items"]:
+        pri = it["labels"]["우선순위"]
+        if pri[0] in ("Minor", "Trivial"):
+            assert {"Minor", "Trivial"} <= set(pri), it["id"]
+        else:
+            assert "label_relaxed" not in it, it["id"]
+    final = next(i for i in load()["items"] if i["id"] == "F15")
+    assert final["labels"]["우선순위"] == ["Minor", "Trivial"]
+    a08 = next(i for i in load()["items"] if i["id"] == "A08")   # 첫 정답 Major — 바꾸지 않음
+    assert a08["labels"]["우선순위"] == ["Major", "Minor"]

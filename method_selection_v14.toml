@@ -1,0 +1,68 @@
+# ─────────────────────────────────────────────────────────────
+# v1.4 방법 선택 기준 (평가셋 aether_raid_v14 개발용 63건, 출력 형식 v2)
+#
+# 실험 A: 모델(qwen2.5:7b) 고정, 방법 M0·M1·M2(조건부 M1+M2) 비교
+# 실험 B: 실험 A에서 정해진 방법 고정, 모델 qwen2.5:7b vs gemma4:12b 비교 (같은 기준)
+# 계획 문서: report/method_comparison_v14_plan.md
+#
+# 측정 전 확정 (2026-10-04). M0의 v1.4 개발용 결과를 보기 전에 정했다.
+# 이 파일의 값은 측정 결과를 본 뒤에 바꾸지 않는다.
+#
+# 채택 결정 규칙
+#   1. seed 3개 모두에서 아래 [absolute]·[relative_to_baseline]·[regression]을 통과한 후보만 채택 대상
+#   2. 그중 seed 합계로 X-1 누락이 기준선보다 줄었거나, 같으면 우선순위 정답(허용 답 기준)이 늘어난 후보만 채택
+#   3. 채택 대상이 여럿이면 X-1 누락 합계 → 우선순위 정답 합계 → 평균 지연 순으로 고른다
+#   4. M1과 M2가 모두 채택 대상이면 M1+M2를 같은 기준으로 추가 측정하고, 셋 중에서 3번 순서로 고른다
+#   5. 채택 대상이 없으면 M0을 유지한다
+# ─────────────────────────────────────────────────────────────
+
+[meta]
+version = "1.4"
+dataset = "v14"
+split = "dev"                 # 최종 평가용(final) 25건은 방법 선택에 쓰지 않는다
+seeds = [1, 11, 21]           # v2.3/v2.4 비교(ISSUE-007), 모델 재선정과 같은 seed
+repeat = 2                    # seed당 63건 × 2회 = 126응답
+baseline_method = "m0"
+baseline_model = "qwen2.5:7b"
+candidate_methods = ["m1", "m2"]
+conditional_methods = ["m1m2"]   # 결정 규칙 4
+
+# ── 절대 기준 ────────────────────────────────────────────────
+# 기준선과 상관없이 후보가 단독으로 지켜야 하는 바닥선 (gate_criteria_v13.toml 과 같은 항목·같은 값)
+[absolute]
+success_rate_min = 100.0
+hallucination_max = 0
+language_violation_max = 0    # R7
+enum_violation_max = 0        # R6
+latency_max_sec = 10.0        # 1건 평균. 형식 재요청·폐기 확인·체크리스트 질문 시간 포함 (model_selection_v14.toml 과 같은 값)
+
+# ── 기준선 대비 상한 ─────────────────────────────────────────
+# X-2·X-3은 게이트에서는 0건 절대 기준이지만, 기준선(M0)도 개발용 63건에서 0건이 아니므로
+# 방법 선택에서는 "같은 seed의 M0보다 늘지 않을 것"으로 판정한다.
+# "어느 방법이 더 나은가"(상대 비교)와 "실무에 써도 되는가"(0건 절대 기준)를 나누기 위함이며,
+# 후자는 최종 측정 보고서에 따로 적는다.
+[relative_to_baseline]
+x2_miss_increase_max = 0
+x3_miss_increase_max = 0
+
+# ── 회귀 기준 ────────────────────────────────────────────────
+# gate_criteria_v13.toml 의 허용폭은 64응답 기준이다. 이번 비교는 seed당 126응답이라
+# 같은 비율을 유지하도록 2배로 둔다. 원칙상 0인 항목(X-1 증가, 처리·분류 하락)은 그대로 0이다.
+# 평균 지연 증가율은 쓰지 않는다(M2는 질문 호출이 늘어나는 방법이라 증가율 대신 절대 상한으로 본다).
+[regression]
+x1_miss_increase_max = 0
+over_escalation_increase_max = 4      # 64응답 기준 2
+format_drop_max_responses = 4         # 64응답 기준 2
+
+[regression.field_drop_max_responses]
+"처리" = 0
+"분류" = 0
+"우선순위" = 2      # 64응답 기준 1
+"모듈" = 6
+"재현 정보" = 6
+"발생 빈도" = 6
+"6칸 정답" = 6
+
+[regression.item_regression_max_responses]
+"처리" = 4          # 64응답 기준 2
+"분류" = 4

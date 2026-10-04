@@ -16,6 +16,10 @@
 - 검증은 v1.3의 merge_dataset.validate를 그대로 쓰되, 트랙 A 개발 배정 규칙 하나만 완화한다(아래 validate 참고).
   v1.3 도구의 규칙은 바꾸지 않는다.
 - 검증에 실패하면 파일을 쓰지 않고 종료 코드 1로 끝낸다.
+- (2026-10-04) Minor와 Trivial의 경계는 서로 허용한다(relax_minor_trivial). 우선순위의 첫 정답이 Minor면 Trivial을,
+  Trivial이면 Minor를 허용 답 끝에 더한다. 첫 정답(가장 바람직한 답)은 그대로이고, Major 이상·판단보류·해당 없음이
+  첫 정답인 문항은 바꾸지 않는다. 라벨 원본(v1.3 배치 스크립트, final_v14_items.py)은 고치지 않고 생성 단계에서 적용해,
+  어느 문항이 이 규칙으로 바뀌었는지 `label_relaxed`로 남긴다. 방법 비교 측정 전에 정했다(기준서 v1.4 §4.1).
 """
 
 import copy
@@ -34,6 +38,18 @@ from final_v14_items import ITEMS as FINAL_ITEMS  # noqa: E402
 
 OUT = ROOT / "data" / "eval_v14" / "aether_raid_v14.json"
 TRACK_A_RULE = "트랙 A에 개발 배정"
+NEIGHBOR = {"Minor": "Trivial", "Trivial": "Minor"}
+
+
+def relax_minor_trivial(item):
+    """첫 정답이 Minor/Trivial이면 다른 쪽을 허용 답에 더한다. 바꿨으면 True."""
+    pri = item["labels"]["우선순위"]
+    other = NEIGHBOR.get(pri[0]) if pri else None
+    if other is None or other in pri:
+        return False
+    pri.append(other)
+    item["label_relaxed"] = ["우선순위: Minor↔Trivial 상호 허용"]
+    return True
 
 
 def validate(items):
@@ -81,6 +97,10 @@ def build():
     if errors:
         return None, errors
     items = dev + final
+    relaxed = [it["id"] for it in items if relax_minor_trivial(it)]
+    errors = validate(items)
+    if errors:
+        return None, errors
     data = {
         "name": "Aether Raid 버그 트리아지 평가셋",
         "version": "v1.4",
@@ -89,6 +109,8 @@ def build():
         "review_log": "docs/dataset/review_log.md",
         "label_semantics": "labels의 각 필드는 허용 답 목록이며 첫 번째 값이 가장 바람직한 답",
         "split_policy": "dev = v1.3의 63건 전부(원래 분할은 split_v13), final = v1.4 신규 25건(방법 선택이 끝난 뒤 1회만 실행)",
+        "label_policy": "우선순위 첫 정답이 Minor 또는 Trivial인 문항은 다른 쪽도 허용 (label_relaxed 표시, 기준서 v1.4 §4.1)",
+        "label_relaxed_ids": relaxed,
         "counts": {"total": len(items), **Counter(i["split"] for i in items)},
         "split_summary": summary(items),
         "items": items,
