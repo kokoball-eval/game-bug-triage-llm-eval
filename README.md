@@ -1,6 +1,8 @@
-# 🎮 Game Bug Report Triage Assistant
+# Game Bug Triage LLM Eval
 
-> **로컬 LLM 기반 인게임 결함 리포트 1차 트리아지 및 벤치마크 평가 자동화 파이프라인**
+> **게임 버그 리포트 1차 트리아지를 LLM에게 맡겨도 되는지, 평가와 회귀 테스트로 계속 검증하는 LLM 평가 체계**
+>
+> 로컬 LLM 트리아지 파이프라인(Ollama) + 이를 검증하는 현업 기반 평가셋 · 회귀 게이트 · 환각 자동 탐지 · pytest/GitHub Actions CI
 
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Package Manager: uv](https://img.shields.io/badge/uv-Fast%20Packaging-DE5FE9?logo=astral)](https://github.com/astral-sh/uv)
