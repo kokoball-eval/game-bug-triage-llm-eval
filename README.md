@@ -391,7 +391,10 @@ uv run triage-compare --label a --run <실행 기록> ...                       
 | [`report/eval_v14_model_selection.md`](report/eval_v14_model_selection.md) | **(v1.4) 모델 재선정 보고서.** 업무 요구사항에서 정한 후보 조건, 사전 점검, seed 3개 비교, 현재 모델 유지 결정의 근거 |
 | [`report/model_selection_v14.md`](report/model_selection_v14.md) | **(v1.4) 모델 선택 판정표.** seed별 기준 판정 (`pipeline/selection.py` 생성) |
 | [`report/method_comparison_v14_plan.md`](report/method_comparison_v14_plan.md) | **(v1.4) 방법 비교 계획(사전 등록).** 비교하는 방법(M0·M1·M2), 채택 기준, 알려진 위험과 대응. 측정 전 커밋 |
-| [`CHANGELOG.md`](CHANGELOG.md) | **버전별 변경 이력.** v1.0부터 v1.4(진행 중)까지, 버전마다 답하려는 질문 |
+| [`report/eval_v14_final.md`](report/eval_v14_final.md) | **(v1.4) 최종 보고서.** 실험 A(방법)·B(모델) 결과와 원인 분석, 최종 평가용 세트 측정, 한계와 v1.5 과제 |
+| [`report/method_comparison_v14_a.md`](report/method_comparison_v14_a.md), [`_b.md`](report/method_comparison_v14_b.md) | **(v1.4) 비교 판정표.** seed별 기준 판정 (`pipeline/compare.py` 생성) |
+| [`report/eval_v14.md`](report/eval_v14.md) | **(v1.4) 최종 평가용 세트 채점 요약** (`pipeline/score.py` 생성) |
+| [`CHANGELOG.md`](CHANGELOG.md) | **버전별 변경 이력.** v1.0부터 v1.4까지, 버전마다 답하려는 질문 |
 | [`docs/issue_log.md`](docs/issue_log.md) | **이슈 기록.** 고도화 중 발견한 결함, v1.3 실사용 시나리오, 알려진 한계, 관찰 사항을 현상 → 원인 → 조치 → 재발 방지 형식으로 정리 |
 | [`docs/dataset/triage_guideline.md`](docs/dataset/triage_guideline.md) | **(v1.3, v1.4 보완) 트리아지 판정 기준서.** 분류·우선순위·처리·발생 빈도 규칙과 조항별 근거(인터뷰 출처) |
 | [`docs/dataset/review_log.md`](docs/dataset/review_log.md) | **(v1.3) 평가셋 검토 기록.** 배치·전체 검토의 쟁점, 검토자 판단, 그에 따른 라벨·기준서 변경 (v1.4 최종 평가용 세트 검토 포함) |
@@ -461,7 +464,11 @@ game-bug-triage-llm-eval/
 │   ├── regression_gate_v13.md   # (v1.3) 회귀 게이트 판정 근거 (pipeline/gate.py 생성)
 │   ├── eval_v14_model_selection.md # (v1.4) 모델 재선정 보고서
 │   ├── model_selection_v14.md   # (v1.4) 모델 선택 판정표 (pipeline/selection.py 생성)
-│   └── method_comparison_v14_plan.md # (v1.4) 방법 비교 계획 (사전 등록)
+│   ├── method_comparison_v14_plan.md # (v1.4) 방법 비교 계획 (사전 등록)
+│   ├── method_comparison_v14_a.md # (v1.4) 실험 A 판정표 (pipeline/compare.py 생성)
+│   ├── method_comparison_v14_b.md # (v1.4) 실험 B 판정표 (pipeline/compare.py 생성)
+│   ├── eval_v14.md              # (v1.4) 최종 평가용 세트 채점 요약 (pipeline/score.py 생성)
+│   └── eval_v14_final.md        # (v1.4) 최종 보고서
 ├── scripts/legacy/               # 5일 실험 당시의 일회용 스크립트 (v1.3 구조 정리 때 src/ 에서 이동)
 │   ├── 01_ollama_chat.py         # 단일 모델 적재/VRAM 측정 스모크 테스트
 │   ├── 02_luna_chat.py           # OpenAI Responses API Cloud 비교 스크립트
@@ -564,7 +571,7 @@ v1.0은 "지금 어떤 모델이 이 업무에 맞는가"를 **한 번** 측정�
 | ✅&nbsp;v1.1.1 | 평가 도구 자체는 믿을 수 있는가? | 채점·게이트 로직 단위 테스트(pytest) + GitHub Actions CI |
 | ✅&nbsp;v1.2 | 가장 위험한 결함(날조)을 사람 없이 잡을 수 있는가? | 환각 자동 탐지 + seed 고정 모드 + 측정 환경 체크리스트 |
 | ✅&nbsp;v1.3 | 평가셋이 실제 현업 인입을 대표하는가? | ✅ 현업 기반 평가셋 63건 (분류 체계 → 판정 기준서 → 시드 케이스·정답 라벨), 개발용/평가용 분리 · ✅ 출력 형식 v2와 기준선 측정 · ✅ v1.3 게이트·실사용 시나리오 · ✅ 저장소 구조 정리 · ✅ 평가용 세트 최종 측정 |
-| 🔨&nbsp;v1.4 | 판단 기준을 프롬프트 문장이 아닌 방식으로 전달하면 Critical 누락을 줄일 수 있는가? | ✅ 모델 재선정(현재 모델 유지) · ✅ 날조 탐지기 오탐 수정 · ✅ 새 최종 평가용 세트 25건 · ✅ 방법 비교 사전 등록 · 🔨 방법 비교(실험 A 방법, 실험 B 모델) · ⏳ 최종 측정 |
+| ✅&nbsp;v1.4 | 판단 기준을 프롬프트 문장이 아닌 방식으로 전달하면 Critical 누락을 줄일 수 있는가? | ✅ 모델 재선정(현재 모델 유지) · ✅ 날조 탐지기 오탐 수정 · ✅ 새 최종 평가용 세트 25건 · ✅ 방법 비교 사전 등록 · ✅ 방법 비교(Critical 체크리스트 채택) · ✅ 최종 측정 |
 | ⏳&nbsp;v1.5 | 무엇을 자동 처리하고 무엇을 사람에게 넘길지 시스템이 판단할 수 있는가? | 채점자 간 라벨 일치율 + LLM-as-judge와 사람 채점의 일치율 → 확신도 기반 라우팅 + 자동 처리율·정확도·위험 건 누락 측정 |
 | ⏳&nbsp;v2.0 | 사람이 보지 않는 동안에도 BTS에 올바르게 인입되는가? | BTS 자동 인입 (Redmine) + 중복 티켓 감지(RAG) + 무인 운영 데모 |
 
@@ -605,8 +612,13 @@ v1.0은 "지금 어떤 모델이 이 업무에 맞는가"를 **한 번** 측정�
   2. ✅ **날조 탐지기 오탐 수정** — 같은 수량을 다른 횟수 표현으로 옮긴 응답("100번" → "100회")을 날조로 잡던 오탐을 고쳤습니다. 저장된 응답 2,545건을 다시 판정해 바뀐 판정이 이 오탐 사례뿐임을 확인했습니다([ISSUE-008](docs/issue_log.md#issue-008))
   3. ✅ **새 최종 평가용 세트** — v1.3 평가용 31건은 결과를 이미 봤으므로 개발용으로 돌리고, 새 시나리오 25건을 검토 2회로 확정했습니다. 방법·모델 선택이 끝날 때까지 실행하지 않습니다 (→ [`docs/dataset/final_v14_review.md`](docs/dataset/final_v14_review.md))
   4. ✅ **방법 비교 사전 등록** — M1(판정 예시 4개), M2(Critical 체크리스트 후 코드가 판정)와 채택 기준을 측정 전에 커밋했습니다 (→ [`report/method_comparison_v14_plan.md`](report/method_comparison_v14_plan.md))
-  5. 🔨 **방법 비교** — 실험 A(모델 고정, 방법 비교) 진행 중. 이어서 실험 B(정해진 방법으로 모델 비교)
-  6. ⏳ **최종 측정** — 정해진 방법·모델 조합으로 최종 평가용 25건을 1회 측정합니다
+  5. ✅ **방법 비교** — 개발용 63건 × 2회 × seed 3개 (→ [실험 A 판정표](report/method_comparison_v14_a.md), [실험 B 판정표](report/method_comparison_v14_b.md))
+     - 실험 A(qwen2.5:7b 고정): **M2(Critical 체크리스트) 채택** — X-1 누락 25 → 17, 체크리스트가 올린 8건 모두 실제 Critical, 다른 지표 악화 없음. M1(판정 예시)은 X-1 25 → 9로 효과가 가장 컸지만, 예시를 따라 해 과잉 상신(26 → 56)과 모듈 오답이 늘어 탈락
+     - 실험 B(M2 고정): gemma4:12b는 **X-1 누락 0건**, 6칸 정답 19.8% → 45.8%였지만 처리·분류 문항 단위 회귀와 과잉 상신이 seed 3개 모두에서 기준을 넘어 qwen2.5:7b 유지. 결과를 본 뒤 기준을 바꾸지 않고 v1.5의 근거로 남겼습니다
+  6. ✅ **최종 측정** — 최종 평가용 25건 × 2회, qwen2.5:7b + M2 (→ [`report/eval_v14_final.md`](report/eval_v14_final.md))
+     - 날조·결함 폐기·경계 건 확정 처리·형식 위반 **0건**, 형식 STRICT 100%, 평균 2.3초
+     - X-1 누락 2/10(한 문항을 2회 모두 놓침). 체크리스트가 바꾼 판정은 0건이라 **M2의 효과는 최종 세트에서 확인되지 않았습니다** — 개발용 개선 폭은 실제보다 크게 나올 수 있다는 사전 등록 계획의 경고가 확인된 결과입니다
+     - 결론: 체크리스트는 올린 판정이 모두 맞을 만큼 정확하지만 놓친 Critical을 찾는 힘이 약하고, 분류가 틀리면 작동하지 않습니다. 모델 하나로 "놓치지 않으면서 과하게 올리지도 않는" 판단을 기대하기보다, 놓치지 않는 쪽으로 기운 판단을 사람 검토 큐가 받아내는 구조를 v1.5에서 만듭니다
 
 * **v1.5** — 먼저 같은 기준서로 다른 채점자가 독립적으로 라벨을 달아 일치율을 재고, LLM-as-judge의 채점이 사람 채점과 얼마나 일치하는지 측정합니다. 라우팅이 "확신할 수 없는 건"을 고르려면 판정 기준과 채점이 믿을 만한지부터 알아야 하기 때문입니다(v1.4 계획에서 옮김). 이어서 응답의 확신도, 환각 탐지 결과, 판단보류·Critical 여부를 근거로 **자동 등록 / 검토 큐**를 나눕니다. 자동 처리율을 높이는 것보다 **위험 건 누락 0건을 지키는 것**이 우선입니다. v1.0 보고서의 Human-in-the-Loop 큐 설계([`report/final_selection.md`](report/final_selection.md) §5)를 실제로 구현하고 측정하는 단계입니다.
 * **v2.0** — 리포트가 쌓이면 자동으로 감지해 트리아지하고, BTS에 등록합니다. BTS는 사내 설치형인 **Redmine**(Docker 로컬 실행)을 써서 "외부 API 전송 불가" 전제를 지키고, 공개 데모용으로 녹화 영상을 함께 남깁니다. 과거 티켓을 검색해 중복 제보(예: Q10과 Q01)를 묶는 RAG를 붙이며, 검색이 끼면서 생기는 새 실패 유형(엉뚱한 티켓을 중복으로 판정)도 기존 게이트 체계로 측정합니다.
