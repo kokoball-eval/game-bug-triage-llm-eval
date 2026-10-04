@@ -180,6 +180,7 @@ def render_report(log_path: Path, summary: dict, rows: list[dict], version: str 
     L = [f"# {version} 평가셋 채점 결과", "",
          f"> 실행 기록: `{rel(log_path)}` · `src/triage_eval/pipeline/score.py` 생성", ""]
     for model, by_set in summary.items():
+        by_set = {k: v for k, v in by_set.items() if v["n"]}   # 문항이 없는 세트는 표에서 뺀다 (v1.4 final은 대표 세트뿐)
         L += [f"## {model}", "", "| 지표 | " + " | ".join(by_set) + " |", "| :--- |" + " ---: |" * len(by_set)]
 
         def row(name, fn):

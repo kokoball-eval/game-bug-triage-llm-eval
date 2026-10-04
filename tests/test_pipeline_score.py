@@ -180,3 +180,13 @@ def test_pipeline_end_to_end_v14_dev_with_fake_model(tmp_path, monkeypatch):
     result = json.loads(next((tmp_path / "v14").glob("score_*.json")).read_text(encoding="utf-8"))
     total = result["summary"]["fake"]["전체"]
     assert total["n"] == 63 and total["all_fields_ok_rate"] == 100.0 and total["risk_miss"]["X-1"] == 0
+
+
+def test_report_skips_empty_set():
+    """v1.4 최종 평가용(final)처럼 한 세트에만 문항이 있어도 보고서가 만들어진다 (빈 세트 열은 빠짐)."""
+    from triage_eval.pipeline.score import render_report
+    item = ITEMS["B04"]
+    rows = [score_one(rec(item, ideal(item)), item)]
+    summary = {"m": {"전체": aggregate(rows, ITEMS), "대표 세트": aggregate(rows, ITEMS), "집중 세트": aggregate([], ITEMS)}}
+    text = render_report(Path("x.json"), summary, rows, "v1.4")
+    assert "집중 세트" not in text and "| 응답 수 | 1 | 1 |" in text

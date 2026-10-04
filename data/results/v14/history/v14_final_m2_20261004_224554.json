@@ -1,0 +1,2784 @@
+{
+  "metadata": {
+    "project": "Aether Raid 버그 트리아지 평가셋",
+    "dataset_version": "v1.4",
+    "executed_at": "2026-10-04T22:45:54.322393",
+    "models": [
+      "qwen2.5:7b"
+    ],
+    "total_formal_runs": 50,
+    "warmup_runs": 1,
+    "run_config": {
+      "contract": "v2",
+      "options": {
+        "temperature": 0.2,
+        "num_predict": 512,
+        "num_ctx": 8192
+      },
+      "repeat_count": 2,
+      "split": "final",
+      "set": "all",
+      "prompt_version": "v2.3",
+      "guardrail_version": "g2",
+      "retry_policy": {
+        "trigger": [
+          "R6_enum_valid",
+          "R7_output_language"
+        ],
+        "max_retries": 1,
+        "scope": "field",
+        "output": "json_schema_enum+line_pattern",
+        "num_predict": 256
+      },
+      "discard_check_policy": {
+        "trigger": "처리=폐기, 분류≠중복 의심",
+        "choices": [
+          "이상 현상 제보",
+          "무관"
+        ],
+        "on_report": "정보 요청 후 보류",
+        "num_predict": 32
+      },
+      "system_prompt_sha256": "f512ddaab04df8609586c7ebef6043178e4a2e955e1d685d6a0dbdbbf82102f2",
+      "think": false,
+      "method": "m2",
+      "method_assets_sha256": "a9425d6e3373eb297c256664546820a0dec28a5a1227fed7a216b2de0f631775",
+      "critical_check_policy": {
+        "asked_when": "분류=결함",
+        "rule": "upgrade_only",
+        "num_predict": 96
+      },
+      "dataset_sha256": "5f653cbdf5e58f4a6239bfc7c82d6f8eec75a042f6a8cc5ed38406420820aecb",
+      "item_ids": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08",
+        "F09",
+        "F10",
+        "F11",
+        "F12",
+        "F13",
+        "F14",
+        "F15",
+        "F16",
+        "F17",
+        "F18",
+        "F19",
+        "F20",
+        "F21",
+        "F22",
+        "F23",
+        "F24",
+        "F25"
+      ],
+      "model_digests": {
+        "qwen2.5:7b": "845dbda0ea48"
+      },
+      "seeds": {
+        "1": 1,
+        "2": 2
+      },
+      "environment": {
+        "gpu_used_mib": 0.0,
+        "ollama_loaded": [],
+        "other_vram_mib": 0.0,
+        "on_ac_power": true,
+        "warnings": [],
+        "notes": []
+      }
+    }
+  },
+  "warmup_runs": [
+    {
+      "model": "qwen2.5:7b",
+      "is_warmup": true,
+      "success": true,
+      "response_text": "[요약]: 게임 시작 시 클라이언트 안정성 문제 발생\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 5.182,
+      "load_duration_sec": 3.092,
+      "prompt_eval_count": 2107,
+      "eval_count": 87,
+      "tokens_per_sec": 67.13,
+      "vram_mib": 4756.1,
+      "error_message": null
+    }
+  ],
+  "results": [
+    {
+      "eval_id": "qwen2.5_7b_F01_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F01",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:02.036819",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 회원 탈퇴 철회 후 로그인 시 탈퇴된 계정 메시지가 뜬다.\n[분류]: 결함\n[모듈]: 계정·로그인\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.473,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2505,
+      "eval_count": 99,
+      "tokens_per_sec": 68.71,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 회원 탈퇴 철회 후 로그인 시 탈퇴된 계정 메시지가 뜬다.\n[분류]: 결함\n[모듈]: 계정·로그인\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.632
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.841,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 회원 탈퇴 철회 후 로그인 시 탈퇴된 계정 메시지가 뜬다.\n[분류]: 결함\n[모듈]: 계정·로그인\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F02_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F02",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:04.593447",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 튜토리얼 중 재접속 시 안내 화살표 버튼 클릭 불가\n[분류]: 결함\n[모듈]: UI·텍스트, 게임플레이·밸런스\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.555,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2568,
+      "eval_count": 102,
+      "tokens_per_sec": 66.59,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 튜토리얼 중 재접속 시 안내 화살표 버튼 클릭 불가\n[분류]: 결함\n[모듈]: UI·텍스트, 게임플레이·밸런스\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.739
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"예\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "예",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "이미 Critical — 기록만",
+          "elapsed_sec": 0.816,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 튜토리얼 중 재접속 시 안내 화살표 버튼 클릭 불가\n[분류]: 결함\n[모듈]: UI·텍스트, 게임플레이·밸런스\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F03_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F03",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:06.311830",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 강화석 최대치일 때 우편함 '모두 받기'로 수령하면 초과분이 사라짐\n[분류]: 버그 아님\n[모듈]: 결제·재화\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.718,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2486,
+      "eval_count": 103,
+      "tokens_per_sec": 66.64,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 강화석 최대치일 때 우편함 '모두 받기'로 수령하면 초과분이 사라짐\n[분류]: 버그 아님\n[모듈]: 결제·재화\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.718
+        }
+      ],
+      "retried": false,
+      "critical_checked": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 강화석 최대치일 때 우편함 '모두 받기'로 수령하면 초과분이 사라짐\n[분류]: 버그 아님\n[모듈]: 결제·재화\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F04_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F04",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:08.672234",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 스토어에서 환불 후 다이아가 회수되지 않음\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.359,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2579,
+      "eval_count": 91,
+      "tokens_per_sec": 66.65,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 스토어에서 환불 후 다이아가 회수되지 않음\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.579
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"예\",\"q3\":\"아니오\",\"q4\":\"예\",\"q5\":\"아니오\",\"q6\":\"서버 장애\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "예",
+            "q3": "아니오",
+            "q4": "예",
+            "q5": "아니오",
+            "q6": "서버 장애"
+          },
+          "upgraded": false,
+          "reason": "이미 Critical — 기록만",
+          "elapsed_sec": 0.78,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 스토어에서 환불 후 다이아가 회수되지 않음\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F05_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F05",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:11.148186",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 갤럭시 A12에서 월드맵 열면 앱이 강제 종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.474,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2604,
+      "eval_count": 95,
+      "tokens_per_sec": 66.56,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 갤럭시 A12에서 월드맵 열면 앱이 강제 종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.642
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"예\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"서버 장애\"}",
+          "answers": {
+            "q1": "예",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "서버 장애"
+          },
+          "upgraded": false,
+          "reason": "이미 Critical — 기록만",
+          "elapsed_sec": 0.832,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 갤럭시 A12에서 월드맵 열면 앱이 강제 종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F06_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F06",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:13.664926",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 유저가 탈퇴 후 랭킹에 예전 닉네임이 남아 있는 문제 제보\n[분류]: 결함\n[모듈]: 계정·로그인\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.515,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2487,
+      "eval_count": 100,
+      "tokens_per_sec": 66.64,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 유저가 탈퇴 후 랭킹에 예전 닉네임이 남아 있는 문제 제보\n[분류]: 결함\n[모듈]: 계정·로그인\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.667
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.848,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 유저가 탈퇴 후 랭킹에 예전 닉네임이 남아 있는 문제 제보\n[분류]: 결함\n[모듈]: 계정·로그인\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F07_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F07",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:16.238041",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: '서리 협곡' 부활 지점에서 벽 안에서 부활해 이동 불가\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.571,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2516,
+      "eval_count": 102,
+      "tokens_per_sec": 66.55,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: '서리 협곡' 부활 지점에서 벽 안에서 부활해 이동 불가\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.723
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.848,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: '서리 협곡' 부활 지점에서 벽 안에서 부활해 이동 불가\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": [
+          {
+            "rule": "H-2b",
+            "field": "처리",
+            "from": "등록(재현 대기)",
+            "to": "개발 배정"
+          }
+        ]
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F08_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F08",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:18.988516",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 10월 출석 이벤트 푸시 알림 누르면 이벤트 페이지로 안 가고 로비 화면에서 멈춥니다.\n[분류]: 결함\n[모듈]: UI·텍스트, 네트워크\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.749,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2487,
+      "eval_count": 115,
+      "tokens_per_sec": 66.43,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 10월 출석 이벤트 푸시 알림 누르면 이벤트 페이지로 안 가고 로비 화면에서 멈춥니다.\n[분류]: 결함\n[모듈]: UI·텍스트, 네트워크\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.898
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.851,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 10월 출석 이벤트 푸시 알림 누르면 이벤트 페이지로 안 가고 로비 화면에서 멈춥니다.\n[분류]: 결함\n[모듈]: UI·텍스트, 네트워크\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F09_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F09",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:21.589867",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 요일 던전 입장 시 앱이 꺼지고 입장 횟수가 깎임.\n[분류]: 결함\n[모듈]: 결제·재화/게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.599,
+      "load_duration_sec": 0.005,
+      "prompt_eval_count": 2472,
+      "eval_count": 106,
+      "tokens_per_sec": 66.55,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 요일 던전 입장 시 앱이 꺼지고 입장 횟수가 깎임.\n[분류]: 결함\n[모듈]: 결제·재화/게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.747
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.852,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 요일 던전 입장 시 앱이 꺼지고 입장 횟수가 깎임.\n[분류]: 결함\n[모듈]: 결제·재화/게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F10_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F10",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:24.293377",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 서리 협곡 동쪽 얼음 다리 끝에서 탈것을 타고 지나가면 맵 밑으로 떨어짐\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.702,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2477,
+      "eval_count": 112,
+      "tokens_per_sec": 66.51,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 서리 협곡 동쪽 얼음 다리 끝에서 탈것을 타고 지나가면 맵 밑으로 떨어짐\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.85
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.852,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 서리 협곡 동쪽 얼음 다리 끝에서 탈것을 타고 지나가면 맵 밑으로 떨어짐\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F11_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F11",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:26.771821",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 백그라운드 복귀 시 BGM과 효과음 싱크 어긋남\n[분류]: 결함\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.477,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2528,
+      "eval_count": 95,
+      "tokens_per_sec": 66.43,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 백그라운드 복귀 시 BGM과 효과음 싱크 어긋남\n[분류]: 결함\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.626
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.851,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 백그라운드 복귀 시 BGM과 효과음 싱크 어긋남\n[분류]: 결함\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": [
+          {
+            "rule": "H-2b",
+            "field": "처리",
+            "from": "등록(재현 대기)",
+            "to": "개발 배정"
+          }
+        ]
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F12_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F12",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:29.233286",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 거래소에서 판매 취소 후 재등록 시 수량이 고정되어 변경 불가\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.46,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2516,
+      "eval_count": 94,
+      "tokens_per_sec": 66.45,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 거래소에서 판매 취소 후 재등록 시 수량이 고정되어 변경 불가\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.61
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.85,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 거래소에서 판매 취소 후 재등록 시 수량이 고정되어 변경 불가\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": [
+          {
+            "rule": "H-2b",
+            "field": "처리",
+            "from": "등록(재현 대기)",
+            "to": "개발 배정"
+          }
+        ]
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F13_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F13",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:31.843766",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 길드장 위임 후에도 이전 길드장이 추방과 창고 출고 권한을 가짐\n[분류]: 결함\n[모듈]: 계정·로그인\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.61,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2582,
+      "eval_count": 101,
+      "tokens_per_sec": 66.21,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 길드장 위임 후에도 이전 길드장이 추방과 창고 출고 권한을 가짐\n[분류]: 결함\n[모듈]: 계정·로그인\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.741
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"서버 장애\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "서버 장애"
+          },
+          "upgraded": false,
+          "reason": "이미 Critical — 기록만",
+          "elapsed_sec": 0.869,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 길드장 위임 후에도 이전 길드장이 추방과 창고 출고 권한을 가짐\n[분류]: 결함\n[모듈]: 계정·로그인\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F14_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F14",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:34.550764",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 뽑기 연출 화면에서만 사운드가 재생된다.\n[분류]: 결함\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.704,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2417,
+      "eval_count": 89,
+      "tokens_per_sec": 66.72,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 뽑기 연출 화면에서만 사운드가 재생된다.\n[분류]: 결함\n[모듈]: 사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [
+            "R6_enum_valid"
+          ],
+          "elapsed_sec": 1.485
+        },
+        {
+          "kind": "retry",
+          "response_text": "{\n  \"모듈\": \"그래픽·사운드\"\n}",
+          "elapsed_sec": 0.367,
+          "eval_count": 16,
+          "error_message": null,
+          "errors": [
+            {
+              "field": "모듈",
+              "value": "사운드"
+            }
+          ],
+          "recheck": [],
+          "lang_errors": [],
+          "fixed": {
+            "모듈": "그래픽·사운드"
+          },
+          "pattern_fallback": false,
+          "pattern_error": null
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.852,
+          "error_message": null
+        }
+      ],
+      "retried": true,
+      "retry_adopted": true,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 뽑기 연출 화면에서만 사운드가 재생된다.\n[분류]: 결함\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F15_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F15",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:37.053423",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 판매 수수료 계산 결과가 안내 금액과 1골드 차이\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.502,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2536,
+      "eval_count": 96,
+      "tokens_per_sec": 66.35,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 판매 수수료 계산 결과가 안내 금액과 1골드 차이\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.65
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.852,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 판매 수수료 계산 결과가 안내 금액과 1골드 차이\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": [
+          {
+            "rule": "H-2b",
+            "field": "처리",
+            "from": "등록(재현 대기)",
+            "to": "개발 배정"
+          }
+        ]
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F16_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F16",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:39.574062",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: +12 강화 시 천장 게이지 100% 달성 후 강화 실패.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.519,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2464,
+      "eval_count": 100,
+      "tokens_per_sec": 66.47,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: +12 강화 시 천장 게이지 100% 달성 후 강화 실패.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.67
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "이미 Critical — 기록만",
+          "elapsed_sec": 0.849,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: +12 강화 시 천장 게이지 100% 달성 후 강화 실패.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F17_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F17",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:42.122688",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 교환소에서 재료 부족 상태에서도 교환 버튼이 활성화되어 누르면 아무 반응 없음.\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.546,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2554,
+      "eval_count": 98,
+      "tokens_per_sec": 66.27,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 교환소에서 재료 부족 상태에서도 교환 버튼이 활성화되어 누르면 아무 반응 없음.\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.693
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "이미 Critical — 기록만",
+          "elapsed_sec": 0.853,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 교환소에서 재료 부족 상태에서도 교환 버튼이 활성화되어 누르면 아무 반응 없음.\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F18_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F18",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:44.422406",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 파견 시간과 출석 보상 초기화 시간이 이상하게 표시됩니다.\n[분류]: 버그 아님\n[모듈]: UI·텍스트, 네트워크\n[우선순위]: 판단보류\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.298,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2449,
+      "eval_count": 102,
+      "tokens_per_sec": 66.59,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 파견 시간과 출석 보상 초기화 시간이 이상하게 표시됩니다.\n[분류]: 버그 아님\n[모듈]: UI·텍스트, 네트워크\n[우선순위]: 미기재\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [
+            "R6_enum_valid"
+          ],
+          "elapsed_sec": 1.7
+        },
+        {
+          "kind": "retry",
+          "response_text": "{\n  \"우선순위\": \"판단보류\",\n  \"처리\": \"등록(재현 대기)\"\n}",
+          "elapsed_sec": 0.598,
+          "eval_count": 29,
+          "error_message": null,
+          "errors": [
+            {
+              "field": "우선순위",
+              "value": "미기재"
+            }
+          ],
+          "recheck": [
+            "처리"
+          ],
+          "lang_errors": [],
+          "fixed": {
+            "우선순위": "판단보류",
+            "처리": "등록(재현 대기)"
+          },
+          "pattern_fallback": false,
+          "pattern_error": null
+        }
+      ],
+      "retried": true,
+      "retry_adopted": true,
+      "critical_checked": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 파견 시간과 출석 보상 초기화 시간이 이상하게 표시됩니다.\n[분류]: 버그 아님\n[모듈]: UI·텍스트, 네트워크\n[우선순위]: 판단보류\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F19_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F19",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:46.999796",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 월정액 구매 시 'E-4021' 오류 코드만 뜨고 결제창이 열리지 않음\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.576,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2453,
+      "eval_count": 105,
+      "tokens_per_sec": 66.59,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 월정액 구매 시 'E-4021' 오류 코드만 뜨고 결제창이 열리지 않음\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.724
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.852,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 월정액 구매 시 'E-4021' 오류 코드만 뜨고 결제창이 열리지 않음\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F20_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F20",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:49.453120",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 서브 퀘스트 카운터가 올라가지 않음\n[분류]: 결함\n[모듈]: 콘텐츠 진행\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.452,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2562,
+      "eval_count": 92,
+      "tokens_per_sec": 66.46,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 서브 퀘스트 카운터가 올라가지 않음\n[분류]: 결함\n[모듈]: 콘텐츠 진행\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.6
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.852,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 서브 퀘스트 카운터가 올라가지 않음\n[분류]: 결함\n[모듈]: 콘텐츠 진행\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": [
+          {
+            "rule": "H-2b",
+            "field": "처리",
+            "from": "등록(재현 대기)",
+            "to": "개발 배정"
+          }
+        ]
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F21_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F21",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:51.003082",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 궁수 직업 비율 높아져서 사거리 수정 요청\n[분류]: 개선 제안\n[모듈]: 게임플레이·밸런스\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.55,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2388,
+      "eval_count": 94,
+      "tokens_per_sec": 66.52,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 궁수 직업 비율 높아져서 사거리 수정 요청\n[분류]: 개선 제안\n[모듈]: 게임플레이·밸런스\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.55
+        }
+      ],
+      "retried": false,
+      "critical_checked": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 궁수 직업 비율 높아져서 사거리 수정 요청\n[분류]: 개선 제안\n[모듈]: 게임플레이·밸런스\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F22_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F22",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:52.415028",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 인벤토리 칸 수 부족 문제 제보\n[분류]: 개선 제안\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.411,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2402,
+      "eval_count": 85,
+      "tokens_per_sec": 66.61,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 인벤토리 칸 수 부족 문제 제보\n[분류]: 개선 제안\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.411
+        }
+      ],
+      "retried": false,
+      "critical_checked": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 인벤토리 칸 수 부족 문제 제보\n[분류]: 개선 제안\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F23_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F23",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:53.826314",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 7일 출석 보상 우편 지연\n[분류]: 버그 아님\n[모듈]: 결제·재화\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.411,
+      "load_duration_sec": 0.005,
+      "prompt_eval_count": 2396,
+      "eval_count": 86,
+      "tokens_per_sec": 66.66,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 7일 출석 보상 우편 지연\n[분류]: 버그 아님\n[모듈]: 결제·재화\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.411
+        }
+      ],
+      "retried": false,
+      "critical_checked": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 7일 출석 보상 우편 지연\n[분류]: 버그 아님\n[모듈]: 결제·재화\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F24_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F24",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:55.159964",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 판매 글 게시\n[분류]: 문의·건의\n[모듈]: 해당 없음\n[우선순위]: 해당 없음\n[재현 정보]: 충분\n[발생 빈도]: 해당 없음\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 해당 없음",
+      "elapsed_sec": 1.333,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2380,
+      "eval_count": 81,
+      "tokens_per_sec": 66.83,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 판매 글 게시\n[분류]: 문의·건의\n[모듈]: 해당 없음\n[우선순위]: 해당 없음\n[재현 정보]: 충분\n[발생 빈도]: 해당 없음\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 해당 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.333
+        }
+      ],
+      "retried": false,
+      "critical_checked": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 판매 글 게시\n[분류]: 문의·건의\n[모듈]: 해당 없음\n[우선순위]: 해당 없음\n[재현 정보]: 충분\n[발생 빈도]: 해당 없음\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 해당 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F25_run1",
+      "model": "qwen2.5:7b",
+      "run_index": 1,
+      "item_id": "F25",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 1,
+      "timestamp": "2026-10-04T22:44:56.847561",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 게임이 업데이트 후 작동하지 않음\n[분류]: 버그 아님\n[모듈]: 해당 없음\n[우선순위]: 판단보류\n[재현 정보]: 부족\n[발생 빈도]: 미기재\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 플랫폼, 기기 정보, 오류 메시지, 재현 방법",
+      "elapsed_sec": 1.687,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2350,
+      "eval_count": 105,
+      "tokens_per_sec": 66.64,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 게임이 업데이트 후 작동하지 않음\n[분류]: 버그 아님\n[모듈]: 해당 없음\n[우선순위]: 판단보류\n[재현 정보]: 부족\n[발생 빈도]: 미기재\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 플랫폼, 기기 정보, 오류 메시지, 재현 방법",
+          "failed_rules": [],
+          "elapsed_sec": 1.687
+        }
+      ],
+      "retried": false,
+      "critical_checked": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 게임이 업데이트 후 작동하지 않음\n[분류]: 버그 아님\n[모듈]: 해당 없음\n[우선순위]: 판단보류\n[재현 정보]: 부족\n[발생 빈도]: 미기재\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 플랫폼, 기기 정보, 오류 메시지, 재현 방법",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F01_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F01",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:44:59.331069",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 회원 탈퇴 철회 후 로그인 시 탈퇴된 계정 메시지 뜸\n[분류]: 결함\n[모듈]: 계정·로그인\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.482,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2505,
+      "eval_count": 97,
+      "tokens_per_sec": 66.47,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 회원 탈퇴 철회 후 로그인 시 탈퇴된 계정 메시지 뜸\n[분류]: 결함\n[모듈]: 계정·로그인\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.629
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.853,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 회원 탈퇴 철회 후 로그인 시 탈퇴된 계정 메시지 뜸\n[분류]: 결함\n[모듈]: 계정·로그인\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F02_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F02",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:01.825399",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 튜토리얼 중 재접속 시 버튼 클릭 불가\n[분류]: 결함\n[모듈]: UI·텍스트, 게임플레이·밸런스\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.493,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2568,
+      "eval_count": 96,
+      "tokens_per_sec": 66.45,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 튜토리얼 중 재접속 시 버튼 클릭 불가\n[분류]: 결함\n[모듈]: UI·텍스트, 게임플레이·밸런스\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.659
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"예\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "예",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "이미 Critical — 기록만",
+          "elapsed_sec": 0.834,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 튜토리얼 중 재접속 시 버튼 클릭 불가\n[분류]: 결함\n[모듈]: UI·텍스트, 게임플레이·밸런스\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F03_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F03",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:04.296660",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 강화석 최대치일 때 우편 모두 받기 누르면 초과분 처리 안 됨\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.47,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2486,
+      "eval_count": 96,
+      "tokens_per_sec": 66.42,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 강화석 최대치일 때 우편 모두 받기 누르면 초과분 처리 안 됨\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.617
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.853,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 강화석 최대치일 때 우편 모두 받기 누르면 초과분 처리 안 됨\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F04_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F04",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:06.669788",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 스토어에서 환불 후 다이아가 회수되지 않음\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.371,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2579,
+      "eval_count": 91,
+      "tokens_per_sec": 66.46,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 스토어에서 환불 후 다이아가 회수되지 않음\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.586
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"예\",\"q3\":\"아니오\",\"q4\":\"예\",\"q5\":\"아니오\",\"q6\":\"서버 장애\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "예",
+            "q3": "아니오",
+            "q4": "예",
+            "q5": "아니오",
+            "q6": "서버 장애"
+          },
+          "upgraded": false,
+          "reason": "이미 Critical — 기록만",
+          "elapsed_sec": 0.785,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 스토어에서 환불 후 다이아가 회수되지 않음\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F05_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F05",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:09.155280",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 갤럭시 A12에서 월드맵 열면 앱이 강제 종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.485,
+      "load_duration_sec": 0.005,
+      "prompt_eval_count": 2604,
+      "eval_count": 95,
+      "tokens_per_sec": 66.48,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 갤럭시 A12에서 월드맵 열면 앱이 강제 종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.648
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"예\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"서버 장애\"}",
+          "answers": {
+            "q1": "예",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "서버 장애"
+          },
+          "upgraded": false,
+          "reason": "이미 Critical — 기록만",
+          "elapsed_sec": 0.837,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 갤럭시 A12에서 월드맵 열면 앱이 강제 종료\n[분류]: 결함\n[모듈]: 클라이언트 안정성\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F06_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F06",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:11.687643",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 유저가 탈퇴 후 랭킹에 예전 닉네임이 남아 있어 문제 제기\n[분류]: 결함\n[모듈]: 계정·로그인\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.531,
+      "load_duration_sec": 0.006,
+      "prompt_eval_count": 2487,
+      "eval_count": 100,
+      "tokens_per_sec": 66.46,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 유저가 탈퇴 후 랭킹에 예전 닉네임이 남아 있어 문제 제기\n[분류]: 결함\n[모듈]: 계정·로그인\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.676
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.855,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 유저가 탈퇴 후 랭킹에 예전 닉네임이 남아 있어 문제 제기\n[분류]: 결함\n[모듈]: 계정·로그인\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F07_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F07",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:14.268813",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: '서리 협곡' 부활 지점에서 벽 안에서 부활해 이동 불가\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.58,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2516,
+      "eval_count": 102,
+      "tokens_per_sec": 66.46,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: '서리 협곡' 부활 지점에서 벽 안에서 부활해 이동 불가\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.727
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.853,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: '서리 협곡' 부활 지점에서 벽 안에서 부활해 이동 불가\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": [
+          {
+            "rule": "H-2b",
+            "field": "처리",
+            "from": "등록(재현 대기)",
+            "to": "개발 배정"
+          }
+        ]
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F08_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F08",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:17.029091",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 10월 출석 이벤트 푸시 알림 클릭 시 이벤트 페이지로 이동하지 않고 로비 화면에서 멈춤\n[분류]: 결함\n[모듈]: UI·텍스트, 네트워크\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.759,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2487,
+      "eval_count": 115,
+      "tokens_per_sec": 66.37,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 10월 출석 이벤트 푸시 알림 클릭 시 이벤트 페이지로 이동하지 않고 로비 화면에서 멈춤\n[분류]: 결함\n[모듈]: UI·텍스트, 네트워크\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.904
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.855,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 10월 출석 이벤트 푸시 알림 클릭 시 이벤트 페이지로 이동하지 않고 로비 화면에서 멈춤\n[분류]: 결함\n[모듈]: UI·텍스트, 네트워크\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F09_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F09",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:19.498473",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 요일 던전 입장 시 앱이 꺼지고 입장 횟수가 깎임.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.468,
+      "load_duration_sec": 0.006,
+      "prompt_eval_count": 2472,
+      "eval_count": 97,
+      "tokens_per_sec": 66.55,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 요일 던전 입장 시 앱이 꺼지고 입장 횟수가 깎임.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.615
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.853,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 요일 던전 입장 시 앱이 꺼지고 입장 횟수가 깎임.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F10_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F10",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:22.074548",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 서리 협곡 다리 끝에서 탈것 타면 맵 밑으로 떨어짐\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.575,
+      "load_duration_sec": 0.006,
+      "prompt_eval_count": 2477,
+      "eval_count": 103,
+      "tokens_per_sec": 66.49,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 서리 협곡 다리 끝에서 탈것 타면 맵 밑으로 떨어짐\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.721
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.854,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 서리 협곡 다리 끝에서 탈것 타면 맵 밑으로 떨어짐\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F11_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F11",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:24.560007",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 백그라운드 복귀 시 BGM과 효과음 싱크 어긋남\n[분류]: 결함\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.484,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2528,
+      "eval_count": 95,
+      "tokens_per_sec": 66.34,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 백그라운드 복귀 시 BGM과 효과음 싱크 어긋남\n[분류]: 결함\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.63
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.854,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 백그라운드 복귀 시 BGM과 효과음 싱크 어긋남\n[분류]: 결함\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": [
+          {
+            "rule": "H-2b",
+            "field": "처리",
+            "from": "등록(재현 대기)",
+            "to": "개발 배정"
+          }
+        ]
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F12_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F12",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:27.030231",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 거래소에서 판매 취소 후 재등록 시 수량이 고정되어 변경 불가\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.469,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2516,
+      "eval_count": 94,
+      "tokens_per_sec": 66.35,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 거래소에서 판매 취소 후 재등록 시 수량이 고정되어 변경 불가\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.611
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.858,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 거래소에서 판매 취소 후 재등록 시 수량이 고정되어 변경 불가\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": [
+          {
+            "rule": "H-2b",
+            "field": "처리",
+            "from": "등록(재현 대기)",
+            "to": "개발 배정"
+          }
+        ]
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F13_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F13",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:29.719784",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 길드장 위임 후에도 이전 급드장이 추방과 창고 출고 권한을 가짐\n[분류]: 결함\n[모듈]: 계정·로그인/콘텐츠 진행\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.688,
+      "load_duration_sec": 0.005,
+      "prompt_eval_count": 2582,
+      "eval_count": 106,
+      "tokens_per_sec": 66.32,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 길드장 위임 후에도 이전 급드장이 추방과 창고 출고 권한을 가짐\n[분류]: 결함\n[모듈]: 계정·로그인/콘텐츠 진행\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.817
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"서버 장애\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "서버 장애"
+          },
+          "upgraded": false,
+          "reason": "이미 Critical — 기록만",
+          "elapsed_sec": 0.871,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 길드장 위임 후에도 이전 급드장이 추방과 창고 출고 권한을 가짐\n[분류]: 결함\n[모듈]: 계정·로그인/콘텐츠 진행\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F14_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F14",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:32.432951",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 뽑기 연출 화면에서만 사운드가 작동한다.\n[분류]: 결함\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.711,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2417,
+      "eval_count": 89,
+      "tokens_per_sec": 66.66,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 뽑기 연출 화면에서만 사운드가 작동한다.\n[분류]: 결함\n[모듈]: 사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [
+            "R6_enum_valid"
+          ],
+          "elapsed_sec": 1.487
+        },
+        {
+          "kind": "retry",
+          "response_text": "{\n  \"모듈\": \"그래픽·사운드\"\n}",
+          "elapsed_sec": 0.368,
+          "eval_count": 16,
+          "error_message": null,
+          "errors": [
+            {
+              "field": "모듈",
+              "value": "사운드"
+            }
+          ],
+          "recheck": [],
+          "lang_errors": [],
+          "fixed": {
+            "모듈": "그래픽·사운드"
+          },
+          "pattern_fallback": false,
+          "pattern_error": null
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.856,
+          "error_message": null
+        }
+      ],
+      "retried": true,
+      "retry_adopted": true,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 뽑기 연출 화면에서만 사운드가 작동한다.\n[분류]: 결함\n[모듈]: 그래픽·사운드\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F15_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F15",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:34.931713",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 판매 수수료 계산 결과가 안내 금액과 1골드 차이\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.497,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2536,
+      "eval_count": 96,
+      "tokens_per_sec": 66.39,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 판매 수수료 계산 결과가 안내 금액과 1골드 차이\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.645
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.852,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 판매 수수료 계산 결과가 안내 금액과 1골드 차이\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 간헐적\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": [
+          {
+            "rule": "H-2b",
+            "field": "처리",
+            "from": "등록(재현 대기)",
+            "to": "개발 배정"
+          }
+        ]
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F16_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F16",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:37.642466",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: +12 강화 시 천장 게이지 100%에도 강화 실패하고 게이지와 재화가 정상적으로 처리되지 않았다.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.709,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2464,
+      "eval_count": 112,
+      "tokens_per_sec": 66.46,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: +12 강화 시 천장 게이지 100%에도 강화 실패하고 게이지와 재화가 정상적으로 처리되지 않았다.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.854
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "이미 Critical — 기록만",
+          "elapsed_sec": 0.855,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: +12 강화 시 천장 게이지 100%에도 강화 실패하고 게이지와 재화가 정상적으로 처리되지 않았다.\n[분류]: 결함\n[모듈]: 게임플레이·밸런스\n[우선순위]: Critical\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 긴급 사인 요청\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F17_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F17",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:40.130611",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 교환소에서 재료 부족 상태에서도 교환 버튼이 활성화되어 누르면 무반응.\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.486,
+      "load_duration_sec": 0.006,
+      "prompt_eval_count": 2554,
+      "eval_count": 94,
+      "tokens_per_sec": 66.42,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 교환소에서 재료 부족 상태에서도 교환 버튼이 활성화되어 누르면 무반응.\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.633
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.853,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 교환소에서 재료 부족 상태에서도 교환 버튼이 활성화되어 누르면 무반응.\n[분류]: 결함\n[모듈]: UI·텍스트\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F18_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F18",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:41.691619",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 파견 남은 시간과 출석 보상 초기화 시간이 이상하게 표시됩니다.\n[분류]: 버그 아님\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.56,
+      "load_duration_sec": 0.005,
+      "prompt_eval_count": 2449,
+      "eval_count": 93,
+      "tokens_per_sec": 66.67,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 파견 남은 시간과 출석 보상 초기화 시간이 이상하게 표시됩니다.\n[분류]: 버그 아님\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.56
+        }
+      ],
+      "retried": false,
+      "critical_checked": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 파견 남은 시간과 출석 보상 초기화 시간이 이상하게 표시됩니다.\n[분류]: 버그 아님\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F19_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F19",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:44.281708",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 월정액 구매 시 'E-4021' 오류 코드만 뜨고 결제창이 열리지 않음.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.588,
+      "load_duration_sec": 0.005,
+      "prompt_eval_count": 2453,
+      "eval_count": 105,
+      "tokens_per_sec": 66.54,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 월정액 구매 시 'E-4021' 오류 코드만 뜨고 결제창이 열리지 않음.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.731
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.857,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 월정액 구매 시 'E-4021' 오류 코드만 뜨고 결제창이 열리지 않음.\n[분류]: 결함\n[모듈]: 결제·재화\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F20_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F20",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:46.830259",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 서브 퀘스트 카운터가 정상 완료 시에도 갱신되지 않음\n[분류]: 결함\n[모듈]: 콘텐츠 진행\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 2.547,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2562,
+      "eval_count": 98,
+      "tokens_per_sec": 66.43,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 서브 퀘스트 카운터가 정상 완료 시에도 갱신되지 않음\n[분류]: 결함\n[모듈]: 콘텐츠 진행\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.692
+        },
+        {
+          "kind": "critical_check",
+          "response_text": "{\"q1\":\"아니오\",\"q2\":\"아니오\",\"q3\":\"아니오\",\"q4\":\"아니오\",\"q5\":\"아니오\",\"q6\":\"아니오\"}",
+          "answers": {
+            "q1": "아니오",
+            "q2": "아니오",
+            "q3": "아니오",
+            "q4": "아니오",
+            "q5": "아니오",
+            "q6": "아니오"
+          },
+          "upgraded": false,
+          "reason": "체크리스트 모두 아니오",
+          "elapsed_sec": 0.855,
+          "error_message": null
+        }
+      ],
+      "retried": false,
+      "critical_checked": true,
+      "critical_upgraded": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 서브 퀘스트 카운터가 정상 완료 시에도 갱신되지 않음\n[분류]: 결함\n[모듈]: 콘텐츠 진행\n[우선순위]: Major\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": [
+          {
+            "rule": "H-2b",
+            "field": "처리",
+            "from": "등록(재현 대기)",
+            "to": "개발 배정"
+          }
+        ]
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F21_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F21",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:48.410237",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 궁수 직업 비율 높아짐에 대한 유저 의견 제보\n[분류]: 개선 제안\n[모듈]: 게임플레이·밸런스\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 미기재\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.579,
+      "load_duration_sec": 0.003,
+      "prompt_eval_count": 2388,
+      "eval_count": 96,
+      "tokens_per_sec": 66.66,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 궁수 직업 비율 높아짐에 대한 유저 의견 제보\n[분류]: 개선 제안\n[모듈]: 게임플레이·밸런스\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 미기재\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.579
+        }
+      ],
+      "retried": false,
+      "critical_checked": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 궁수 직업 비율 높아짐에 대한 유저 의견 제보\n[분류]: 개선 제안\n[모듈]: 게임플레이·밸런스\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 미기재\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F22_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F22",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:49.815673",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 인벤토리 칸 수 부족 문제 제보\n[분류]: 개선 제안\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.405,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2402,
+      "eval_count": 85,
+      "tokens_per_sec": 66.82,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 인벤토리 칸 수 부족 문제 제보\n[분류]: 개선 제안\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.405
+        }
+      ],
+      "retried": false,
+      "critical_checked": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 인벤토리 칸 수 부족 문제 제보\n[분류]: 개선 제안\n[모듈]: UI·텍스트\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 항상\n[처리]: 개발 배정\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F23_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F23",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:51.238257",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 7일 출석 보상 우편 미지급\n[분류]: 버그 아님\n[모듈]: 결제·재화\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 없음",
+      "elapsed_sec": 1.421,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2396,
+      "eval_count": 87,
+      "tokens_per_sec": 66.84,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 7일 출석 보상 우편 미지급\n[분류]: 버그 아님\n[모듈]: 결제·재화\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.421
+        }
+      ],
+      "retried": false,
+      "critical_checked": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 7일 출석 보상 우편 미지급\n[분류]: 버그 아님\n[모듈]: 결제·재화\n[우선순위]: Minor\n[재현 정보]: 충분\n[발생 빈도]: 1회\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F24_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F24",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:52.571590",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 판매 글 게시\n[분류]: 문의·건의\n[모듈]: 해당 없음\n[우선순위]: 해당 없음\n[재현 정보]: 충분\n[발생 빈도]: 해당 없음\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 해당 없음",
+      "elapsed_sec": 1.333,
+      "load_duration_sec": 0.004,
+      "prompt_eval_count": 2380,
+      "eval_count": 81,
+      "tokens_per_sec": 66.83,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 판매 글 게시\n[분류]: 문의·건의\n[모듈]: 해당 없음\n[우선순위]: 해당 없음\n[재현 정보]: 충분\n[발생 빈도]: 해당 없음\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 해당 없음",
+          "failed_rules": [],
+          "elapsed_sec": 1.333
+        }
+      ],
+      "retried": false,
+      "critical_checked": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 판매 글 게시\n[분류]: 문의·건의\n[모듈]: 해당 없음\n[우선순위]: 해당 없음\n[재현 정보]: 충분\n[발생 빈도]: 해당 없음\n[처리]: CS 응대\n[누락 정보 및 권장 조치]: 해당 없음",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    },
+    {
+      "eval_id": "qwen2.5_7b_F25_run2",
+      "model": "qwen2.5:7b",
+      "run_index": 2,
+      "item_id": "F25",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "seed": 2,
+      "timestamp": "2026-10-04T22:45:54.322393",
+      "hit_num_predict": false,
+      "context_near_limit": false,
+      "success": true,
+      "response_text": "[요약]: 게임이 업데이트 후 작동하지 않음\n[분류]: 버그 아님\n[모듈]: 해당 없음\n[우선순위]: 판단보류\n[재현 정보]: 부족\n[발생 빈도]: 미기재\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 플랫폼, 기기 정보, 오류 메시지, 오류 발생 전 후 상황",
+      "elapsed_sec": 1.75,
+      "load_duration_sec": 0.005,
+      "prompt_eval_count": 2350,
+      "eval_count": 109,
+      "tokens_per_sec": 66.61,
+      "vram_mib": 4756.1,
+      "error_message": null,
+      "attempts": [
+        {
+          "kind": "first",
+          "response_text": "[요약]: 게임이 업데이트 후 작동하지 않음\n[분류]: 버그 아님\n[모듈]: 해당 없음\n[우선순위]: 판단보류\n[재현 정보]: 부족\n[발생 빈도]: 미기재\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 플랫폼, 기기 정보, 오류 메시지, 오류 발생 전 후 상황",
+          "failed_rules": [],
+          "elapsed_sec": 1.75
+        }
+      ],
+      "retried": false,
+      "critical_checked": false,
+      "discard_checked": false,
+      "raw_response_text": "[요약]: 게임이 업데이트 후 작동하지 않음\n[분류]: 버그 아님\n[모듈]: 해당 없음\n[우선순위]: 판단보류\n[재현 정보]: 부족\n[발생 빈도]: 미기재\n[처리]: 등록(재현 대기)\n[누락 정보 및 권장 조치]: 플랫폼, 기기 정보, 오류 메시지, 오류 발생 전 후 상황",
+      "guardrail": {
+        "version": "g2",
+        "applied": []
+      }
+    }
+  ]
+}

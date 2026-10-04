@@ -1,0 +1,4376 @@
+{
+  "log": "v14_final_m2_20261004_224554.json",
+  "summary": {
+    "qwen2.5:7b": {
+      "전체": {
+        "n": 50,
+        "success": 50,
+        "strict_rate": 100.0,
+        "parsable_rate": 100.0,
+        "field_ok_rate": {
+          "분류": 78.0,
+          "우선순위": 68.0,
+          "모듈": 76.0,
+          "재현 정보": 88.0,
+          "발생 빈도": 78.0,
+          "처리": 72.0
+        },
+        "field_best_rate": {
+          "분류": 74.0,
+          "우선순위": 62.0,
+          "모듈": 68.0,
+          "재현 정보": 88.0,
+          "발생 빈도": 76.0,
+          "처리": 68.0
+        },
+        "all_fields_ok_rate": 32.0,
+        "risk_miss": {
+          "X-1": 2,
+          "X-2": 0,
+          "X-3": 0
+        },
+        "risk_items": {
+          "X-1": 10,
+          "X-2": 42,
+          "X-3": 2
+        },
+        "over_escalation": 3,
+        "hallucination_count": 0,
+        "language_violation": 0,
+        "required_coverage_rate": 14.3,
+        "latency_sec_mean": 2.294,
+        "prompt_tokens_max": 2604,
+        "rule_failures": {}
+      },
+      "대표 세트": {
+        "n": 50,
+        "success": 50,
+        "strict_rate": 100.0,
+        "parsable_rate": 100.0,
+        "field_ok_rate": {
+          "분류": 78.0,
+          "우선순위": 68.0,
+          "모듈": 76.0,
+          "재현 정보": 88.0,
+          "발생 빈도": 78.0,
+          "처리": 72.0
+        },
+        "field_best_rate": {
+          "분류": 74.0,
+          "우선순위": 62.0,
+          "모듈": 68.0,
+          "재현 정보": 88.0,
+          "발생 빈도": 76.0,
+          "처리": 68.0
+        },
+        "all_fields_ok_rate": 32.0,
+        "risk_miss": {
+          "X-1": 2,
+          "X-2": 0,
+          "X-3": 0
+        },
+        "risk_items": {
+          "X-1": 10,
+          "X-2": 42,
+          "X-3": 2
+        },
+        "over_escalation": 3,
+        "hallucination_count": 0,
+        "language_violation": 0,
+        "required_coverage_rate": 14.3,
+        "latency_sec_mean": 2.294,
+        "prompt_tokens_max": 2604,
+        "rule_failures": {}
+      },
+      "집중 세트": {
+        "n": 0
+      }
+    }
+  },
+  "per_response": [
+    {
+      "eval_id": "qwen2.5_7b_F01_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F01",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Critical"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "모듈": {
+          "predicted": "계정·로그인",
+          "allowed": [
+            "계정·로그인"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "등록(재현 대기)",
+          "allowed": [
+            "긴급 사인 요청"
+          ],
+          "ok": false,
+          "best": false
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [
+        "X-1"
+      ],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.473,
+      "prompt_eval_count": 2505
+    },
+    {
+      "eval_id": "qwen2.5_7b_F02_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F02",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Critical",
+          "allowed": [
+            "Critical"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "UI·텍스트, 게임플레이·밸런스",
+          "allowed": [
+            "콘텐츠 진행",
+            "UI·텍스트"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "긴급 사인 요청",
+          "allowed": [
+            "긴급 사인 요청"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.555,
+      "prompt_eval_count": 2568
+    },
+    {
+      "eval_id": "qwen2.5_7b_F03_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F03",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "버그 아님",
+          "allowed": [
+            "결함"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "우선순위": {
+          "predicted": "Minor",
+          "allowed": [
+            "Major",
+            "Critical"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "모듈": {
+          "predicted": "결제·재화",
+          "allowed": [
+            "결제·재화"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "1회"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "처리": {
+          "predicted": "등록(재현 대기)",
+          "allowed": [
+            "등록(재현 대기)",
+            "긴급 사인 요청"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 2,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 1.718,
+      "prompt_eval_count": 2486
+    },
+    {
+      "eval_id": "qwen2.5_7b_F04_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F04",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Critical",
+          "allowed": [
+            "Critical"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "결제·재화",
+          "allowed": [
+            "결제·재화"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "긴급 사인 요청",
+          "allowed": [
+            "긴급 사인 요청"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": true,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.359,
+      "prompt_eval_count": 2579
+    },
+    {
+      "eval_id": "qwen2.5_7b_F05_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F05",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Critical",
+          "allowed": [
+            "Critical"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "클라이언트 안정성",
+          "allowed": [
+            "클라이언트 안정성",
+            "플랫폼 호환성"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "긴급 사인 요청",
+          "allowed": [
+            "긴급 사인 요청"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": true,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.474,
+      "prompt_eval_count": 2604
+    },
+    {
+      "eval_id": "qwen2.5_7b_F06_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F06",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Major",
+            "Minor"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "계정·로그인",
+          "allowed": [
+            "계정·로그인"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "1회",
+          "allowed": [
+            "1회",
+            "미기재"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "등록(재현 대기)",
+          "allowed": [
+            "등록(재현 대기)"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": true,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 2,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.515,
+      "prompt_eval_count": 2487
+    },
+    {
+      "eval_id": "qwen2.5_7b_F07_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F07",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Minor",
+            "Trivial"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "모듈": {
+          "predicted": "게임플레이·밸런스",
+          "allowed": [
+            "게임플레이·밸런스",
+            "콘텐츠 진행"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "간헐적",
+          "allowed": [
+            "간헐적"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "개발 배정",
+          "allowed": [
+            "개발 배정"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.571,
+      "prompt_eval_count": 2516
+    },
+    {
+      "eval_id": "qwen2.5_7b_F08_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F08",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Major"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "UI·텍스트, 네트워크",
+          "allowed": [
+            "클라이언트 안정성",
+            "UI·텍스트",
+            "플랫폼 호환성"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "등록(재현 대기)",
+          "allowed": [
+            "등록(재현 대기)"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.749,
+      "prompt_eval_count": 2487
+    },
+    {
+      "eval_id": "qwen2.5_7b_F09_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F09",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Major"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "결제·재화/게임플레이·밸런스",
+          "allowed": [
+            "클라이언트 안정성",
+            "콘텐츠 진행"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "간헐적",
+          "allowed": [
+            "간헐적"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "등록(재현 대기)",
+          "allowed": [
+            "등록(재현 대기)"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 1,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.599,
+      "prompt_eval_count": 2472
+    },
+    {
+      "eval_id": "qwen2.5_7b_F10_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F10",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Major",
+            "Minor"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "게임플레이·밸런스",
+          "allowed": [
+            "게임플레이·밸런스",
+            "콘텐츠 진행"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "등록(재현 대기)",
+          "allowed": [
+            "등록(재현 대기)"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": true,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.702,
+      "prompt_eval_count": 2477
+    },
+    {
+      "eval_id": "qwen2.5_7b_F11_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F11",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Minor",
+          "allowed": [
+            "Minor",
+            "Trivial"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "그래픽·사운드",
+          "allowed": [
+            "그래픽·사운드"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "개발 배정",
+          "allowed": [
+            "개발 배정"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": true,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.477,
+      "prompt_eval_count": 2528
+    },
+    {
+      "eval_id": "qwen2.5_7b_F12_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F12",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Major",
+            "Minor"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "UI·텍스트",
+          "allowed": [
+            "UI·텍스트",
+            "결제·재화"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "개발 배정",
+          "allowed": [
+            "개발 배정"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": true,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.46,
+      "prompt_eval_count": 2516
+    },
+    {
+      "eval_id": "qwen2.5_7b_F13_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F13",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Critical",
+          "allowed": [
+            "Critical"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "계정·로그인",
+          "allowed": [
+            "보안·어뷰징",
+            "콘텐츠 진행"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "미기재"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "처리": {
+          "predicted": "긴급 사인 요청",
+          "allowed": [
+            "긴급 사인 요청"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 1,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.61,
+      "prompt_eval_count": 2582
+    },
+    {
+      "eval_id": "qwen2.5_7b_F14_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F14",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Minor",
+          "allowed": [
+            "Minor",
+            "Trivial"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "그래픽·사운드",
+          "allowed": [
+            "그래픽·사운드"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "등록(재현 대기)",
+          "allowed": [
+            "등록(재현 대기)"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": true,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.704,
+      "prompt_eval_count": 2417
+    },
+    {
+      "eval_id": "qwen2.5_7b_F15_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F15",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Minor",
+          "allowed": [
+            "Minor",
+            "Trivial"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "UI·텍스트",
+          "allowed": [
+            "결제·재화",
+            "UI·텍스트"
+          ],
+          "ok": true,
+          "best": false
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "간헐적",
+          "allowed": [
+            "항상"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "처리": {
+          "predicted": "개발 배정",
+          "allowed": [
+            "개발 배정"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.502,
+      "prompt_eval_count": 2536
+    },
+    {
+      "eval_id": "qwen2.5_7b_F16_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F16",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함",
+            "문의·건의"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Critical",
+          "allowed": [
+            "판단보류"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "모듈": {
+          "predicted": "게임플레이·밸런스",
+          "allowed": [
+            "게임플레이·밸런스",
+            "결제·재화"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "1회"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "처리": {
+          "predicted": "긴급 사인 요청",
+          "allowed": [
+            "등록(재현 대기)"
+          ],
+          "ok": false,
+          "best": false
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": true,
+      "required_total": 3,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.519,
+      "prompt_eval_count": 2464
+    },
+    {
+      "eval_id": "qwen2.5_7b_F17_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F17",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Critical",
+          "allowed": [
+            "Minor",
+            "Trivial"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "모듈": {
+          "predicted": "UI·텍스트",
+          "allowed": [
+            "UI·텍스트"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "긴급 사인 요청",
+          "allowed": [
+            "개발 배정"
+          ],
+          "ok": false,
+          "best": false
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": true,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.546,
+      "prompt_eval_count": 2554
+    },
+    {
+      "eval_id": "qwen2.5_7b_F18_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F18",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "버그 아님",
+          "allowed": [
+            "결함"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "우선순위": {
+          "predicted": "판단보류",
+          "allowed": [
+            "Major",
+            "Minor"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "모듈": {
+          "predicted": "UI·텍스트, 네트워크",
+          "allowed": [
+            "콘텐츠 진행",
+            "보안·어뷰징"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "1회",
+          "allowed": [
+            "1회"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "등록(재현 대기)",
+          "allowed": [
+            "등록(재현 대기)"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 1,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.298,
+      "prompt_eval_count": 2449
+    },
+    {
+      "eval_id": "qwen2.5_7b_F19_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F19",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Major"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "결제·재화",
+          "allowed": [
+            "결제·재화",
+            "계정·로그인"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "등록(재현 대기)",
+          "allowed": [
+            "등록(재현 대기)"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": true,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.576,
+      "prompt_eval_count": 2453
+    },
+    {
+      "eval_id": "qwen2.5_7b_F20_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F20",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Minor",
+            "Trivial"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "모듈": {
+          "predicted": "콘텐츠 진행",
+          "allowed": [
+            "UI·텍스트",
+            "콘텐츠 진행"
+          ],
+          "ok": true,
+          "best": false
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "개발 배정",
+          "allowed": [
+            "개발 배정"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.452,
+      "prompt_eval_count": 2562
+    },
+    {
+      "eval_id": "qwen2.5_7b_F21_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F21",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "개선 제안",
+          "allowed": [
+            "문의·건의"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "우선순위": {
+          "predicted": "Minor",
+          "allowed": [
+            "해당 없음"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "모듈": {
+          "predicted": "게임플레이·밸런스",
+          "allowed": [
+            "게임플레이·밸런스"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "부족"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "발생 빈도": {
+          "predicted": "1회",
+          "allowed": [
+            "해당 없음",
+            "미기재"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "처리": {
+          "predicted": "개발 배정",
+          "allowed": [
+            "CS 응대"
+          ],
+          "ok": false,
+          "best": false
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 1.55,
+      "prompt_eval_count": 2388
+    },
+    {
+      "eval_id": "qwen2.5_7b_F22_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F22",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "개선 제안",
+          "allowed": [
+            "문의·건의",
+            "개선 제안"
+          ],
+          "ok": true,
+          "best": false
+        },
+        "우선순위": {
+          "predicted": "Minor",
+          "allowed": [
+            "해당 없음",
+            "Trivial"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "모듈": {
+          "predicted": "UI·텍스트",
+          "allowed": [
+            "UI·텍스트",
+            "게임플레이·밸런스"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "부족"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "해당 없음",
+            "미기재"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "처리": {
+          "predicted": "개발 배정",
+          "allowed": [
+            "CS 응대",
+            "개발 배정"
+          ],
+          "ok": true,
+          "best": false
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 1.411,
+      "prompt_eval_count": 2402
+    },
+    {
+      "eval_id": "qwen2.5_7b_F23_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F23",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "버그 아님",
+          "allowed": [
+            "중복 의심"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "우선순위": {
+          "predicted": "Minor",
+          "allowed": [
+            "Major",
+            "Minor"
+          ],
+          "ok": true,
+          "best": false
+        },
+        "모듈": {
+          "predicted": "결제·재화",
+          "allowed": [
+            "결제·재화"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분",
+            "부족"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "1회",
+          "allowed": [
+            "1회"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "CS 응대",
+          "allowed": [
+            "폐기"
+          ],
+          "ok": false,
+          "best": false
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 1,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 1.411,
+      "prompt_eval_count": 2396
+    },
+    {
+      "eval_id": "qwen2.5_7b_F24_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F24",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "문의·건의",
+          "allowed": [
+            "무관"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "우선순위": {
+          "predicted": "해당 없음",
+          "allowed": [
+            "해당 없음"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "해당 없음",
+          "allowed": [],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "부족"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "발생 빈도": {
+          "predicted": "해당 없음",
+          "allowed": [
+            "해당 없음",
+            "미기재"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "CS 응대",
+          "allowed": [
+            "폐기"
+          ],
+          "ok": false,
+          "best": false
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 1.333,
+      "prompt_eval_count": 2380
+    },
+    {
+      "eval_id": "qwen2.5_7b_F25_run1",
+      "model": "qwen2.5:7b",
+      "item_id": "F25",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 1,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "버그 아님",
+          "allowed": [
+            "결함",
+            "문의·건의"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "우선순위": {
+          "predicted": "판단보류",
+          "allowed": [
+            "판단보류",
+            "해당 없음"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "해당 없음",
+          "allowed": [
+            "클라이언트 안정성",
+            "네트워크",
+            "계정·로그인"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "재현 정보": {
+          "predicted": "부족",
+          "allowed": [
+            "부족"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "미기재",
+          "allowed": [
+            "미기재"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "등록(재현 대기)",
+          "allowed": [
+            "CS 응대",
+            "정보 요청 후 보류"
+          ],
+          "ok": false,
+          "best": false
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 3,
+      "required_covered": 2,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 1.687,
+      "prompt_eval_count": 2350
+    },
+    {
+      "eval_id": "qwen2.5_7b_F01_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F01",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Critical"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "모듈": {
+          "predicted": "계정·로그인",
+          "allowed": [
+            "계정·로그인"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "등록(재현 대기)",
+          "allowed": [
+            "긴급 사인 요청"
+          ],
+          "ok": false,
+          "best": false
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [
+        "X-1"
+      ],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.482,
+      "prompt_eval_count": 2505
+    },
+    {
+      "eval_id": "qwen2.5_7b_F02_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F02",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Critical",
+          "allowed": [
+            "Critical"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "UI·텍스트, 게임플레이·밸런스",
+          "allowed": [
+            "콘텐츠 진행",
+            "UI·텍스트"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "긴급 사인 요청",
+          "allowed": [
+            "긴급 사인 요청"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.493,
+      "prompt_eval_count": 2568
+    },
+    {
+      "eval_id": "qwen2.5_7b_F03_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F03",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Major",
+            "Critical"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "결제·재화",
+          "allowed": [
+            "결제·재화"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "1회"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "처리": {
+          "predicted": "등록(재현 대기)",
+          "allowed": [
+            "등록(재현 대기)",
+            "긴급 사인 요청"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 2,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.47,
+      "prompt_eval_count": 2486
+    },
+    {
+      "eval_id": "qwen2.5_7b_F04_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F04",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Critical",
+          "allowed": [
+            "Critical"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "결제·재화",
+          "allowed": [
+            "결제·재화"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "긴급 사인 요청",
+          "allowed": [
+            "긴급 사인 요청"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": true,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.371,
+      "prompt_eval_count": 2579
+    },
+    {
+      "eval_id": "qwen2.5_7b_F05_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F05",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Critical",
+          "allowed": [
+            "Critical"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "클라이언트 안정성",
+          "allowed": [
+            "클라이언트 안정성",
+            "플랫폼 호환성"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "긴급 사인 요청",
+          "allowed": [
+            "긴급 사인 요청"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": true,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.485,
+      "prompt_eval_count": 2604
+    },
+    {
+      "eval_id": "qwen2.5_7b_F06_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F06",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Major",
+            "Minor"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "계정·로그인",
+          "allowed": [
+            "계정·로그인"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "1회",
+          "allowed": [
+            "1회",
+            "미기재"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "등록(재현 대기)",
+          "allowed": [
+            "등록(재현 대기)"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": true,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 2,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.531,
+      "prompt_eval_count": 2487
+    },
+    {
+      "eval_id": "qwen2.5_7b_F07_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F07",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Minor",
+            "Trivial"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "모듈": {
+          "predicted": "게임플레이·밸런스",
+          "allowed": [
+            "게임플레이·밸런스",
+            "콘텐츠 진행"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "간헐적",
+          "allowed": [
+            "간헐적"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "개발 배정",
+          "allowed": [
+            "개발 배정"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.58,
+      "prompt_eval_count": 2516
+    },
+    {
+      "eval_id": "qwen2.5_7b_F08_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F08",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Major"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "UI·텍스트, 네트워크",
+          "allowed": [
+            "클라이언트 안정성",
+            "UI·텍스트",
+            "플랫폼 호환성"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "등록(재현 대기)",
+          "allowed": [
+            "등록(재현 대기)"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.759,
+      "prompt_eval_count": 2487
+    },
+    {
+      "eval_id": "qwen2.5_7b_F09_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F09",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Major"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "결제·재화",
+          "allowed": [
+            "클라이언트 안정성",
+            "콘텐츠 진행"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "간헐적",
+          "allowed": [
+            "간헐적"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "등록(재현 대기)",
+          "allowed": [
+            "등록(재현 대기)"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 1,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.468,
+      "prompt_eval_count": 2472
+    },
+    {
+      "eval_id": "qwen2.5_7b_F10_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F10",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Major",
+            "Minor"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "게임플레이·밸런스",
+          "allowed": [
+            "게임플레이·밸런스",
+            "콘텐츠 진행"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "등록(재현 대기)",
+          "allowed": [
+            "등록(재현 대기)"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": true,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.575,
+      "prompt_eval_count": 2477
+    },
+    {
+      "eval_id": "qwen2.5_7b_F11_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F11",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Minor",
+          "allowed": [
+            "Minor",
+            "Trivial"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "그래픽·사운드",
+          "allowed": [
+            "그래픽·사운드"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "개발 배정",
+          "allowed": [
+            "개발 배정"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": true,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.484,
+      "prompt_eval_count": 2528
+    },
+    {
+      "eval_id": "qwen2.5_7b_F12_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F12",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Major",
+            "Minor"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "UI·텍스트",
+          "allowed": [
+            "UI·텍스트",
+            "결제·재화"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "개발 배정",
+          "allowed": [
+            "개발 배정"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": true,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.469,
+      "prompt_eval_count": 2516
+    },
+    {
+      "eval_id": "qwen2.5_7b_F13_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F13",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Critical",
+          "allowed": [
+            "Critical"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "계정·로그인/콘텐츠 진행",
+          "allowed": [
+            "보안·어뷰징",
+            "콘텐츠 진행"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "미기재"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "처리": {
+          "predicted": "긴급 사인 요청",
+          "allowed": [
+            "긴급 사인 요청"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 1,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.688,
+      "prompt_eval_count": 2582
+    },
+    {
+      "eval_id": "qwen2.5_7b_F14_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F14",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Minor",
+          "allowed": [
+            "Minor",
+            "Trivial"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "그래픽·사운드",
+          "allowed": [
+            "그래픽·사운드"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "등록(재현 대기)",
+          "allowed": [
+            "등록(재현 대기)"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": true,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.711,
+      "prompt_eval_count": 2417
+    },
+    {
+      "eval_id": "qwen2.5_7b_F15_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F15",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Minor",
+          "allowed": [
+            "Minor",
+            "Trivial"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "UI·텍스트",
+          "allowed": [
+            "결제·재화",
+            "UI·텍스트"
+          ],
+          "ok": true,
+          "best": false
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "간헐적",
+          "allowed": [
+            "항상"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "처리": {
+          "predicted": "개발 배정",
+          "allowed": [
+            "개발 배정"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.497,
+      "prompt_eval_count": 2536
+    },
+    {
+      "eval_id": "qwen2.5_7b_F16_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F16",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함",
+            "문의·건의"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Critical",
+          "allowed": [
+            "판단보류"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "모듈": {
+          "predicted": "게임플레이·밸런스",
+          "allowed": [
+            "게임플레이·밸런스",
+            "결제·재화"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "1회"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "처리": {
+          "predicted": "긴급 사인 요청",
+          "allowed": [
+            "등록(재현 대기)"
+          ],
+          "ok": false,
+          "best": false
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": true,
+      "required_total": 3,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.709,
+      "prompt_eval_count": 2464
+    },
+    {
+      "eval_id": "qwen2.5_7b_F17_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F17",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Minor",
+            "Trivial"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "모듈": {
+          "predicted": "UI·텍스트",
+          "allowed": [
+            "UI·텍스트"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "개발 배정",
+          "allowed": [
+            "개발 배정"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.486,
+      "prompt_eval_count": 2554
+    },
+    {
+      "eval_id": "qwen2.5_7b_F18_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F18",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "버그 아님",
+          "allowed": [
+            "결함"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "우선순위": {
+          "predicted": "Minor",
+          "allowed": [
+            "Major",
+            "Minor"
+          ],
+          "ok": true,
+          "best": false
+        },
+        "모듈": {
+          "predicted": "UI·텍스트",
+          "allowed": [
+            "콘텐츠 진행",
+            "보안·어뷰징"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "1회",
+          "allowed": [
+            "1회"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "CS 응대",
+          "allowed": [
+            "등록(재현 대기)"
+          ],
+          "ok": false,
+          "best": false
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 1,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 1.56,
+      "prompt_eval_count": 2449
+    },
+    {
+      "eval_id": "qwen2.5_7b_F19_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F19",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Major"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "결제·재화",
+          "allowed": [
+            "결제·재화",
+            "계정·로그인"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "등록(재현 대기)",
+          "allowed": [
+            "등록(재현 대기)"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": true,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.588,
+      "prompt_eval_count": 2453
+    },
+    {
+      "eval_id": "qwen2.5_7b_F20_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F20",
+      "set": "representative",
+      "track": "B",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "결함",
+          "allowed": [
+            "결함"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "우선순위": {
+          "predicted": "Major",
+          "allowed": [
+            "Minor",
+            "Trivial"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "모듈": {
+          "predicted": "콘텐츠 진행",
+          "allowed": [
+            "UI·텍스트",
+            "콘텐츠 진행"
+          ],
+          "ok": true,
+          "best": false
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "항상"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "개발 배정",
+          "allowed": [
+            "개발 배정"
+          ],
+          "ok": true,
+          "best": true
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 2.547,
+      "prompt_eval_count": 2562
+    },
+    {
+      "eval_id": "qwen2.5_7b_F21_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F21",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "개선 제안",
+          "allowed": [
+            "문의·건의"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "우선순위": {
+          "predicted": "Minor",
+          "allowed": [
+            "해당 없음"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "모듈": {
+          "predicted": "게임플레이·밸런스",
+          "allowed": [
+            "게임플레이·밸런스"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "부족"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "발생 빈도": {
+          "predicted": "미기재",
+          "allowed": [
+            "해당 없음",
+            "미기재"
+          ],
+          "ok": true,
+          "best": false
+        },
+        "처리": {
+          "predicted": "개발 배정",
+          "allowed": [
+            "CS 응대"
+          ],
+          "ok": false,
+          "best": false
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 1.579,
+      "prompt_eval_count": 2388
+    },
+    {
+      "eval_id": "qwen2.5_7b_F22_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F22",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "개선 제안",
+          "allowed": [
+            "문의·건의",
+            "개선 제안"
+          ],
+          "ok": true,
+          "best": false
+        },
+        "우선순위": {
+          "predicted": "Minor",
+          "allowed": [
+            "해당 없음",
+            "Trivial"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "모듈": {
+          "predicted": "UI·텍스트",
+          "allowed": [
+            "UI·텍스트",
+            "게임플레이·밸런스"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "부족"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "발생 빈도": {
+          "predicted": "항상",
+          "allowed": [
+            "해당 없음",
+            "미기재"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "처리": {
+          "predicted": "개발 배정",
+          "allowed": [
+            "CS 응대",
+            "개발 배정"
+          ],
+          "ok": true,
+          "best": false
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 1.405,
+      "prompt_eval_count": 2402
+    },
+    {
+      "eval_id": "qwen2.5_7b_F23_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F23",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "버그 아님",
+          "allowed": [
+            "중복 의심"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "우선순위": {
+          "predicted": "Minor",
+          "allowed": [
+            "Major",
+            "Minor"
+          ],
+          "ok": true,
+          "best": false
+        },
+        "모듈": {
+          "predicted": "결제·재화",
+          "allowed": [
+            "결제·재화"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "충분",
+            "부족"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "1회",
+          "allowed": [
+            "1회"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "CS 응대",
+          "allowed": [
+            "폐기"
+          ],
+          "ok": false,
+          "best": false
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 1,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 1.421,
+      "prompt_eval_count": 2396
+    },
+    {
+      "eval_id": "qwen2.5_7b_F24_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F24",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "문의·건의",
+          "allowed": [
+            "무관"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "우선순위": {
+          "predicted": "해당 없음",
+          "allowed": [
+            "해당 없음"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "해당 없음",
+          "allowed": [],
+          "ok": true,
+          "best": true
+        },
+        "재현 정보": {
+          "predicted": "충분",
+          "allowed": [
+            "부족"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "발생 빈도": {
+          "predicted": "해당 없음",
+          "allowed": [
+            "해당 없음",
+            "미기재"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "CS 응대",
+          "allowed": [
+            "폐기"
+          ],
+          "ok": false,
+          "best": false
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 0,
+      "required_covered": 0,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 1.333,
+      "prompt_eval_count": 2380
+    },
+    {
+      "eval_id": "qwen2.5_7b_F25_run2",
+      "model": "qwen2.5:7b",
+      "item_id": "F25",
+      "set": "representative",
+      "track": "A",
+      "split": "final",
+      "run_index": 2,
+      "success": true,
+      "format": {
+        "rules": {
+          "R1_no_preamble": true,
+          "R2_all_fields": true,
+          "R3_field_order": true,
+          "R4_no_blank_line": true,
+          "R5_no_stray_text": true,
+          "R6_enum_valid": true,
+          "R7_output_language": true
+        },
+        "failed_rules": [],
+        "reasons": {},
+        "strict_pass": true,
+        "parsable_pass": true
+      },
+      "fields": {
+        "분류": {
+          "predicted": "버그 아님",
+          "allowed": [
+            "결함",
+            "문의·건의"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "우선순위": {
+          "predicted": "판단보류",
+          "allowed": [
+            "판단보류",
+            "해당 없음"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "모듈": {
+          "predicted": "해당 없음",
+          "allowed": [
+            "클라이언트 안정성",
+            "네트워크",
+            "계정·로그인"
+          ],
+          "ok": false,
+          "best": false
+        },
+        "재현 정보": {
+          "predicted": "부족",
+          "allowed": [
+            "부족"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "발생 빈도": {
+          "predicted": "미기재",
+          "allowed": [
+            "미기재"
+          ],
+          "ok": true,
+          "best": true
+        },
+        "처리": {
+          "predicted": "등록(재현 대기)",
+          "allowed": [
+            "CS 응대",
+            "정보 요청 후 보류"
+          ],
+          "ok": false,
+          "best": false
+        }
+      },
+      "all_fields_ok": false,
+      "risk_miss": [],
+      "over_escalation": false,
+      "required_total": 3,
+      "required_covered": 2,
+      "hallucinated": false,
+      "ungrounded": [],
+      "elapsed_sec": 1.75,
+      "prompt_eval_count": 2350
+    }
+  ]
+}
