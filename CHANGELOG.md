@@ -6,6 +6,15 @@
 
 ---
 
+## [Unreleased]
+
+### 변경 (v1.5 시작 전 정비)
+- README — 상단 요약과 2절을 현재 구성(v1.4)과 결과 중심으로 바꾸고, v1.0 모델 선정 내용은 3절 "출발점"으로 옮김(수치 변경 없음). 6절을 "안전장치와 한계"로 바꿔 v1.0 가드레일 설계가 현재 어떻게 구현됐는지와 v1.4 기준 남은 한계를 추가. 테스트 표에 v1.3·v1.4 테스트를 추가하고, 현재 채택 구성 실행 명령을 추가하고, 로드맵에서 v1.5를 다음 작업으로 표시
+- CHANGELOG — v1.4 절을 작업 단계 순서로 정렬, 버전 비교 링크(v1.0·v1.3·v1.4) 추가
+- `pyproject.toml` 프로젝트 설명, 패키지 설명문을 현재 구성에 맞춤 (동작 변경 없음)
+
+---
+
 ## [v1.4] — 2026-10-04
 
 > **답하려는 질문:** 판단 기준을 프롬프트 문장이 아닌 방식으로 전달하면 Critical 누락을 줄일 수 있는가?
@@ -29,9 +38,16 @@
   - 교체 규칙(측정 전 확정): 모든 seed에서 기준 통과 + seed 합계로 X-1 누락 감소(같으면 우선순위 정답 증가). 개선이 없으면 현재 모델 유지
 - 테스트 173 → 199개
 
-### 변경
+### 변경 (1단계: 실행 조건)
 - `run.py` — 모든 모델 호출에 `think=False`, 실행 기록에 `run_config.think`. 모델마다 실행 전에 메모리에서 내림(OBS-002의 `ollama stop`을 코드로 옮김). 기본 대상 모델을 `qwen2.5:7b` 하나로 변경(Llama 3.1은 정기 측정에서 제외)
 - 동작 동일성 확인: 변경 후 qwen2.5:7b 개발용 seed 1의 모델 원본·최종 응답 64/64가 v1.3 실행 기록과 같음
+
+### 모델 재선정 (2026-10-02~03, 개발용 32건 × 2회 × seed 3개)
+- 후보 8개 → 조건(한국어·VRAM 8GB·상업 라이선스·구조화 출력)으로 6개 사전 점검 → gemma4:12b·granite4:tiny-h 비교 측정
+- **결정: 현재 모델(qwen2.5:7b) 유지** — 두 후보 모두 seed 3개 전부에서 기준 미통과
+- gemma4:12b: X-1 누락 8→3, 우선순위 정답 119→158(seed 합계)로 판단은 앞섰으나, X-3(B12)·과잉 상신·처리 문항 회귀가 모든 seed의 같은 문항에서 반복. 날조 판정 6건은 탐지기 오판([ISSUE-008](docs/issue_log.md#issue-008) 재현)이나 제외해도 결론 동일
+- 한계: 프롬프트 v2.3이 현재 모델에 맞춰져 있음 ([KL-004](docs/issue_log.md#kl-004))
+- 보고서: [`report/eval_v14_model_selection.md`](report/eval_v14_model_selection.md)
 
 ### 수정 (2단계: 날조 탐지기)
 - `detect_hallucination.py` — 같은 수량을 다른 횟수 단위로 옮긴 응답("100번"→"100회", "한 번"→"1회")을 날조로 판정하던 오탐 수정. 숫자·고유어 수사 + 번·회·연·차례를 같은 횟수로 비교하고, "N번째"·"번호"는 제외 ([ISSUE-008](docs/issue_log.md#issue-008))
@@ -56,13 +72,6 @@
 - 동작 동일성 확인: 저장된 v1.3 실행 기록 27개를 변경 전후 코드로 다시 채점해 채점 결과 JSON 27개가 모두 같고, 보고서는 실행 기록 경로 표기 외에 같음
 - 테스트 218 → 225개
 
-### 추가 (6단계: 방법 실행·비교 도구)
-- `src/triage_eval/pipeline/methods.py` — M1 판정 예시(확정 문서 `docs/method/m1_examples.md`를 실행 시 읽음, CRLF 체크아웃에서도 같은 문자열), M2 Critical 체크리스트(6문항 JSON 스키마, 올리기만, 재현 정보 부족 시 서버 장애만 예외, 허용 값 밖 판단은 변경 안 함)
-- `run.py` — `--method m0|m1|m2|m1m2`(기본 m0). m0 외 방법은 v14 평가셋에서만 실행. 실행 기록에 `method`·`method_assets_sha256`·`critical_check_policy`. v1.4 실행 기록 이름에 방법 포함(`v14_dev_m2_<시각>.json`)
-- `src/triage_eval/pipeline/compare.py` (`uv run triage-compare`) — `method_selection_v14.toml`로 실험 A(방법)·B(모델) 판정. arm = 방법/모델. 개발용·v1.4·seed 구성·비교 외 조건 일치를 먼저 확인하고, 어긋나면 판정 거부(종료 코드 2). M1·M2가 모두 채택 대상이면 M1+M2 측정 안내
-- `prompt.py` — 프롬프트 조립 함수에 예시 블록 선택 인자(기본 빈 문자열이라 m0 프롬프트는 그대로, 테스트로 확인)
-- 테스트 226 → 259개 (예시·평가셋 표현 겹침 15% 미만, 체크리스트 규칙 9가지, 가짜 모델로 채택·기준 유지·'예' 편향 탈락·조건 불일치 거부)
-
 ### 추가 (5단계: 방법 비교 사전 등록)
 - `report/method_comparison_v14_plan.md` — 실험 A(모델 고정, M0·M1·M2·조건부 M1+M2)와 실험 B(방법 고정, qwen2.5:7b vs gemma4:12b)의 계획. 측정 전 커밋
   - M1: 판정 예시 4개(few-shot, [`docs/method/m1_examples.md`](docs/method/m1_examples.md)) — 등급 눈금(해당 없음·판단보류) 겨냥
@@ -73,12 +82,12 @@
 - 판정 기준서 §4.1 — Minor와 Trivial 상호 허용. v1.4 평가셋 15건(개발용 9, 최종 6)의 우선순위 허용 답에 반영(첫 정답은 그대로, `label_relaxed` 표시)
 - 테스트 225 → 226개
 
-### 모델 재선정 (2026-10-02~03, 개발용 32건 × 2회 × seed 3개)
-- 후보 8개 → 조건(한국어·VRAM 8GB·상업 라이선스·구조화 출력)으로 6개 사전 점검 → gemma4:12b·granite4:tiny-h 비교 측정
-- **결정: 현재 모델(qwen2.5:7b) 유지** — 두 후보 모두 seed 3개 전부에서 기준 미통과
-- gemma4:12b: X-1 누락 8→3, 우선순위 정답 119→158(seed 합계)로 판단은 앞섰으나, X-3(B12)·과잉 상신·처리 문항 회귀가 모든 seed의 같은 문항에서 반복. 날조 판정 6건은 탐지기 오판([ISSUE-008](docs/issue_log.md#issue-008) 재현)이나 제외해도 결론 동일
-- 한계: 프롬프트 v2.3이 현재 모델에 맞춰져 있음 ([KL-004](docs/issue_log.md#kl-004))
-- 보고서: [`report/eval_v14_model_selection.md`](report/eval_v14_model_selection.md)
+### 추가 (6단계: 방법 실행·비교 도구)
+- `src/triage_eval/pipeline/methods.py` — M1 판정 예시(확정 문서 `docs/method/m1_examples.md`를 실행 시 읽음, CRLF 체크아웃에서도 같은 문자열), M2 Critical 체크리스트(6문항 JSON 스키마, 올리기만, 재현 정보 부족 시 서버 장애만 예외, 허용 값 밖 판단은 변경 안 함)
+- `run.py` — `--method m0|m1|m2|m1m2`(기본 m0). m0 외 방법은 v14 평가셋에서만 실행. 실행 기록에 `method`·`method_assets_sha256`·`critical_check_policy`. v1.4 실행 기록 이름에 방법 포함(`v14_dev_m2_<시각>.json`)
+- `src/triage_eval/pipeline/compare.py` (`uv run triage-compare`) — `method_selection_v14.toml`로 실험 A(방법)·B(모델) 판정. arm = 방법/모델. 개발용·v1.4·seed 구성·비교 외 조건 일치를 먼저 확인하고, 어긋나면 판정 거부(종료 코드 2). M1·M2가 모두 채택 대상이면 M1+M2 측정 안내
+- `prompt.py` — 프롬프트 조립 함수에 예시 블록 선택 인자(기본 빈 문자열이라 m0 프롬프트는 그대로, 테스트로 확인)
+- 테스트 226 → 259개 (예시·평가셋 표현 겹침 15% 미만, 체크리스트 규칙 9가지, 가짜 모델로 채택·기준 유지·'예' 편향 탈락·조건 불일치 거부)
 
 ---
 
@@ -257,6 +266,9 @@
 - 결론: **Qwen2.5-7B 채택.** Llama-3.1-8B는 단문 리포트(Q08)에서 없는 결함과 PC 사양을 지어내 탈락
 - 상세: [`report/final_selection.md`](report/final_selection.md)
 
+[v1.4]: https://github.com/kokoball-eval/game-bug-triage-llm-eval/compare/v1.3...v1.4
+[v1.3]: https://github.com/kokoball-eval/game-bug-triage-llm-eval/compare/v1.2...v1.3
 [v1.2]: https://github.com/kokoball-eval/game-bug-triage-llm-eval/compare/v1.1.1...v1.2
 [v1.1.1]: https://github.com/kokoball-eval/game-bug-triage-llm-eval/compare/v1.1...v1.1.1
-[v1.1]: https://github.com/kokoball-eval/game-bug-triage-llm-eval/tree/v1.1
+[v1.1]: https://github.com/kokoball-eval/game-bug-triage-llm-eval/compare/v1.0-submission...v1.1
+[v1.0]: https://github.com/kokoball-eval/game-bug-triage-llm-eval/tree/v1.0-submission
