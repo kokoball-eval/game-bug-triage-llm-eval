@@ -63,6 +63,8 @@
 두 모델은 파라미터 규모(8.03B vs 7.61B)와 양자화(`Q4_K_M`)가 비슷합니다. **모델 자체의 차이 외 변수를 통제한 상태로 비교**할 수 있다는 점도 이 조합을 고른 이유입니다.
 
 > **선정 과정과 한계** — 후보군은 요구 조건을 정리한 뒤 LLM 도구의 제안을 출발점으로 추렸고, 최종 2종의 제원·라이선스·컨텍스트는 Model Card 원문으로 직접 확인했습니다. 다만 조건을 만족할 수 있는 다른 모델까지 폭넓게 탐색하지는 않았습니다. 5일 일정 안에서 후보 수보다 비교의 깊이를 우선했고, 후보 범위 확대는 후속 과제로 남깁니다.
+>
+> **(v1.4) 후보 범위 확대 결과** — 업무 요구사항(한국어, 구조화 출력, VRAM 8GB, 상업 라이선스)에서 조건을 다시 정해 후보 8개를 거르고, 6개를 사전 점검한 뒤 2개(gemma4:12b, granite4:tiny-h)를 현재 모델과 seed 3개로 비교했습니다. 측정 전에 정한 교체 규칙을 만족한 후보가 없어 **qwen2.5:7b를 유지**했습니다. gemma4:12b는 Critical 누락(8→3)과 우선순위 정답(119→158)이 앞섰지만, 처리 단계 회귀와 경계 건 확정 처리가 모든 seed의 같은 문항에서 반복됐습니다 (→ [`report/eval_v14_model_selection.md`](report/eval_v14_model_selection.md)).
 
 * **수행 형태**: 1인 단독 프로젝트 (환경 구성, 벤치마크 자동화, 정량/정성 평가 전 과정)
 * **실행 환경**: Windows 11 (AMD64), NVIDIA GeForce RTX 5060 Laptop GPU (VRAM 8,151 MiB), 시스템 RAM 31.4 GB, Ollama 0.34.0, Python 3.12.13 (`uv`) — 실측 근거: [`report/environment.md`](report/environment.md)
@@ -353,6 +355,22 @@ uv run triage-gate; echo "종료 코드: $LASTEXITCODE"           # 고정 기�
 * `--no-retry`, `--no-discard-check`, `--no-guardrail`로 형식 재요청·폐기 확인·후처리 안전장치를 끄면 모델 단독 성능을 잴 수 있습니다. 켜 둔 상태에서도 실행 기록에 모델 원본 응답(`raw_response_text`)이 함께 남습니다.
 * 결과: `data/results/v13/gate_result_v13.json`(기계 판독용), `report/regression_gate_v13.md`(판정 근거)
 
+### 9) v1.4 모델 재선정·방법 비교
+
+```powershell
+# 모델 재선정 — 후보 사전 점검(설치·생각 끄기·GPU 적재·구조화 출력·형식) → seed 3개 비교 → 교체 판정
+uv run triage-screen --model gemma4:12b
+uv run triage-select --run <seed1.json> --run <seed11.json> --run <seed21.json>   # 0 교체 · 1 유지 · 2 판정 불가
+
+# 방법 비교 — v1.4 평가셋 개발용 63건, 방법(m0·m1·m2·m1m2)마다 seed 1·11·21
+uv run triage-run --dataset v14 --seed 1 --strict-env --method m2
+uv run triage-compare --label a --run <실행 기록> ...                               # 0 채택 · 1 기준 유지 · 2 판정 불가
+```
+
+* `--dataset v14`는 v1.3의 63건(모두 개발용)과 새 최종 평가용 25건(`final`)으로 이루어진 평가셋을 씁니다. `final`은 `--final` 없이 실행되지 않고, 방법·모델 선택이 끝난 뒤 1회만 실행합니다.
+* 비교 기준은 측정 전에 커밋한 [`method_selection_v14.toml`](method_selection_v14.toml)과 [`report/method_comparison_v14_plan.md`](report/method_comparison_v14_plan.md)에 있습니다. 비교 대상 말고 다른 조건이 다르거나 seed가 빠지면 판정하지 않습니다.
+* 결과: `data/results/v14/compare_<a|b>.json`, `report/method_comparison_v14_<a|b>.md`
+
 ---
 
 ## 5. 저장소 구조와 상세 보고서
@@ -369,11 +387,16 @@ uv run triage-gate; echo "종료 코드: $LASTEXITCODE"           # 고정 기�
 | [`report/eval_v13.md`](report/eval_v13.md) | **(v1.3) 정답 대조 채점 요약.** 모델·세트별 칸별 정답률, 위험 건, 날조 (`pipeline/score.py` 생성, 가장 최근 실행 기준) |
 | [`report/eval_v13_final.md`](report/eval_v13_final.md) | **(v1.3) 최종 측정 보고서.** 평가용 세트 결과, 개발용 대비 비교, 모델 원본과 최종 출력 비교, 오답 원인 분석 |
 | [`report/regression_gate.md`](report/regression_gate.md) | **회귀 게이트 판정 근거.** 기준선 대비 최신 실행의 지표·기준별 판정·판정 변화 (`compare_runs.py` 생성) |
-| [`report/regression_gate_v13.md`](report/regression_gate_v13.md) | **(v1.3) 회귀 게이트 판정 근거.** 기준선 대비 후보 실행의 기준별 판정과 문항 단위 변화 (`gate_v13.py` 생성) |
-| [`CHANGELOG.md`](CHANGELOG.md) | **버전별 변경 이력.** v1.0부터 v1.3까지, 버전마다 답하려는 질문 |
+| [`report/regression_gate_v13.md`](report/regression_gate_v13.md) | **(v1.3) 회귀 게이트 판정 근거.** 기준선 대비 후보 실행의 기준별 판정과 문항 단위 변화 (`pipeline/gate.py` 생성) |
+| [`report/eval_v14_model_selection.md`](report/eval_v14_model_selection.md) | **(v1.4) 모델 재선정 보고서.** 업무 요구사항에서 정한 후보 조건, 사전 점검, seed 3개 비교, 현재 모델 유지 결정의 근거 |
+| [`report/model_selection_v14.md`](report/model_selection_v14.md) | **(v1.4) 모델 선택 판정표.** seed별 기준 판정 (`pipeline/selection.py` 생성) |
+| [`report/method_comparison_v14_plan.md`](report/method_comparison_v14_plan.md) | **(v1.4) 방법 비교 계획(사전 등록).** 비교하는 방법(M0·M1·M2), 채택 기준, 알려진 위험과 대응. 측정 전 커밋 |
+| [`CHANGELOG.md`](CHANGELOG.md) | **버전별 변경 이력.** v1.0부터 v1.4(진행 중)까지, 버전마다 답하려는 질문 |
 | [`docs/issue_log.md`](docs/issue_log.md) | **이슈 기록.** 고도화 중 발견한 결함, v1.3 실사용 시나리오, 알려진 한계, 관찰 사항을 현상 → 원인 → 조치 → 재발 방지 형식으로 정리 |
-| [`docs/dataset/triage_guideline.md`](docs/dataset/triage_guideline.md) | **(v1.3) 트리아지 판정 기준서.** 분류·우선순위·처리·발생 빈도 규칙과 조항별 근거(인터뷰 출처) |
-| [`docs/dataset/review_log.md`](docs/dataset/review_log.md) | **(v1.3) 평가셋 검토 기록.** 배치·전체 검토의 쟁점, 검토자 판단, 그에 따른 라벨·기준서 변경 |
+| [`docs/dataset/triage_guideline.md`](docs/dataset/triage_guideline.md) | **(v1.3, v1.4 보완) 트리아지 판정 기준서.** 분류·우선순위·처리·발생 빈도 규칙과 조항별 근거(인터뷰 출처) |
+| [`docs/dataset/review_log.md`](docs/dataset/review_log.md) | **(v1.3) 평가셋 검토 기록.** 배치·전체 검토의 쟁점, 검토자 판단, 그에 따른 라벨·기준서 변경 (v1.4 최종 평가용 세트 검토 포함) |
+| [`docs/dataset/final_v14_review.md`](docs/dataset/final_v14_review.md) | **(v1.4) 최종 평가용 세트 25건.** 문항 전문과 정답 라벨, 기존 문항과의 겹침 정도 |
+| [`docs/method/m1_examples.md`](docs/method/m1_examples.md) | **(v1.4) 방법 M1의 판정 예시 4개.** 측정 전 확정본 (실행 코드가 이 문서를 그대로 읽음) |
 
 ### 2) 디렉터리 구조
 
@@ -388,20 +411,27 @@ game-bug-triage-llm-eval/
 ├── pyproject.toml                # uv 기반 의존성 명세 (ollama, openai / 개발용 pytest)
 ├── gate_criteria.toml            # (v1.1) 회귀 게이트 합격 기준
 ├── gate_criteria_v13.toml        # (v1.3) 평가셋 회귀 게이트 합격 기준 (응답 수 기준 허용폭)
+├── model_selection_v14.toml      # (v1.4) 모델 교체 판정 기준 (지연 절대 기준, seed 수)
+├── method_selection_v14.toml     # (v1.4) 방법·모델 비교 채택 기준 (측정 전 커밋)
 ├── uv.lock                       # 의존성 잠금 파일 (재현 가능한 환경 구성)
 ├── README.md                     # 프로젝트 종합 대시보드 (본 문서)
 ├── CHANGELOG.md                  # 버전별 변경 이력
 ├── docs/
 │   ├── issue_log.md              # 결함·알려진 한계 기록 (현상 → 원인 → 조치 → 재발 방지)
-│   └── dataset/                  # (v1.3) 평가셋 근거 문서
-│       ├── triage_guideline.md   # 판정 기준서 (조항별 근거)
-│       ├── seed_plan.md          # 분류 체계·제보 품질 분포·문항 설계안
-│       ├── interview_round1~4.md # 설계 인터뷰 기록 (질문·답변 요지·결정 사항)
-│       └── review_log.md         # 배치·전체 검토의 쟁점·판단·반영 기록
+│   ├── dataset/                  # (v1.3) 평가셋 근거 문서
+│   │   ├── triage_guideline.md   # 판정 기준서 (조항별 근거)
+│   │   ├── seed_plan.md          # 분류 체계·제보 품질 분포·문항 설계안
+│   │   ├── interview_round1~4.md # 설계 인터뷰 기록 (질문·답변 요지·결정 사항)
+│   │   ├── review_log.md         # 배치·전체 검토의 쟁점·판단·반영 기록
+│   │   └── final_v14_review.md   # (v1.4) 최종 평가용 세트 25건 문항·라벨 (생성 문서)
+│   └── method/
+│       └── m1_examples.md        # (v1.4) 방법 M1의 판정 예시 4개 (측정 전 확정본)
 ├── data/
 │   ├── questions.json            # 고정 벤치마크 10건 (정상 6, 경계 2, 예외 2)
 │   ├── eval_v13/
 │   │   └── aether_raid_v13.json  # (v1.3) 현업 기반 평가셋 63건 (정답 라벨, dev/test 분할)
+│   ├── eval_v14/
+│   │   └── aether_raid_v14.json  # (v1.4) 63건 전부 개발용 + 새 최종 평가용 25건(final)
 │   └── results/
 │       ├── qwen2.5_7b_verify.json       # 1일차 단일 호출 검증 로그
 │       ├── llama3.1_8b_verify.json      # 1일차 단일 호출 검증 로그
@@ -417,7 +447,8 @@ game-bug-triage-llm-eval/
 │       │   ├── v1.0_local_eval_results.json # (v1.1) v1.0 기준선 — README 수치의 출처, 덮어쓰지 않음
 │       │   └── v1.2_seed1_local_eval_results.json # (v1.2) 기본 기준선 — seed=1, 깨끗한 환경
 │       ├── history/                     # 실행 기록 (run_eval.py 실행마다 생성, compare_runs.py 기본 후보)
-│       └── v13/                         # (v1.3) 평가셋 실행 기록(history/), 고정 기준선(baseline/), 채점 결과(score_*.json), 게이트 판정(gate_result_v13.json)
+│       ├── v13/                         # (v1.3) 평가셋 실행 기록(history/), 고정 기준선(baseline/), 채점 결과(score_*.json), 게이트 판정(gate_result_v13.json)
+│       └── v14/                         # (v1.4) 사전 점검(screening/), 모델 선택 판정, v1.4 평가셋 실행 기록(history/), 비교 판정(compare_*.json)
 ├── report/
 │   ├── model_comparison.md      # 로컬 2종 vs Cloud 상세 정량/정성 분석서
 │   ├── final_selection.md       # Qwen2.5 최종 선정 사유 및 배포 가드레일
@@ -427,7 +458,10 @@ game-bug-triage-llm-eval/
 │   ├── eval_v13_baseline.md     # (v1.3) 기준선 측정 보고서 (원인 분석)
 │   ├── eval_v13.md              # (v1.3) 정답 대조 채점 요약 (pipeline/score.py 생성)
 │   ├── eval_v13_final.md        # (v1.3) 평가용 세트 최종 측정 보고서
-│   └── regression_gate_v13.md   # (v1.3) 회귀 게이트 판정 근거 (gate_v13.py 생성)
+│   ├── regression_gate_v13.md   # (v1.3) 회귀 게이트 판정 근거 (pipeline/gate.py 생성)
+│   ├── eval_v14_model_selection.md # (v1.4) 모델 재선정 보고서
+│   ├── model_selection_v14.md   # (v1.4) 모델 선택 판정표 (pipeline/selection.py 생성)
+│   └── method_comparison_v14_plan.md # (v1.4) 방법 비교 계획 (사전 등록)
 ├── scripts/legacy/               # 5일 실험 당시의 일회용 스크립트 (v1.3 구조 정리 때 src/ 에서 이동)
 │   ├── 01_ollama_chat.py         # 단일 모델 적재/VRAM 측정 스모크 테스트
 │   ├── 02_luna_chat.py           # OpenAI Responses API Cloud 비교 스크립트
@@ -447,12 +481,17 @@ game-bug-triage-llm-eval/
 │   └── pipeline/                 # 현역 트리아지 파이프라인 (버전은 파일 이름이 아니라 코드 안 상수로 관리)
 │       ├── contract.py           # 출력 형식 v2 — 8칸 정의·파싱·형식 채점 (R1~R7)
 │       ├── prompt.py             # 판정 기준서 요약 프롬프트(v2.3)와 재요청·폐기 확인 질문 조립
-│       ├── run.py                # 평가셋 실행 — 형식 재요청, 폐기 확인, 후처리 안전장치  → triage-run
+│       ├── run.py                # 평가셋 실행 — 형식 재요청, 폐기 확인, 후처리 안전장치, (v1.4) 평가셋·방법 선택  → triage-run
+│       ├── methods.py            # (v1.4) 방법 M1(판정 예시)·M2(Critical 체크리스트)
 │       ├── guardrail.py          # 후처리 안전장치 g2 — [처리] 규칙 보정 (정답 라벨 미사용)
 │       ├── score.py              # 정답 대조 채점 (칸별 정답률·위험 건·과잉 상신·날조)   → triage-score
-│       └── gate.py               # 평가셋 회귀 게이트 판정                               → triage-gate
+│       ├── gate.py               # 평가셋 회귀 게이트 판정                               → triage-gate
+│       ├── screen.py             # (v1.4) 후보 모델 사전 점검                            → triage-screen
+│       ├── selection.py          # (v1.4) 모델 교체 판정 (seed 3개)                      → triage-select
+│       └── compare.py            # (v1.4) 방법·모델 비교 판정 (사전 등록 기준)            → triage-compare
 ├── tools/
-│   └── dataset_v13/              # (v1.3) 평가셋 생성·병합·검증 스크립트 (정답 라벨의 원본)
+│   ├── dataset_v13/              # (v1.3) 평가셋 생성·병합·검증 스크립트 (정답 라벨의 원본)
+│   └── dataset_v14/              # (v1.4) v1.4 평가셋 생성 (63건 개발용 전환 + 최종 평가용 25건 라벨 원본)
 └── tests/                        # (v1.1.1) 평가 도구 단위 테스트 (pytest)
     ├── conftest.py               # 공통 준비물 (기준선 로그 로드, 임시 파일)
     ├── test_score_format.py      # 포맷 채점 규칙 R1~R6
@@ -466,7 +505,12 @@ game-bug-triage-llm-eval/
     ├── test_pipeline_score.py    # (v1.3) 정답 대조 채점, 가짜 모델로 실행→채점 전 과정
     ├── test_pipeline_run.py      # (v1.3) 평가용 실행 차단, 문항 유출 없음, 형식 재요청·폐기 확인
     ├── test_pipeline_guardrail.py # (v1.3) 후처리 안전장치 규칙, 정답 라벨 미사용, 원본 보존
-    └── test_pipeline_gate.py     # (v1.3) 게이트 판정·비교 조건·기준 파일 검증
+    ├── test_pipeline_gate.py     # (v1.3) 게이트 판정·비교 조건·기준 파일 검증
+    ├── test_dataset_v14.py       # (v1.4) v1.4 평가셋 = 생성 결과, 63건 라벨 무변경, 최종 25건 원문 겹침 없음
+    ├── test_pipeline_screen.py   # (v1.4) 후보 사전 점검 판정
+    ├── test_pipeline_selection.py # (v1.4) 모델 교체 판정 규칙
+    ├── test_pipeline_methods.py  # (v1.4) M1 예시·M2 체크리스트 규칙, M0 프롬프트 불변
+    └── test_pipeline_compare.py  # (v1.4) 방법·모델 비교 판정, 비교 조건 불일치 거부
 ```
 
 </details>
@@ -487,9 +531,9 @@ game-bug-triage-llm-eval/
 
 ### 2) 이 실험의 한계
 
-* **표본 크기** — 고정 질문 10건을 40회 반복한 소규모 평가셋입니다. 실제 서비스의 엣지 케이스를 모두 대변하지는 못합니다.
+* **표본 크기** — 고정 질문 10건을 40회 반복한 소규모 평가셋입니다. 실제 서비스의 엣지 케이스를 모두 대변하지는 못합니다. *(v1.3에서 현업 기반 평가셋 63건, v1.4에서 새 최종 평가용 25건으로 보완)*
 * **평가자 1인** — QA 루브릭 채점에 주관이 포함됩니다. 이를 보완하기 위해 주관이 개입하지 않는 지표는 전부 스크립트로 기계 채점했습니다.
-* **생성 시드 미고정** — `seed`를 지정하지 않아 회차마다 출력이 달라질 수 있습니다. 재실행 시 동일한 응답이 나오는 것을 보장하지 않습니다. 상세 영향 범위는 [`report/final_selection.md`](report/final_selection.md) §6에 기록했습니다.
+* **생성 시드 미고정** — `seed`를 지정하지 않아 회차마다 출력이 달라질 수 있습니다. 재실행 시 동일한 응답이 나오는 것을 보장하지 않습니다. 상세 영향 범위는 [`report/final_selection.md`](report/final_selection.md) §6에 기록했습니다. *(v1.2에서 seed 고정 모드로 보완)*
 
 ---
 
@@ -520,8 +564,8 @@ v1.0은 "지금 어떤 모델이 이 업무에 맞는가"를 **한 번** 측정�
 | ✅&nbsp;v1.1.1 | 평가 도구 자체는 믿을 수 있는가? | 채점·게이트 로직 단위 테스트(pytest) + GitHub Actions CI |
 | ✅&nbsp;v1.2 | 가장 위험한 결함(날조)을 사람 없이 잡을 수 있는가? | 환각 자동 탐지 + seed 고정 모드 + 측정 환경 체크리스트 |
 | ✅&nbsp;v1.3 | 평가셋이 실제 현업 인입을 대표하는가? | ✅ 현업 기반 평가셋 63건 (분류 체계 → 판정 기준서 → 시드 케이스·정답 라벨), 개발용/평가용 분리 · ✅ 출력 형식 v2와 기준선 측정 · ✅ v1.3 게이트·실사용 시나리오 · ✅ 저장소 구조 정리 · ✅ 평가용 세트 최종 측정 |
-| ⏳&nbsp;v1.4 | 정답 라벨과 자동 채점을 믿을 수 있는가? | 채점자 간 라벨 일치율 + LLM-as-judge와 사람 채점의 일치율 |
-| ⏳&nbsp;v1.5 | 무엇을 자동 처리하고 무엇을 사람에게 넘길지 시스템이 판단할 수 있는가? | 확신도 기반 라우팅 + 자동 처리율·정확도·위험 건 누락 측정 |
+| 🔨&nbsp;v1.4 | 판단 기준을 프롬프트 문장이 아닌 방식으로 전달하면 Critical 누락을 줄일 수 있는가? | ✅ 모델 재선정(현재 모델 유지) · ✅ 날조 탐지기 오탐 수정 · ✅ 새 최종 평가용 세트 25건 · ✅ 방법 비교 사전 등록 · 🔨 방법 비교(실험 A 방법, 실험 B 모델) · ⏳ 최종 측정 |
+| ⏳&nbsp;v1.5 | 무엇을 자동 처리하고 무엇을 사람에게 넘길지 시스템이 판단할 수 있는가? | 채점자 간 라벨 일치율 + LLM-as-judge와 사람 채점의 일치율 → 확신도 기반 라우팅 + 자동 처리율·정확도·위험 건 누락 측정 |
 | ⏳&nbsp;v2.0 | 사람이 보지 않는 동안에도 BTS에 올바르게 인입되는가? | BTS 자동 인입 (Redmine) + 중복 티켓 감지(RAG) + 무인 운영 데모 |
 
 > ✅ 완료 · 🔨 다음 작업 · ⏳ 예정
@@ -556,8 +600,15 @@ v1.0은 "지금 어떤 모델이 이 업무에 맞는가"를 **한 번** 측정�
   정답 라벨의 원본은 생성 스크립트([`tools/dataset_v13/`](tools/dataset_v13/))이고 JSON은 그 결과물입니다. 테스트가 둘의 일치와 라벨 규칙 간 일관성을 CI에서 확인합니다.
 
   실사용 시나리오(프롬프트 수정 → 게이트 FAIL → 원인 분석 → 수정 → PASS)는 [ISSUE-007](docs/issue_log.md#issue-007)에 기록했습니다. 남은 한계는 [KL-002](docs/issue_log.md#kl-002)에 있습니다.
-* **v1.4** — 같은 기준서로 다른 채점자가 독립적으로 라벨을 달아 일치율을 잽니다. 일치하지 않는 건은 기준서가 모호하다는 신호이므로 기준서를 고칩니다. 이어서 LLM-as-judge의 채점이 사람 채점과 얼마나 일치하는지 측정해, 품질 채점 자동화를 어디까지 믿을 수 있는지 정합니다. 게이트 판정도 seed 하나가 아니라 여러 seed의 결과로 내리는 방식을 검토합니다(v1.3에서 seed에 따라 판정이 갈린 사례: [KL-002](docs/issue_log.md#kl-002)).
-* **v1.5** — 응답의 확신도, 환각 탐지 결과, 판단보류·Critical 여부를 근거로 **자동 등록 / 검토 큐**를 나눕니다. 자동 처리율을 높이는 것보다 **위험 건 누락 0건을 지키는 것**이 우선입니다. v1.0 보고서의 Human-in-the-Loop 큐 설계([`report/final_selection.md`](report/final_selection.md) §5)를 실제로 구현하고 측정하는 단계입니다.
+* **v1.4** — v1.3 최종 측정에서 모델 판단(Critical 인식·우선순위)이 처음 보는 리포트에서 크게 떨어졌습니다. 판단 문제의 해법은 판단을 더 잘하는 모델로 바꾸거나, 판단 기준을 전달하는 방법을 바꾸는 것입니다. 두 가지를 한 번에 바꾸면 무엇 덕분인지 알 수 없어 한 가지씩 비교합니다.
+  1. ✅ **모델 재선정** — 후보 8개 → 사전 점검 6개 → 비교 2개, seed 3개. 교체 규칙을 만족한 후보가 없어 qwen2.5:7b 유지 (→ [`report/eval_v14_model_selection.md`](report/eval_v14_model_selection.md)). 사전 점검 중 GPU 적재 판정의 거짓 통과를 발견해 판정 불가(HOLD) 규칙을 추가했습니다([ISSUE-009](docs/issue_log.md#issue-009))
+  2. ✅ **날조 탐지기 오탐 수정** — 같은 수량을 다른 횟수 표현으로 옮긴 응답("100번" → "100회")을 날조로 잡던 오탐을 고쳤습니다. 저장된 응답 2,545건을 다시 판정해 바뀐 판정이 이 오탐 사례뿐임을 확인했습니다([ISSUE-008](docs/issue_log.md#issue-008))
+  3. ✅ **새 최종 평가용 세트** — v1.3 평가용 31건은 결과를 이미 봤으므로 개발용으로 돌리고, 새 시나리오 25건을 검토 2회로 확정했습니다. 방법·모델 선택이 끝날 때까지 실행하지 않습니다 (→ [`docs/dataset/final_v14_review.md`](docs/dataset/final_v14_review.md))
+  4. ✅ **방법 비교 사전 등록** — M1(판정 예시 4개), M2(Critical 체크리스트 후 코드가 판정)와 채택 기준을 측정 전에 커밋했습니다 (→ [`report/method_comparison_v14_plan.md`](report/method_comparison_v14_plan.md))
+  5. 🔨 **방법 비교** — 실험 A(모델 고정, 방법 비교) 진행 중. 이어서 실험 B(정해진 방법으로 모델 비교)
+  6. ⏳ **최종 측정** — 정해진 방법·모델 조합으로 최종 평가용 25건을 1회 측정합니다
+
+* **v1.5** — 먼저 같은 기준서로 다른 채점자가 독립적으로 라벨을 달아 일치율을 재고, LLM-as-judge의 채점이 사람 채점과 얼마나 일치하는지 측정합니다. 라우팅이 "확신할 수 없는 건"을 고르려면 판정 기준과 채점이 믿을 만한지부터 알아야 하기 때문입니다(v1.4 계획에서 옮김). 이어서 응답의 확신도, 환각 탐지 결과, 판단보류·Critical 여부를 근거로 **자동 등록 / 검토 큐**를 나눕니다. 자동 처리율을 높이는 것보다 **위험 건 누락 0건을 지키는 것**이 우선입니다. v1.0 보고서의 Human-in-the-Loop 큐 설계([`report/final_selection.md`](report/final_selection.md) §5)를 실제로 구현하고 측정하는 단계입니다.
 * **v2.0** — 리포트가 쌓이면 자동으로 감지해 트리아지하고, BTS에 등록합니다. BTS는 사내 설치형인 **Redmine**(Docker 로컬 실행)을 써서 "외부 API 전송 불가" 전제를 지키고, 공개 데모용으로 녹화 영상을 함께 남깁니다. 과거 티켓을 검색해 중복 제보(예: Q10과 Q01)를 묶는 RAG를 붙이며, 검색이 끼면서 생기는 새 실패 유형(엉뚱한 티켓을 중복으로 판정)도 기존 게이트 체계로 측정합니다.
 
 ---
