@@ -1,15 +1,16 @@
-"""v1.3 평가셋 정답 대조 채점 — 출력 형식 v2.
+"""평가셋 정답 대조 채점 — 출력 형식 v2.
 
-run.py 실행 기록을 정답 라벨(data/eval_v13/aether_raid_v13.json)과 대조해
+run.py 실행 기록을 그 실행에 쓴 평가셋의 정답 라벨(v1.3 data/eval_v13/, v1.4 data/eval_v14/)과 대조해
 형식 준수, 칸별 정답률, 위험 건, 과잉 상신, 날조를 계산한다.
 
 사용법:
     uv run triage-score                       # data/results/v13/history/ 의 가장 최근 실행
     uv run triage-score --log <실행 기록.json>
+    uv run triage-score --dataset v14         # data/results/v14/history/ 의 가장 최근 실행
 
 출력:
-    data/results/v13/score_<실행 기록 이름>.json   기계 판독용 채점 결과 (문항별 상세 포함)
-    report/eval_v13.md                             사람이 읽는 채점 요약
+    data/results/<v13|v14>/score_<실행 기록 이름>.json   기계 판독용 채점 결과 (문항별 상세 포함)
+    report/eval_v13.md, report/eval_v14.md               사람이 읽는 채점 요약 (평가셋별)
 
 지표 정의
 ---------
@@ -36,6 +37,9 @@ run.py 실행 기록을 정답 라벨(data/eval_v13/aether_raid_v13.json)과 대
    정식 채점은 v1.4(LLM-as-judge와 사람 채점의 일치율 측정)에서 한다.
 6. 날조 판정은 detect_hallucination.detect() 를 그대로 쓰고, 근거 원문은 모델에 실제로 들어간 입력
    (prompt.build_input) 전체로 한다. 공지·기존 이슈에 있는 사실을 인용한 것은 날조가 아니다.
+7. (v1.4) 정답 라벨은 실행 기록의 metadata.dataset_version 으로 고른다(v1.3 → v13, v1.4 → v14).
+   채점하는 사람이 평가셋을 따로 지정하면 v1.4 실행을 v1.3 라벨로 채점하는 실수가 생길 수 있어, 실행 기록이 스스로 정한다.
+   알 수 없는 버전이면 채점하지 않고 종료 코드 2로 끝낸다. --dataset 은 --log 를 생략했을 때 가장 최근 실행을 찾을 폴더만 정한다.
 """
 
 import argparse
@@ -53,6 +57,9 @@ from triage_eval.pipeline.prompt import build_input
 DATASET = ROOT / "data" / "eval_v13" / "aether_raid_v13.json"
 HISTORY = ROOT / "data" / "results" / "v13" / "history"
 REPORT = ROOT / "report" / "eval_v13.md"
+DATASET_V14 = ROOT / "data" / "eval_v14" / "aether_raid_v14.json"   # 설계 의도 7
+HISTORY_V14 = ROOT / "data" / "results" / "v14" / "history"
+REPORT_V14 = ROOT / "report" / "eval_v14.md"
 
 JUDGED = ["분류", "우선순위", "모듈", "재현 정보", "발생 빈도", "처리"]
 CLOSING = {"개발 배정", "CS 응대", "폐기"}          # 사람 확인 없이 끝나는 처리 (X-3)
@@ -158,13 +165,19 @@ def aggregate(rows: list[dict], items: dict) -> dict:
     return out
 
 
-def latest_log() -> Path | None:
-    logs = sorted(HISTORY.glob("v13_*.json"))
+def latest_log(dataset: str = "v13") -> Path | None:
+    history = HISTORY if dataset == "v13" else HISTORY_V14
+    logs = sorted(history.glob(f"{dataset}_*.json"))
     return logs[-1] if logs else None
 
 
-def render_report(log_path: Path, summary: dict, rows: list[dict]) -> str:
-    L = [f"# v1.3 평가셋 채점 결과", "",
+def dataset_for(version: str) -> tuple[Path, Path] | None:
+    """설계 의도 7 — 실행 기록의 평가셋 버전으로 (정답 라벨 파일, 보고서 경로)를 고른다."""
+    return {"v1.3": (DATASET, REPORT), "v1.4": (DATASET_V14, REPORT_V14)}.get(version)
+
+
+def render_report(log_path: Path, summary: dict, rows: list[dict], version: str = "v1.3") -> str:
+    L = [f"# {version} 평가셋 채점 결과", "",
          f"> 실행 기록: `{rel(log_path)}` · `src/triage_eval/pipeline/score.py` 생성", ""]
     for model, by_set in summary.items():
         L += [f"## {model}", "", "| 지표 | " + " | ".join(by_set) + " |", "| :--- |" + " ---: |" * len(by_set)]
@@ -197,17 +210,25 @@ def render_report(log_path: Path, summary: dict, rows: list[dict]) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
-    p = argparse.ArgumentParser(description="v1.3 평가셋 정답 대조 채점")
+    p = argparse.ArgumentParser(description="평가셋 정답 대조 채점")
     p.add_argument("--log", type=Path, default=None)
-    p.add_argument("--no-report", action="store_true", help="report/eval_v13.md 를 쓰지 않음")
+    p.add_argument("--dataset", choices=["v13", "v14"], default="v13",
+                   help="--log 를 생략했을 때 가장 최근 실행을 찾을 평가셋 (기본: v13)")
+    p.add_argument("--no-report", action="store_true", help="report/eval_v13.md(또는 eval_v14.md) 를 쓰지 않음")
     args = p.parse_args(argv)
 
-    log_path = args.log or latest_log()
+    log_path = args.log or latest_log(args.dataset)
     if not log_path or not log_path.exists():
         print("채점할 실행 기록이 없습니다. 먼저 uv run triage-run 을 실행하세요.")
         return 2
     payload = json.loads(log_path.read_text(encoding="utf-8"))
-    items = {i["id"]: i for i in json.loads(DATASET.read_text(encoding="utf-8"))["items"]}
+    version = payload["metadata"].get("dataset_version")
+    picked = dataset_for(version)
+    if picked is None:
+        print(f"실행 기록의 평가셋 버전({version})에 맞는 정답 라벨이 없어 채점하지 않습니다.")
+        return 2
+    dataset_path, report_path = picked
+    items = {i["id"]: i for i in json.loads(dataset_path.read_text(encoding="utf-8"))["items"]}
     rows = [score_one(r, items[r["item_id"]]) for r in payload["results"]]
 
     summary = {}
@@ -221,14 +242,14 @@ def main(argv: list[str] | None = None) -> int:
     out.write_text(json.dumps({"log": log_path.name, "summary": summary, "per_response": rows},
                               ensure_ascii=False, indent=2), encoding="utf-8")
     if not args.no_report:
-        REPORT.write_text(render_report(log_path, summary, rows), encoding="utf-8")
+        report_path.write_text(render_report(log_path, summary, rows, version), encoding="utf-8")
 
     for model, by_set in summary.items():
         a = by_set["전체"]
         print(f"[{model}] n={a['n']} STRICT {a['strict_rate']}% · 처리 정답률 {a['field_ok_rate']['처리']}% · "
               f"전 칸 정답 {a['all_fields_ok_rate']}% · X-1/X-2/X-3 누락 {a['risk_miss']} · "
               f"과잉 상신 {a['over_escalation']} · 날조 {a['hallucination_count']} · 출력 언어 위반 {a['language_violation']}")
-    print(f"저장: {rel(out)}" + ("" if args.no_report else f", {rel(REPORT)}"))
+    print(f"저장: {rel(out)}" + ("" if args.no_report else f", {rel(report_path)}"))
     return 0
 
 

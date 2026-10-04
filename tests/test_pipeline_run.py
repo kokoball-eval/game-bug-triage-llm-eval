@@ -25,6 +25,29 @@ def test_test_split_requires_final_flag():
     assert check_split_guard("dev", final=False) is None
 
 
+DATA_V14 = json.loads((ROOT / "data/eval_v14/aether_raid_v14.json").read_text(encoding="utf-8"))
+
+
+def test_final_split_requires_final_flag():
+    """v1.4 최종 평가용(final)도 --final 없이 실행되지 않는다 (설계 의도 11)."""
+    assert check_split_guard("final", final=False)
+    assert check_split_guard("final", final=True) is None
+
+
+def test_v14_dataset_split_counts():
+    assert len(select_items(DATA_V14, "dev", "all")) == 63
+    assert len(select_items(DATA_V14, "final", "all")) == 25
+    assert select_items(DATA_V14, "test", "all") == []   # v1.4에는 test 분할이 없다
+
+
+def test_main_refuses_final_without_flag_and_empty_split():
+    """모델을 부르기 전에 막힌다 — 클라이언트를 만들지 않으므로 가짜 모델 없이 확인할 수 있다."""
+    from triage_eval.pipeline import run as pipeline_run
+    assert pipeline_run.main(["--dataset", "v14", "--split", "final"]) == 2           # --final 없음
+    assert pipeline_run.main(["--dataset", "v13", "--split", "final", "--final"]) == 2  # v1.3에는 final 없음
+    assert pipeline_run.main(["--dataset", "v14", "--split", "test", "--final"]) == 2   # v1.4에는 test 없음
+
+
 def test_options_fix_context_and_seed():
     assert OPTIONS_V2["num_ctx"] == 8192
     assert options_for(1, 2)["seed"] == 2 and "seed" not in OPTIONS_V2

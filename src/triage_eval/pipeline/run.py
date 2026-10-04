@@ -1,13 +1,16 @@
-"""v1.3 평가셋(data/eval_v13/aether_raid_v13.json) 실행 스크립트 — 출력 형식 v2.
+"""평가셋 실행 스크립트 — 출력 형식 v2. v1.3 평가셋(기본)과 v1.4 평가셋을 실행한다.
 
 사용법:
     uv run triage-run --seed 1 --strict-env                 # 개발용(dev) 전체, 현재 선정 모델(qwen2.5:7b)
     uv run triage-run --seed 1 --model qwen2.5:7b --model gemma4:12b   # 모델 비교 (v1.4, triage-select 로 판정)
     uv run triage-run --seed 1 --set focused                # 집중 세트만
     uv run triage-run --seed 1 --split test --final         # 평가용(test) — 최종 측정 때만
+    uv run triage-run --seed 1 --dataset v14                # (v1.4) 개발용 63건
+    uv run triage-run --seed 1 --dataset v14 --split final --final   # (v1.4) 최종 평가용 25건 — 방법 선택 후 1회만
 
 출력:
     data/results/v13/history/v13_<split>_<시각>.json   실행 기록 (항상 새 파일)
+    data/results/v14/history/v14_<split>_<시각>.json   --dataset v14 실행 기록
 
 채점: uv run triage-score
 
@@ -75,6 +78,13 @@
    여러 모델을 한 번에 실행해도 모델마다 같은 출발 상태에서 측정된다.
 10. (v1.4) 기본 대상은 현재 선정 모델 하나다. Llama 3.1은 평가용 세트에서도 형식·Critical 인식 모두 크게 뒤져
    정기 측정에서 뺐다(필요하면 --model 로 지정). 후보 모델은 --model 로 함께 넘겨 같은 실행 안에서 비교한다.
+11. (v1.4) --dataset 으로 평가셋을 고른다. 기본값은 v13이라 옵션을 주지 않으면 v1.3과 똑같이 동작한다.
+   - v1.4 평가셋(data/eval_v14/)은 v1.3의 63건이 모두 dev이고, 새 25건의 분할 이름이 final 이다.
+     final 도 test 와 같이 --final 이 있어야 실행된다(설계 의도 1을 그대로 적용).
+   - 고른 평가셋에 없는 분할(v13의 final, v14의 test)을 지정해 문항이 0건이면 실행하지 않고 종료 코드 2로 끝낸다.
+     빈 실행 기록이 남으면 "실행은 했는데 결과가 없음"과 "실행하지 않음"이 구분되지 않기 때문이다.
+   - 실행 기록은 평가셋별 폴더(v13/history, v14/history)에 따로 남긴다. v1.3 게이트·모델 선정 도구는
+     v13 폴더만 보므로, v1.4 실행 기록이 섞여 v1.3 판정이 바뀌는 일이 없다.
 """
 
 import argparse
@@ -96,8 +106,10 @@ from triage_eval.pipeline.guardrail import GUARDRAIL_VERSION, apply_record
 from triage_eval.pipeline.prompt import (DISCARD_CHECK_CHOICES, PROMPT_VERSION, SYSTEM_PROMPT_V2,
                                          build_discard_check_prompt, build_prompt, build_retry_prompt)
 
-DATASET = ROOT / "data" / "eval_v13" / "aether_raid_v13.json"
+DATASET = ROOT / "data" / "eval_v13" / "aether_raid_v13.json"   # 기본 평가셋 (screen.py 등 v1.3 도구가 사용)
 OUT_DIR = ROOT / "data" / "results" / "v13" / "history"
+DATASET_V14 = ROOT / "data" / "eval_v14" / "aether_raid_v14.json"   # 설계 의도 11
+OUT_DIR_V14 = ROOT / "data" / "results" / "v14" / "history"
 
 MODELS = ["qwen2.5:7b"]  # 설계 의도 10
 THINK = False  # 설계 의도 8
@@ -272,9 +284,9 @@ def generate_triage(client, model: str, item: dict, options: dict, retry: bool =
 
 
 def check_split_guard(split: str, final: bool) -> str | None:
-    """설계 의도 1 — test 가 포함된 실행은 --final 이 있어야 한다. 막을 때는 이유를 돌려준다."""
-    if split in ("test", "all") and not final:
-        return ("평가용(test) 문항은 최종 측정 때만 실행합니다. 프롬프트 개선은 --split dev 로 하고, "
+    """설계 의도 1·11 — test·final 이 포함된 실행은 --final 이 있어야 한다. 막을 때는 이유를 돌려준다."""
+    if split in ("test", "final", "all") and not final:
+        return ("평가용(test·final) 문항은 최종 측정 때만 실행합니다. 프롬프트 개선은 --split dev 로 하고, "
                 "최종 측정이면 --final 을 함께 주세요.")
     return None
 
@@ -284,14 +296,15 @@ def options_for(seed_base: int | None, run_idx: int) -> dict:
 
 
 def main(argv: list[str] | None = None) -> int:
-    p = argparse.ArgumentParser(description="v1.3 평가셋 실행 (출력 형식 v2)")
-    p.add_argument("--split", choices=["dev", "test", "all"], default="dev")
+    p = argparse.ArgumentParser(description="평가셋 실행 (출력 형식 v2)")
+    p.add_argument("--dataset", choices=["v13", "v14"], default="v13", help="평가셋 (기본: v13, 설계 의도 11)")
+    p.add_argument("--split", choices=["dev", "test", "final", "all"], default="dev")
     p.add_argument("--set", dest="set_name", choices=["representative", "focused", "all"], default="all")
     p.add_argument("--model", action="append", help="실행할 모델 (여러 번 지정 가능, 기본: qwen2.5:7b)")
     p.add_argument("--seed", type=int, default=None, help="seed 고정 모드 (1회차 N, 2회차 N+1)")
     p.add_argument("--repeat", type=int, default=REPEAT_COUNT)
     p.add_argument("--strict-env", action="store_true", help="측정 환경 경고가 있으면 실행하지 않음")
-    p.add_argument("--final", action="store_true", help="평가용(test) 문항 실행 허용 — 최종 측정 때만")
+    p.add_argument("--final", action="store_true", help="평가용(test·final) 문항 실행 허용 — 최종 측정 때만")
     p.add_argument("--no-guardrail", action="store_true", help="후처리 안전장치 없이 모델 원본만 기록")
     p.add_argument("--no-retry", action="store_true", help="형식 위반 응답을 다시 요청하지 않음")
     p.add_argument("--no-discard-check", action="store_true", help="폐기 직전 확인 질문을 하지 않음")
@@ -302,9 +315,12 @@ def main(argv: list[str] | None = None) -> int:
         print(blocked)
         return 2
 
-    dataset_text = DATASET.read_text(encoding="utf-8")
-    dataset = json.loads(dataset_text)
+    dataset_path, out_dir = (DATASET, OUT_DIR) if args.dataset == "v13" else (DATASET_V14, OUT_DIR_V14)
+    dataset = json.loads(dataset_path.read_text(encoding="utf-8"))
     items = select_items(dataset, args.split, args.set_name)
+    if not items:
+        print(f"{args.dataset} 평가셋에 {args.split}/{args.set_name} 문항이 없어 실행하지 않습니다.")
+        return 2
     models = args.model or MODELS
     client = ollama.Client()
 
@@ -379,8 +395,8 @@ def main(argv: list[str] | None = None) -> int:
         "warmup_runs": warmups,
         "results": results,
     }
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
-    out = OUT_DIR / f"v13_{args.split}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out = out_dir / f"{args.dataset}_{args.split}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
     out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
     near = sum(r["context_near_limit"] for r in results)
