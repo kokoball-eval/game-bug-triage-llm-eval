@@ -1,0 +1,4835 @@
+{
+  "label": "a",
+  "baseline": "m0/qwen2.5:7b",
+  "runs": [
+    "data/results/v14/history/v14_dev_m0_20261004_204024.json",
+    "data/results/v14/history/v14_dev_m0_20261004_205305.json",
+    "data/results/v14/history/v14_dev_m0_20261004_210549.json",
+    "data/results/v14/history/v14_dev_m1_20261004_204436.json",
+    "data/results/v14/history/v14_dev_m1_20261004_205719.json",
+    "data/results/v14/history/v14_dev_m1_20261004_211000.json",
+    "data/results/v14/history/v14_dev_m2_20261004_204929.json",
+    "data/results/v14/history/v14_dev_m2_20261004_210209.json",
+    "data/results/v14/history/v14_dev_m2_20261004_211450.json"
+  ],
+  "chosen": "m2/qwen2.5:7b",
+  "reasons": {
+    "m1/qwen2.5:7b": "기준 미통과 (seed 중 하나 이상에서 절대·회귀 기준 FAIL)",
+    "m2/qwen2.5:7b": "교체 조건 충족 (X-1 누락 25→17, 우선순위 정답 228→236)"
+  },
+  "note": null,
+  "summaries": {
+    "m1/qwen2.5:7b": {
+      "all_seeds_passed": false,
+      "x1_base": 25,
+      "x1_cand": 9,
+      "pri_base": 228,
+      "pri_cand": 247,
+      "latency_cand": 1.96
+    },
+    "m2/qwen2.5:7b": {
+      "all_seeds_passed": true,
+      "x1_base": 25,
+      "x1_cand": 17,
+      "pri_base": 228,
+      "pri_cand": 236,
+      "latency_cand": 2.269
+    }
+  },
+  "results": {
+    "m1/qwen2.5:7b": [
+      {
+        "seeds": {
+          "1": 1,
+          "2": 2
+        },
+        "passed": false,
+        "checks": [
+          {
+            "name": "호출 성공률(%)",
+            "kind": "절대",
+            "baseline": null,
+            "candidate": 100.0,
+            "limit": "≥ 100.0",
+            "passed": true
+          },
+          {
+            "name": "날조 응답",
+            "kind": "절대",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "≤ 0",
+            "passed": true
+          },
+          {
+            "name": "출력 언어 위반(R7)",
+            "kind": "절대",
+            "baseline": 0,
+            "candidate": 1,
+            "limit": "≤ 0",
+            "passed": false
+          },
+          {
+            "name": "허용 값 위반(R6)",
+            "kind": "절대",
+            "baseline": 0,
+            "candidate": 1,
+            "limit": "≤ 0",
+            "passed": false
+          },
+          {
+            "name": "X-1 Critical 미상신",
+            "kind": "회귀",
+            "baseline": 8,
+            "candidate": 3,
+            "limit": "증가 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "과잉 상신",
+            "kind": "회귀",
+            "baseline": 8,
+            "candidate": 19,
+            "limit": "증가 ≤ 4",
+            "passed": false
+          },
+          {
+            "name": "형식 STRICT(응답 수)",
+            "kind": "회귀",
+            "baseline": 126,
+            "candidate": 125,
+            "limit": "하락 ≤ 4",
+            "passed": true
+          },
+          {
+            "name": "형식 PARSABLE(응답 수)",
+            "kind": "회귀",
+            "baseline": 126,
+            "candidate": 125,
+            "limit": "하락 ≤ 4",
+            "passed": true
+          },
+          {
+            "name": "처리 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 85,
+            "candidate": 79,
+            "limit": "하락 ≤ 0",
+            "passed": false
+          },
+          {
+            "name": "분류 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 85,
+            "candidate": 105,
+            "limit": "하락 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "우선순위 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 77,
+            "candidate": 83,
+            "limit": "하락 ≤ 2",
+            "passed": true
+          },
+          {
+            "name": "모듈 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 89,
+            "candidate": 69,
+            "limit": "하락 ≤ 6",
+            "passed": false
+          },
+          {
+            "name": "재현 정보 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 106,
+            "candidate": 107,
+            "limit": "하락 ≤ 6",
+            "passed": true
+          },
+          {
+            "name": "발생 빈도 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 60,
+            "candidate": 56,
+            "limit": "하락 ≤ 6",
+            "passed": true
+          },
+          {
+            "name": "6칸 모두 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 27,
+            "candidate": 14,
+            "limit": "하락 ≤ 6",
+            "passed": false
+          },
+          {
+            "name": "처리 문항 단위 회귀(응답 수)",
+            "kind": "회귀",
+            "baseline": 0,
+            "candidate": 19,
+            "limit": "≤ 4",
+            "passed": false
+          },
+          {
+            "name": "분류 문항 단위 회귀(응답 수)",
+            "kind": "회귀",
+            "baseline": 0,
+            "candidate": 2,
+            "limit": "≤ 4",
+            "passed": true
+          },
+          {
+            "name": "X-2 결함 폐기",
+            "kind": "기준선 대비",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "증가 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "X-3 경계 건 확정 처리",
+            "kind": "기준선 대비",
+            "baseline": 4,
+            "candidate": 2,
+            "limit": "증가 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "평균 지연(초)",
+            "kind": "절대",
+            "baseline": 1.698,
+            "candidate": 1.962,
+            "limit": "≤ 10.0",
+            "passed": true
+          }
+        ],
+        "baseline": {
+          "n": 126,
+          "success": 126,
+          "strict": 126,
+          "parsable": 126,
+          "fields_ok": {
+            "분류": 85,
+            "우선순위": 77,
+            "모듈": 89,
+            "재현 정보": 106,
+            "발생 빈도": 60,
+            "처리": 85,
+            "6칸 정답": 27
+          },
+          "x1": 8,
+          "x2": 0,
+          "x3": 4,
+          "over": 8,
+          "halluc": 0,
+          "lang": 0,
+          "enum": 0,
+          "latency": 1.698
+        },
+        "candidate": {
+          "n": 126,
+          "success": 126,
+          "strict": 125,
+          "parsable": 125,
+          "fields_ok": {
+            "분류": 105,
+            "우선순위": 83,
+            "모듈": 69,
+            "재현 정보": 107,
+            "발생 빈도": 56,
+            "처리": 79,
+            "6칸 정답": 14
+          },
+          "x1": 3,
+          "x2": 0,
+          "x3": 2,
+          "over": 19,
+          "halluc": 0,
+          "lang": 1,
+          "enum": 1,
+          "latency": 1.962
+        },
+        "item_changes": {
+          "분류": {
+            "regressed": [
+              {
+                "item_id": "A09",
+                "run": 1,
+                "before": "결함",
+                "after": "문의·건의"
+              },
+              {
+                "item_id": "A09",
+                "run": 2,
+                "before": "결함",
+                "after": "문의·건의"
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "A02",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "A02",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "A03",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "A03",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "A05",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "A10",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "A10",
+                "run": 2,
+                "before": "무관",
+                "after": "결함"
+              },
+              {
+                "item_id": "A16",
+                "run": 1,
+                "before": "문의·건의",
+                "after": "무관"
+              },
+              {
+                "item_id": "A18",
+                "run": 2,
+                "before": "개선 제안",
+                "after": "무관"
+              },
+              {
+                "item_id": "B08",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B09",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B09",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B11",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B13",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B13",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B20",
+                "run": 1,
+                "before": "개선 제안",
+                "after": "결함"
+              },
+              {
+                "item_id": "B20",
+                "run": 2,
+                "before": "개선 제안",
+                "after": "결함"
+              },
+              {
+                "item_id": "S07",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "S07",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "S10",
+                "run": 1,
+                "before": "개선 제안",
+                "after": "결함"
+              },
+              {
+                "item_id": "S10",
+                "run": 2,
+                "before": "개선 제안",
+                "after": "결함"
+              },
+              {
+                "item_id": "S11",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              }
+            ]
+          },
+          "우선순위": {
+            "regressed": [
+              {
+                "item_id": "A02",
+                "run": 1,
+                "before": "판단보류",
+                "after": "Major"
+              },
+              {
+                "item_id": "A02",
+                "run": 2,
+                "before": "판단보류",
+                "after": "Major"
+              },
+              {
+                "item_id": "A05",
+                "run": 2,
+                "before": "Minor",
+                "after": "Major"
+              },
+              {
+                "item_id": "A08",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "A20",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "B09",
+                "run": 1,
+                "before": "Minor",
+                "after": "Major"
+              },
+              {
+                "item_id": "B09",
+                "run": 2,
+                "before": "Minor",
+                "after": "Major"
+              },
+              {
+                "item_id": "S02",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S02",
+                "run": 2,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S13",
+                "run": 2,
+                "before": "Critical",
+                "after": "Major"
+              },
+              {
+                "item_id": "S14",
+                "run": 2,
+                "before": "Major",
+                "after": "Critical"
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "A09",
+                "run": 1,
+                "before": "Major",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A10",
+                "run": 1,
+                "before": "Minor",
+                "after": "Major"
+              },
+              {
+                "item_id": "A10",
+                "run": 2,
+                "before": "해당 없음",
+                "after": "Major"
+              },
+              {
+                "item_id": "A15",
+                "run": 1,
+                "before": "판단보류",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A15",
+                "run": 2,
+                "before": "판단보류",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A16",
+                "run": 1,
+                "before": "판단보류",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A18",
+                "run": 1,
+                "before": "Minor",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A18",
+                "run": 2,
+                "before": "Minor",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A19",
+                "run": 1,
+                "before": "판단보류",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A19",
+                "run": 2,
+                "before": "판단보류",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "B06",
+                "run": 2,
+                "before": "Major",
+                "after": "Minor"
+              },
+              {
+                "item_id": "S04",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S04",
+                "run": 2,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S04b",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S04b",
+                "run": 2,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S11",
+                "run": 1,
+                "before": "Minor",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S16",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              }
+            ]
+          },
+          "모듈": {
+            "regressed": [
+              {
+                "item_id": "A06",
+                "run": 1,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              },
+              {
+                "item_id": "A06",
+                "run": 2,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              },
+              {
+                "item_id": "A07",
+                "run": 1,
+                "before": "계정·로그인",
+                "after": "계정·로그인 / 보안·어뷰징"
+              },
+              {
+                "item_id": "A07",
+                "run": 2,
+                "before": "계정·로그인",
+                "after": "결제·재화 / 게임플레이·밸런스"
+              },
+              {
+                "item_id": "A09",
+                "run": 1,
+                "before": "게임플레이·밸런스",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A12",
+                "run": 1,
+                "before": "그래픽·사운드, UI·텍스트",
+                "after": "그래픽·사운드 / UI·텍스트 / 네트워크"
+              },
+              {
+                "item_id": "A13",
+                "run": 1,
+                "before": "클라이언트 안정성",
+                "after": "클라이언트 안정성 / 게임플레이·밸런스"
+              },
+              {
+                "item_id": "A13",
+                "run": 2,
+                "before": "클라이언트 안정성",
+                "after": "클라이언트 안정성 / 게임플레이·밸런스"
+              },
+              {
+                "item_id": "A15",
+                "run": 1,
+                "before": "UI·텍스트",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A15",
+                "run": 2,
+                "before": "UI·텍스트",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "B03",
+                "run": 1,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              },
+              {
+                "item_id": "B03",
+                "run": 2,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              },
+              {
+                "item_id": "B05",
+                "run": 1,
+                "before": "콘텐츠 진행",
+                "after": "콘텐츠 진행 / 게임플레이·밸런스"
+              },
+              {
+                "item_id": "B05",
+                "run": 2,
+                "before": "콘텐츠 진행",
+                "after": "콘텐츠 진행 / 게임플레이·밸런스"
+              },
+              {
+                "item_id": "B15",
+                "run": 1,
+                "before": "계정·로그인/결제·재화",
+                "after": "계정·로그인 / 플랫폼 호환성"
+              },
+              {
+                "item_id": "B15",
+                "run": 2,
+                "before": "계정·로그인/결제·재화",
+                "after": "계정·로그인 / 플랫폼 호환성"
+              },
+              {
+                "item_id": "B17",
+                "run": 2,
+                "before": "클라이언트 안정성",
+                "after": "클라이언트 안정성 / 그래픽·사운드"
+              },
+              {
+                "item_id": "B18",
+                "run": 1,
+                "before": "UI·텍스트",
+                "after": "그래픽·사운드 / 플랫폼 호환성"
+              },
+              {
+                "item_id": "B18",
+                "run": 2,
+                "before": "UI·텍스트",
+                "after": "그래픽·사운드 / 플랫폼 호환성"
+              },
+              {
+                "item_id": "S03",
+                "run": 1,
+                "before": "게임플레이·밸런스",
+                "after": "게임플레이·밸런스 / 플랫폼 호환성"
+              },
+              {
+                "item_id": "S03",
+                "run": 2,
+                "before": "게임플레이·밸런스",
+                "after": "게임플레이·밸런스 / 플랫폼 호환성"
+              },
+              {
+                "item_id": "S04",
+                "run": 1,
+                "before": "게임플레이·밸런스",
+                "after": "게임플레이·밸런스 / 보안·어뷰징"
+              },
+              {
+                "item_id": "S04",
+                "run": 2,
+                "before": "게임플레이·밸런스",
+                "after": "게임플레이·밸런스 / 보안·어뷰징"
+              },
+              {
+                "item_id": "S05",
+                "run": 2,
+                "before": "UI·텍스트",
+                "after": "게임플레이·밸런스"
+              },
+              {
+                "item_id": "S12",
+                "run": 1,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              },
+              {
+                "item_id": "S12",
+                "run": 2,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              },
+              {
+                "item_id": "S16",
+                "run": 1,
+                "before": "네트워크",
+                "after": "네트워크 / 보안·어뷰징"
+              },
+              {
+                "item_id": "S16",
+                "run": 2,
+                "before": "네트워크",
+                "after": "네트워크 / 보안·어뷰징"
+              },
+              {
+                "item_id": "S17",
+                "run": 2,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "A18",
+                "run": 1,
+                "before": "콘텐츠 진행",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A18",
+                "run": 2,
+                "before": "콘텐츠 진행",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A19",
+                "run": 2,
+                "before": "보안·어뷰징",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "S07",
+                "run": 1,
+                "before": "UI·텍스트",
+                "after": "그래픽·사운드"
+              },
+              {
+                "item_id": "S07",
+                "run": 2,
+                "before": "UI·텍스트",
+                "after": "그래픽·사운드"
+              },
+              {
+                "item_id": "S10b",
+                "run": 1,
+                "before": "결제·재화",
+                "after": "게임플레이·밸런스"
+              },
+              {
+                "item_id": "S10b",
+                "run": 2,
+                "before": "결제·재화",
+                "after": "게임플레이·밸런스"
+              },
+              {
+                "item_id": "S19",
+                "run": 1,
+                "before": "콘텐츠 진행",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "S19",
+                "run": 2,
+                "before": "콘텐츠 진행",
+                "after": "해당 없음"
+              }
+            ]
+          },
+          "재현 정보": {
+            "regressed": [
+              {
+                "item_id": "A02",
+                "run": 1,
+                "before": "부족",
+                "after": "충분"
+              },
+              {
+                "item_id": "A02",
+                "run": 2,
+                "before": "부족",
+                "after": "충분"
+              },
+              {
+                "item_id": "A03",
+                "run": 1,
+                "before": "부족",
+                "after": "충분"
+              },
+              {
+                "item_id": "A03",
+                "run": 2,
+                "before": "부족",
+                "after": "충분"
+              },
+              {
+                "item_id": "A10",
+                "run": 1,
+                "before": "부족",
+                "after": "충분"
+              },
+              {
+                "item_id": "A10",
+                "run": 2,
+                "before": "부족",
+                "after": "충분"
+              },
+              {
+                "item_id": "S05",
+                "run": 1,
+                "before": "충분",
+                "after": "부족"
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "A09",
+                "run": 1,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "A09",
+                "run": 2,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "A18",
+                "run": 1,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "A18",
+                "run": 2,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "S10",
+                "run": 1,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "S10",
+                "run": 2,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "S19",
+                "run": 1,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "S19",
+                "run": 2,
+                "before": "충분",
+                "after": "부족"
+              }
+            ]
+          },
+          "발생 빈도": {
+            "regressed": [
+              {
+                "item_id": "A14",
+                "run": 2,
+                "before": "1회",
+                "after": "항상"
+              },
+              {
+                "item_id": "B06",
+                "run": 1,
+                "before": "항상",
+                "after": "간헐적"
+              },
+              {
+                "item_id": "B06",
+                "run": 2,
+                "before": "항상",
+                "after": "간헐적"
+              },
+              {
+                "item_id": "B14",
+                "run": 1,
+                "before": "항상",
+                "after": "간헐적"
+              },
+              {
+                "item_id": "B14",
+                "run": 2,
+                "before": "항상",
+                "after": "간헐적"
+              },
+              {
+                "item_id": "B15",
+                "run": 1,
+                "before": "1회",
+                "after": "항상"
+              },
+              {
+                "item_id": "B15",
+                "run": 2,
+                "before": "1회",
+                "after": "항상"
+              },
+              {
+                "item_id": "S01",
+                "run": 1,
+                "before": "간헐적",
+                "after": "항상"
+              },
+              {
+                "item_id": "S01",
+                "run": 2,
+                "before": "간헐적",
+                "after": "항상"
+              },
+              {
+                "item_id": "S10",
+                "run": 1,
+                "before": "미기재",
+                "after": "1회"
+              },
+              {
+                "item_id": "S10",
+                "run": 2,
+                "before": "미기재",
+                "after": "1회"
+              },
+              {
+                "item_id": "S11",
+                "run": 1,
+                "before": "1회",
+                "after": "항상"
+              },
+              {
+                "item_id": "S14",
+                "run": 1,
+                "before": "1회",
+                "after": "항상"
+              },
+              {
+                "item_id": "S14",
+                "run": 2,
+                "before": "1회",
+                "after": "항상"
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "A09",
+                "run": 1,
+                "before": "항상",
+                "after": "미기재"
+              },
+              {
+                "item_id": "A09",
+                "run": 2,
+                "before": "항상",
+                "after": "미기재"
+              },
+              {
+                "item_id": "A18",
+                "run": 1,
+                "before": "1회",
+                "after": "미기재"
+              },
+              {
+                "item_id": "A18",
+                "run": 2,
+                "before": "1회",
+                "after": "미기재"
+              },
+              {
+                "item_id": "B13",
+                "run": 1,
+                "before": "간헐적",
+                "after": "미기재"
+              },
+              {
+                "item_id": "B13",
+                "run": 2,
+                "before": "간헐적",
+                "after": "미기재"
+              },
+              {
+                "item_id": "S04",
+                "run": 1,
+                "before": "간헐적",
+                "after": "항상"
+              },
+              {
+                "item_id": "S04",
+                "run": 2,
+                "before": "간헐적",
+                "after": "항상"
+              },
+              {
+                "item_id": "S15",
+                "run": 1,
+                "before": "항상",
+                "after": "간헐적"
+              },
+              {
+                "item_id": "S15",
+                "run": 2,
+                "before": "항상",
+                "after": "간헐적"
+              }
+            ]
+          },
+          "처리": {
+            "regressed": [
+              {
+                "item_id": "A02",
+                "run": 1,
+                "before": "정보 요청 후 보류",
+                "after": "등록(재현 대기)"
+              },
+              {
+                "item_id": "A02",
+                "run": 2,
+                "before": "정보 요청 후 보류",
+                "after": "등록(재현 대기)"
+              },
+              {
+                "item_id": "A08",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "A08",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": null
+              },
+              {
+                "item_id": "A09",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "CS 응대"
+              },
+              {
+                "item_id": "A09",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "CS 응대"
+              },
+              {
+                "item_id": "A10",
+                "run": 1,
+                "before": "정보 요청 후 보류",
+                "after": "등록(재현 대기)"
+              },
+              {
+                "item_id": "A10",
+                "run": 2,
+                "before": "정보 요청 후 보류",
+                "after": "등록(재현 대기)"
+              },
+              {
+                "item_id": "A16",
+                "run": 2,
+                "before": "폐기",
+                "after": "CS 응대"
+              },
+              {
+                "item_id": "A17",
+                "run": 1,
+                "before": "폐기",
+                "after": "정보 요청 후 보류"
+              },
+              {
+                "item_id": "A17",
+                "run": 2,
+                "before": "폐기",
+                "after": "정보 요청 후 보류"
+              },
+              {
+                "item_id": "A20",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S02",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S02",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S05",
+                "run": 1,
+                "before": "개발 배정",
+                "after": "CS 응대"
+              },
+              {
+                "item_id": "S13",
+                "run": 2,
+                "before": "긴급 사인 요청",
+                "after": "등록(재현 대기)"
+              },
+              {
+                "item_id": "S14",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S17",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "정보 요청 후 보류"
+              },
+              {
+                "item_id": "S17",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "B08",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "개발 배정"
+              },
+              {
+                "item_id": "B09",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "개발 배정"
+              },
+              {
+                "item_id": "B09",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "개발 배정"
+              },
+              {
+                "item_id": "B11",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "개발 배정"
+              },
+              {
+                "item_id": "S04",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S04",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S04b",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S04b",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S07",
+                "run": 1,
+                "before": "CS 응대",
+                "after": "등록(재현 대기)"
+              },
+              {
+                "item_id": "S07",
+                "run": 2,
+                "before": "CS 응대",
+                "after": "등록(재현 대기)"
+              },
+              {
+                "item_id": "S11",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S16",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S20",
+                "run": 1,
+                "before": "긴급 사인 요청",
+                "after": "등록(재현 대기)"
+              }
+            ]
+          },
+          "6칸 정답": {
+            "regressed": [
+              {
+                "item_id": "A06",
+                "run": 1
+              },
+              {
+                "item_id": "A06",
+                "run": 2
+              },
+              {
+                "item_id": "A16",
+                "run": 2
+              },
+              {
+                "item_id": "A17",
+                "run": 1
+              },
+              {
+                "item_id": "A17",
+                "run": 2
+              },
+              {
+                "item_id": "B03",
+                "run": 1
+              },
+              {
+                "item_id": "B03",
+                "run": 2
+              },
+              {
+                "item_id": "B05",
+                "run": 1
+              },
+              {
+                "item_id": "B05",
+                "run": 2
+              },
+              {
+                "item_id": "B14",
+                "run": 1
+              },
+              {
+                "item_id": "B14",
+                "run": 2
+              },
+              {
+                "item_id": "B15",
+                "run": 1
+              },
+              {
+                "item_id": "B15",
+                "run": 2
+              },
+              {
+                "item_id": "S01",
+                "run": 1
+              },
+              {
+                "item_id": "S01",
+                "run": 2
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "B08",
+                "run": 1
+              },
+              {
+                "item_id": "B11",
+                "run": 2
+              }
+            ]
+          }
+        }
+      },
+      {
+        "seeds": {
+          "1": 11,
+          "2": 12
+        },
+        "passed": false,
+        "checks": [
+          {
+            "name": "호출 성공률(%)",
+            "kind": "절대",
+            "baseline": null,
+            "candidate": 100.0,
+            "limit": "≥ 100.0",
+            "passed": true
+          },
+          {
+            "name": "날조 응답",
+            "kind": "절대",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "≤ 0",
+            "passed": true
+          },
+          {
+            "name": "출력 언어 위반(R7)",
+            "kind": "절대",
+            "baseline": 0,
+            "candidate": 1,
+            "limit": "≤ 0",
+            "passed": false
+          },
+          {
+            "name": "허용 값 위반(R6)",
+            "kind": "절대",
+            "baseline": 0,
+            "candidate": 1,
+            "limit": "≤ 0",
+            "passed": false
+          },
+          {
+            "name": "X-1 Critical 미상신",
+            "kind": "회귀",
+            "baseline": 7,
+            "candidate": 3,
+            "limit": "증가 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "과잉 상신",
+            "kind": "회귀",
+            "baseline": 10,
+            "candidate": 19,
+            "limit": "증가 ≤ 4",
+            "passed": false
+          },
+          {
+            "name": "형식 STRICT(응답 수)",
+            "kind": "회귀",
+            "baseline": 126,
+            "candidate": 125,
+            "limit": "하락 ≤ 4",
+            "passed": true
+          },
+          {
+            "name": "형식 PARSABLE(응답 수)",
+            "kind": "회귀",
+            "baseline": 126,
+            "candidate": 125,
+            "limit": "하락 ≤ 4",
+            "passed": true
+          },
+          {
+            "name": "처리 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 86,
+            "candidate": 79,
+            "limit": "하락 ≤ 0",
+            "passed": false
+          },
+          {
+            "name": "분류 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 87,
+            "candidate": 106,
+            "limit": "하락 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "우선순위 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 77,
+            "candidate": 81,
+            "limit": "하락 ≤ 2",
+            "passed": true
+          },
+          {
+            "name": "모듈 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 91,
+            "candidate": 71,
+            "limit": "하락 ≤ 6",
+            "passed": false
+          },
+          {
+            "name": "재현 정보 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 103,
+            "candidate": 108,
+            "limit": "하락 ≤ 6",
+            "passed": true
+          },
+          {
+            "name": "발생 빈도 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 59,
+            "candidate": 56,
+            "limit": "하락 ≤ 6",
+            "passed": true
+          },
+          {
+            "name": "6칸 모두 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 24,
+            "candidate": 14,
+            "limit": "하락 ≤ 6",
+            "passed": false
+          },
+          {
+            "name": "처리 문항 단위 회귀(응답 수)",
+            "kind": "회귀",
+            "baseline": 0,
+            "candidate": 18,
+            "limit": "≤ 4",
+            "passed": false
+          },
+          {
+            "name": "분류 문항 단위 회귀(응답 수)",
+            "kind": "회귀",
+            "baseline": 0,
+            "candidate": 2,
+            "limit": "≤ 4",
+            "passed": true
+          },
+          {
+            "name": "X-2 결함 폐기",
+            "kind": "기준선 대비",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "증가 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "X-3 경계 건 확정 처리",
+            "kind": "기준선 대비",
+            "baseline": 4,
+            "candidate": 2,
+            "limit": "증가 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "평균 지연(초)",
+            "kind": "절대",
+            "baseline": 1.682,
+            "candidate": 1.969,
+            "limit": "≤ 10.0",
+            "passed": true
+          }
+        ],
+        "baseline": {
+          "n": 126,
+          "success": 126,
+          "strict": 126,
+          "parsable": 126,
+          "fields_ok": {
+            "분류": 87,
+            "우선순위": 77,
+            "모듈": 91,
+            "재현 정보": 103,
+            "발생 빈도": 59,
+            "처리": 86,
+            "6칸 정답": 24
+          },
+          "x1": 7,
+          "x2": 0,
+          "x3": 4,
+          "over": 10,
+          "halluc": 0,
+          "lang": 0,
+          "enum": 0,
+          "latency": 1.682
+        },
+        "candidate": {
+          "n": 126,
+          "success": 126,
+          "strict": 125,
+          "parsable": 125,
+          "fields_ok": {
+            "분류": 106,
+            "우선순위": 81,
+            "모듈": 71,
+            "재현 정보": 108,
+            "발생 빈도": 56,
+            "처리": 79,
+            "6칸 정답": 14
+          },
+          "x1": 3,
+          "x2": 0,
+          "x3": 2,
+          "over": 19,
+          "halluc": 0,
+          "lang": 1,
+          "enum": 1,
+          "latency": 1.969
+        },
+        "item_changes": {
+          "분류": {
+            "regressed": [
+              {
+                "item_id": "A09",
+                "run": 1,
+                "before": "결함",
+                "after": "개선 제안"
+              },
+              {
+                "item_id": "A09",
+                "run": 2,
+                "before": "결함",
+                "after": "개선 제안"
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "A02",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "A03",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "A04",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "A10",
+                "run": 1,
+                "before": "무관",
+                "after": "결함"
+              },
+              {
+                "item_id": "A12",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "A18",
+                "run": 1,
+                "before": "개선 제안",
+                "after": "무관"
+              },
+              {
+                "item_id": "A18",
+                "run": 2,
+                "before": "개선 제안",
+                "after": "무관"
+              },
+              {
+                "item_id": "B08",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B09",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B09",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B11",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B13",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B13",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B20",
+                "run": 1,
+                "before": "개선 제안",
+                "after": "결함"
+              },
+              {
+                "item_id": "S06",
+                "run": 2,
+                "before": "결함",
+                "after": "개선 제안"
+              },
+              {
+                "item_id": "S07",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "S07",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "S10",
+                "run": 1,
+                "before": "개선 제안",
+                "after": "결함"
+              },
+              {
+                "item_id": "S10",
+                "run": 2,
+                "before": "개선 제안",
+                "after": "결함"
+              },
+              {
+                "item_id": "S11",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "S19",
+                "run": 1,
+                "before": "개선 제안",
+                "after": "문의·건의"
+              }
+            ]
+          },
+          "우선순위": {
+            "regressed": [
+              {
+                "item_id": "A02",
+                "run": 2,
+                "before": "판단보류",
+                "after": "Major"
+              },
+              {
+                "item_id": "A03",
+                "run": 1,
+                "before": "판단보류",
+                "after": "Critical"
+              },
+              {
+                "item_id": "A10",
+                "run": 2,
+                "before": "판단보류",
+                "after": null
+              },
+              {
+                "item_id": "B09",
+                "run": 1,
+                "before": "Minor",
+                "after": "Major"
+              },
+              {
+                "item_id": "B09",
+                "run": 2,
+                "before": "Minor",
+                "after": "Major"
+              },
+              {
+                "item_id": "B17",
+                "run": 2,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "B19",
+                "run": 1,
+                "before": "Minor",
+                "after": "Major"
+              },
+              {
+                "item_id": "B19",
+                "run": 2,
+                "before": "Minor",
+                "after": "Major"
+              },
+              {
+                "item_id": "S02",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S02",
+                "run": 2,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S14",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S14",
+                "run": 2,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S15",
+                "run": 2,
+                "before": "Critical",
+                "after": "Major"
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "A04",
+                "run": 2,
+                "before": "Minor",
+                "after": "Major"
+              },
+              {
+                "item_id": "A10",
+                "run": 1,
+                "before": "해당 없음",
+                "after": "Major"
+              },
+              {
+                "item_id": "A15",
+                "run": 1,
+                "before": "판단보류",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A15",
+                "run": 2,
+                "before": "Trivial",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A16",
+                "run": 1,
+                "before": "판단보류",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A18",
+                "run": 1,
+                "before": "Minor",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A18",
+                "run": 2,
+                "before": "Minor",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A19",
+                "run": 1,
+                "before": "판단보류",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "B06",
+                "run": 2,
+                "before": "Major",
+                "after": "Minor"
+              },
+              {
+                "item_id": "B18",
+                "run": 2,
+                "before": "Critical",
+                "after": "Major"
+              },
+              {
+                "item_id": "S04",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S04",
+                "run": 2,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S04b",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S04b",
+                "run": 2,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S06",
+                "run": 2,
+                "before": "Major",
+                "after": "Minor"
+              },
+              {
+                "item_id": "S07",
+                "run": 1,
+                "before": "Trivial",
+                "after": "Major"
+              },
+              {
+                "item_id": "S11",
+                "run": 2,
+                "before": "Minor",
+                "after": "Critical"
+              }
+            ]
+          },
+          "모듈": {
+            "regressed": [
+              {
+                "item_id": "A04",
+                "run": 2,
+                "before": "네트워크",
+                "after": "네트워크 / 클라이언트 안정성"
+              },
+              {
+                "item_id": "A06",
+                "run": 1,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              },
+              {
+                "item_id": "A06",
+                "run": 2,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              },
+              {
+                "item_id": "A07",
+                "run": 2,
+                "before": "계정·로그인",
+                "after": "계정·로그인 / 보안·어뷰징"
+              },
+              {
+                "item_id": "A12",
+                "run": 1,
+                "before": "그래픽·사운드, UI·텍스트",
+                "after": "그래픽·사운드 / UI·텍스트 / 네트워크"
+              },
+              {
+                "item_id": "A13",
+                "run": 1,
+                "before": "클라이언트 안정성",
+                "after": "클라이언트 안정성 / 게임플레이·밸런스"
+              },
+              {
+                "item_id": "A13",
+                "run": 2,
+                "before": "클라이언트 안정성",
+                "after": "클라이언트 안정성 / 게임플레이·밸런스"
+              },
+              {
+                "item_id": "A15",
+                "run": 1,
+                "before": "UI·텍스트",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A15",
+                "run": 2,
+                "before": "UI·텍스트",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "B03",
+                "run": 1,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              },
+              {
+                "item_id": "B03",
+                "run": 2,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              },
+              {
+                "item_id": "B05",
+                "run": 1,
+                "before": "콘텐츠 진행",
+                "after": "콘텐츠 진행 / 게임플레이·밸런스"
+              },
+              {
+                "item_id": "B05",
+                "run": 2,
+                "before": "콘텐츠 진행",
+                "after": "콘텐츠 진행 / 게임플레이·밸런스"
+              },
+              {
+                "item_id": "B15",
+                "run": 1,
+                "before": "계정·로그인/결제·재화",
+                "after": "계정·로그인 / 플랫폼 호환성"
+              },
+              {
+                "item_id": "B15",
+                "run": 2,
+                "before": "계정·로그인/결제·재화",
+                "after": "계정·로그인 / 플랫폼 호환성"
+              },
+              {
+                "item_id": "B17",
+                "run": 1,
+                "before": "클라이언트 안정성",
+                "after": "클라이언트 안정성 / 그래픽·사운드"
+              },
+              {
+                "item_id": "B18",
+                "run": 1,
+                "before": "UI·텍스트",
+                "after": "그래픽·사운드 / 플랫폼 호환성"
+              },
+              {
+                "item_id": "B18",
+                "run": 2,
+                "before": "UI·텍스트",
+                "after": "그래픽·사운드 / 플랫폼 호환성"
+              },
+              {
+                "item_id": "S03",
+                "run": 1,
+                "before": "게임플레이·밸런스",
+                "after": "게임플레이·밸런스 / 플랫폼 호환성"
+              },
+              {
+                "item_id": "S03",
+                "run": 2,
+                "before": "게임플레이·밸런스",
+                "after": "게임플레이·밸런스 / 플랫폼 호환성"
+              },
+              {
+                "item_id": "S04",
+                "run": 1,
+                "before": "게임플레이·밸런스",
+                "after": "게임플레이·밸런스 / 보안·어뷰징"
+              },
+              {
+                "item_id": "S04",
+                "run": 2,
+                "before": "게임플레이·밸런스",
+                "after": "게임플레이·밸런스 / 보안·어뷰징"
+              },
+              {
+                "item_id": "S05",
+                "run": 1,
+                "before": "UI·텍스트",
+                "after": "게임플레이·밸런스"
+              },
+              {
+                "item_id": "S12",
+                "run": 1,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              },
+              {
+                "item_id": "S12",
+                "run": 2,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              },
+              {
+                "item_id": "S13",
+                "run": 1,
+                "before": "계정·로그인",
+                "after": "계정·로그인 / 보안·어뷰징"
+              },
+              {
+                "item_id": "S16",
+                "run": 1,
+                "before": "네트워크",
+                "after": "네트워크 / 보안·어뷰징"
+              },
+              {
+                "item_id": "S16",
+                "run": 2,
+                "before": "네트워크",
+                "after": "네트워크 / 보안·어뷰징"
+              },
+              {
+                "item_id": "S17",
+                "run": 1,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "A18",
+                "run": 1,
+                "before": "콘텐츠 진행",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A18",
+                "run": 2,
+                "before": "콘텐츠 진행",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "S06",
+                "run": 2,
+                "before": "게임플레이·밸런스",
+                "after": "UI·텍스트"
+              },
+              {
+                "item_id": "S07",
+                "run": 1,
+                "before": "UI·텍스트",
+                "after": "그래픽·사운드"
+              },
+              {
+                "item_id": "S07",
+                "run": 2,
+                "before": "UI·텍스트",
+                "after": "그래픽·사운드"
+              },
+              {
+                "item_id": "S10b",
+                "run": 1,
+                "before": "결제·재화",
+                "after": "게임플레이·밸런스"
+              },
+              {
+                "item_id": "S10b",
+                "run": 2,
+                "before": "결제·재화",
+                "after": "게임플레이·밸런스"
+              },
+              {
+                "item_id": "S19",
+                "run": 1,
+                "before": "콘텐츠 진행",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "S19",
+                "run": 2,
+                "before": "게임플레이·밸런스",
+                "after": "해당 없음"
+              }
+            ]
+          },
+          "재현 정보": {
+            "regressed": [
+              {
+                "item_id": "A02",
+                "run": 2,
+                "before": "부족",
+                "after": "충분"
+              },
+              {
+                "item_id": "A03",
+                "run": 1,
+                "before": "부족",
+                "after": "충분"
+              },
+              {
+                "item_id": "A04",
+                "run": 2,
+                "before": "부족",
+                "after": "충분"
+              },
+              {
+                "item_id": "A10",
+                "run": 1,
+                "before": "부족",
+                "after": "충분"
+              },
+              {
+                "item_id": "A10",
+                "run": 2,
+                "before": "부족",
+                "after": null
+              },
+              {
+                "item_id": "S05",
+                "run": 2,
+                "before": "충분",
+                "after": "부족"
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "A09",
+                "run": 1,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "A09",
+                "run": 2,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "A15",
+                "run": 1,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "A15",
+                "run": 2,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "A17",
+                "run": 2,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "A18",
+                "run": 1,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "A18",
+                "run": 2,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "A19",
+                "run": 2,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "S10",
+                "run": 1,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "S19",
+                "run": 1,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "S19",
+                "run": 2,
+                "before": "충분",
+                "after": "부족"
+              }
+            ]
+          },
+          "발생 빈도": {
+            "regressed": [
+              {
+                "item_id": "A04",
+                "run": 2,
+                "before": "간헐적",
+                "after": "항상"
+              },
+              {
+                "item_id": "A14",
+                "run": 1,
+                "before": "1회",
+                "after": "항상"
+              },
+              {
+                "item_id": "A14",
+                "run": 2,
+                "before": "1회",
+                "after": "항상"
+              },
+              {
+                "item_id": "B06",
+                "run": 1,
+                "before": "항상",
+                "after": "간헐적"
+              },
+              {
+                "item_id": "B06",
+                "run": 2,
+                "before": "항상",
+                "after": "간헐적"
+              },
+              {
+                "item_id": "B14",
+                "run": 1,
+                "before": "항상",
+                "after": "간헐적"
+              },
+              {
+                "item_id": "B14",
+                "run": 2,
+                "before": "항상",
+                "after": "간헐적"
+              },
+              {
+                "item_id": "B15",
+                "run": 1,
+                "before": "1회",
+                "after": "항상"
+              },
+              {
+                "item_id": "B15",
+                "run": 2,
+                "before": "1회",
+                "after": "항상"
+              },
+              {
+                "item_id": "S01",
+                "run": 2,
+                "before": "간헐적",
+                "after": "항상"
+              },
+              {
+                "item_id": "S10",
+                "run": 2,
+                "before": "미기재",
+                "after": "항상"
+              },
+              {
+                "item_id": "S11",
+                "run": 2,
+                "before": "1회",
+                "after": "항상"
+              },
+              {
+                "item_id": "S14",
+                "run": 1,
+                "before": "1회",
+                "after": "항상"
+              },
+              {
+                "item_id": "S14",
+                "run": 2,
+                "before": "1회",
+                "after": "항상"
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "A04",
+                "run": 1,
+                "before": "항상",
+                "after": "간헐적"
+              },
+              {
+                "item_id": "A09",
+                "run": 2,
+                "before": "항상",
+                "after": "미기재"
+              },
+              {
+                "item_id": "A15",
+                "run": 1,
+                "before": "1회",
+                "after": "미기재"
+              },
+              {
+                "item_id": "A15",
+                "run": 2,
+                "before": "1회",
+                "after": "미기재"
+              },
+              {
+                "item_id": "A18",
+                "run": 1,
+                "before": "1회",
+                "after": "미기재"
+              },
+              {
+                "item_id": "A18",
+                "run": 2,
+                "before": "1회",
+                "after": "미기재"
+              },
+              {
+                "item_id": "B13",
+                "run": 1,
+                "before": "간헐적",
+                "after": "미기재"
+              },
+              {
+                "item_id": "S04",
+                "run": 1,
+                "before": "간헐적",
+                "after": "항상"
+              },
+              {
+                "item_id": "S04",
+                "run": 2,
+                "before": "간헐적",
+                "after": "항상"
+              },
+              {
+                "item_id": "S10",
+                "run": 1,
+                "before": "1회",
+                "after": "미기재"
+              },
+              {
+                "item_id": "S15",
+                "run": 2,
+                "before": "항상",
+                "after": "간헐적"
+              }
+            ]
+          },
+          "처리": {
+            "regressed": [
+              {
+                "item_id": "A02",
+                "run": 2,
+                "before": "정보 요청 후 보류",
+                "after": "등록(재현 대기)"
+              },
+              {
+                "item_id": "A03",
+                "run": 1,
+                "before": "정보 요청 후 보류",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "A04",
+                "run": 2,
+                "before": "정보 요청 후 보류",
+                "after": "등록(재현 대기)"
+              },
+              {
+                "item_id": "A09",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "CS 응대"
+              },
+              {
+                "item_id": "A09",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "CS 응대"
+              },
+              {
+                "item_id": "A16",
+                "run": 1,
+                "before": "폐기",
+                "after": "CS 응대"
+              },
+              {
+                "item_id": "A16",
+                "run": 2,
+                "before": "폐기",
+                "after": "CS 응대"
+              },
+              {
+                "item_id": "A17",
+                "run": 2,
+                "before": "폐기",
+                "after": "정보 요청 후 보류"
+              },
+              {
+                "item_id": "B13",
+                "run": 1,
+                "before": "정보 요청 후 보류",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "B17",
+                "run": 2,
+                "before": "개발 배정",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S02",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S02",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S05",
+                "run": 1,
+                "before": "개발 배정",
+                "after": "CS 응대"
+              },
+              {
+                "item_id": "S05",
+                "run": 2,
+                "before": "개발 배정",
+                "after": "CS 응대"
+              },
+              {
+                "item_id": "S14",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S14",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S15",
+                "run": 2,
+                "before": "긴급 사인 요청",
+                "after": "등록(재현 대기)"
+              },
+              {
+                "item_id": "S17",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "정보 요청 후 보류"
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "B08",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "개발 배정"
+              },
+              {
+                "item_id": "B09",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "개발 배정"
+              },
+              {
+                "item_id": "B09",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "개발 배정"
+              },
+              {
+                "item_id": "B11",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "개발 배정"
+              },
+              {
+                "item_id": "S04",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S04",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S04b",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S04b",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S07",
+                "run": 1,
+                "before": "CS 응대",
+                "after": "등록(재현 대기)"
+              },
+              {
+                "item_id": "S07",
+                "run": 2,
+                "before": "CS 응대",
+                "after": "등록(재현 대기)"
+              },
+              {
+                "item_id": "S11",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              }
+            ]
+          },
+          "6칸 정답": {
+            "regressed": [
+              {
+                "item_id": "A06",
+                "run": 1
+              },
+              {
+                "item_id": "A06",
+                "run": 2
+              },
+              {
+                "item_id": "A16",
+                "run": 2
+              },
+              {
+                "item_id": "B03",
+                "run": 1
+              },
+              {
+                "item_id": "B03",
+                "run": 2
+              },
+              {
+                "item_id": "B05",
+                "run": 1
+              },
+              {
+                "item_id": "B05",
+                "run": 2
+              },
+              {
+                "item_id": "B14",
+                "run": 1
+              },
+              {
+                "item_id": "B14",
+                "run": 2
+              },
+              {
+                "item_id": "B15",
+                "run": 1
+              },
+              {
+                "item_id": "B15",
+                "run": 2
+              },
+              {
+                "item_id": "S01",
+                "run": 2
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "B08",
+                "run": 1
+              },
+              {
+                "item_id": "B11",
+                "run": 2
+              }
+            ]
+          }
+        }
+      },
+      {
+        "seeds": {
+          "1": 21,
+          "2": 22
+        },
+        "passed": false,
+        "checks": [
+          {
+            "name": "호출 성공률(%)",
+            "kind": "절대",
+            "baseline": null,
+            "candidate": 100.0,
+            "limit": "≥ 100.0",
+            "passed": true
+          },
+          {
+            "name": "날조 응답",
+            "kind": "절대",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "≤ 0",
+            "passed": true
+          },
+          {
+            "name": "출력 언어 위반(R7)",
+            "kind": "절대",
+            "baseline": 0,
+            "candidate": 1,
+            "limit": "≤ 0",
+            "passed": false
+          },
+          {
+            "name": "허용 값 위반(R6)",
+            "kind": "절대",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "≤ 0",
+            "passed": true
+          },
+          {
+            "name": "X-1 Critical 미상신",
+            "kind": "회귀",
+            "baseline": 10,
+            "candidate": 3,
+            "limit": "증가 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "과잉 상신",
+            "kind": "회귀",
+            "baseline": 8,
+            "candidate": 18,
+            "limit": "증가 ≤ 4",
+            "passed": false
+          },
+          {
+            "name": "형식 STRICT(응답 수)",
+            "kind": "회귀",
+            "baseline": 126,
+            "candidate": 125,
+            "limit": "하락 ≤ 4",
+            "passed": true
+          },
+          {
+            "name": "형식 PARSABLE(응답 수)",
+            "kind": "회귀",
+            "baseline": 126,
+            "candidate": 125,
+            "limit": "하락 ≤ 4",
+            "passed": true
+          },
+          {
+            "name": "처리 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 81,
+            "candidate": 81,
+            "limit": "하락 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "분류 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 81,
+            "candidate": 105,
+            "limit": "하락 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "우선순위 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 74,
+            "candidate": 83,
+            "limit": "하락 ≤ 2",
+            "passed": true
+          },
+          {
+            "name": "모듈 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 89,
+            "candidate": 71,
+            "limit": "하락 ≤ 6",
+            "passed": false
+          },
+          {
+            "name": "재현 정보 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 106,
+            "candidate": 107,
+            "limit": "하락 ≤ 6",
+            "passed": true
+          },
+          {
+            "name": "발생 빈도 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 63,
+            "candidate": 54,
+            "limit": "하락 ≤ 6",
+            "passed": false
+          },
+          {
+            "name": "6칸 모두 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 24,
+            "candidate": 14,
+            "limit": "하락 ≤ 6",
+            "passed": false
+          },
+          {
+            "name": "처리 문항 단위 회귀(응답 수)",
+            "kind": "회귀",
+            "baseline": 0,
+            "candidate": 16,
+            "limit": "≤ 4",
+            "passed": false
+          },
+          {
+            "name": "분류 문항 단위 회귀(응답 수)",
+            "kind": "회귀",
+            "baseline": 0,
+            "candidate": 3,
+            "limit": "≤ 4",
+            "passed": true
+          },
+          {
+            "name": "X-2 결함 폐기",
+            "kind": "기준선 대비",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "증가 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "X-3 경계 건 확정 처리",
+            "kind": "기준선 대비",
+            "baseline": 6,
+            "candidate": 2,
+            "limit": "증가 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "평균 지연(초)",
+            "kind": "절대",
+            "baseline": 1.705,
+            "candidate": 1.95,
+            "limit": "≤ 10.0",
+            "passed": true
+          }
+        ],
+        "baseline": {
+          "n": 126,
+          "success": 126,
+          "strict": 126,
+          "parsable": 126,
+          "fields_ok": {
+            "분류": 81,
+            "우선순위": 74,
+            "모듈": 89,
+            "재현 정보": 106,
+            "발생 빈도": 63,
+            "처리": 81,
+            "6칸 정답": 24
+          },
+          "x1": 10,
+          "x2": 0,
+          "x3": 6,
+          "over": 8,
+          "halluc": 0,
+          "lang": 0,
+          "enum": 0,
+          "latency": 1.705
+        },
+        "candidate": {
+          "n": 126,
+          "success": 126,
+          "strict": 125,
+          "parsable": 125,
+          "fields_ok": {
+            "분류": 105,
+            "우선순위": 83,
+            "모듈": 71,
+            "재현 정보": 107,
+            "발생 빈도": 54,
+            "처리": 81,
+            "6칸 정답": 14
+          },
+          "x1": 3,
+          "x2": 0,
+          "x3": 2,
+          "over": 18,
+          "halluc": 0,
+          "lang": 1,
+          "enum": 0,
+          "latency": 1.95
+        },
+        "item_changes": {
+          "분류": {
+            "regressed": [
+              {
+                "item_id": "A09",
+                "run": 1,
+                "before": "결함",
+                "after": "개선 제안"
+              },
+              {
+                "item_id": "A09",
+                "run": 2,
+                "before": "결함",
+                "after": "개선 제안"
+              },
+              {
+                "item_id": "S13",
+                "run": 2,
+                "before": "결함",
+                "after": "버그 아님"
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "A02",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "A03",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "A03",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "A04",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "A04",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "A10",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "A10",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "A11",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "A16",
+                "run": 1,
+                "before": "문의·건의",
+                "after": "무관"
+              },
+              {
+                "item_id": "A18",
+                "run": 2,
+                "before": "개선 제안",
+                "after": "무관"
+              },
+              {
+                "item_id": "A20",
+                "run": 1,
+                "before": "개선 제안",
+                "after": "결함"
+              },
+              {
+                "item_id": "B08",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B08",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B09",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B09",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B11",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B13",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B13",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B15",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "B20",
+                "run": 1,
+                "before": "개선 제안",
+                "after": "결함"
+              },
+              {
+                "item_id": "B20",
+                "run": 2,
+                "before": "개선 제안",
+                "after": "결함"
+              },
+              {
+                "item_id": "S07",
+                "run": 1,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "S07",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "S10",
+                "run": 1,
+                "before": "개선 제안",
+                "after": "결함"
+              },
+              {
+                "item_id": "S10",
+                "run": 2,
+                "before": "개선 제안",
+                "after": "결함"
+              },
+              {
+                "item_id": "S11",
+                "run": 2,
+                "before": "버그 아님",
+                "after": "결함"
+              },
+              {
+                "item_id": "S19",
+                "run": 1,
+                "before": "개선 제안",
+                "after": "문의·건의"
+              }
+            ]
+          },
+          "우선순위": {
+            "regressed": [
+              {
+                "item_id": "A02",
+                "run": 2,
+                "before": "판단보류",
+                "after": "Major"
+              },
+              {
+                "item_id": "A03",
+                "run": 2,
+                "before": "판단보류",
+                "after": "Critical"
+              },
+              {
+                "item_id": "A20",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "B09",
+                "run": 1,
+                "before": "Minor",
+                "after": "Major"
+              },
+              {
+                "item_id": "B09",
+                "run": 2,
+                "before": "Minor",
+                "after": "Major"
+              },
+              {
+                "item_id": "B17",
+                "run": 2,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S02",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S02",
+                "run": 2,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S13",
+                "run": 2,
+                "before": "Critical",
+                "after": "Minor"
+              },
+              {
+                "item_id": "S14",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S14",
+                "run": 2,
+                "before": "Major",
+                "after": "Critical"
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "A04",
+                "run": 1,
+                "before": "Minor",
+                "after": "Major"
+              },
+              {
+                "item_id": "A04",
+                "run": 2,
+                "before": "Minor",
+                "after": "Major"
+              },
+              {
+                "item_id": "A11",
+                "run": 2,
+                "before": "Minor",
+                "after": "Major"
+              },
+              {
+                "item_id": "A15",
+                "run": 1,
+                "before": "판단보류",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A15",
+                "run": 2,
+                "before": "판단보류",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A16",
+                "run": 1,
+                "before": "Trivial",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A18",
+                "run": 1,
+                "before": "Minor",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A18",
+                "run": 2,
+                "before": "Minor",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A19",
+                "run": 1,
+                "before": "판단보류",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "B06",
+                "run": 2,
+                "before": "Major",
+                "after": "Minor"
+              },
+              {
+                "item_id": "B15",
+                "run": 1,
+                "before": "Minor",
+                "after": "Critical"
+              },
+              {
+                "item_id": "B18",
+                "run": 1,
+                "before": "Critical",
+                "after": "Major"
+              },
+              {
+                "item_id": "S04",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S04",
+                "run": 2,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S04b",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S04b",
+                "run": 2,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S07",
+                "run": 2,
+                "before": "Trivial",
+                "after": "Major"
+              },
+              {
+                "item_id": "S11",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S11",
+                "run": 2,
+                "before": "Minor",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S16",
+                "run": 2,
+                "before": "Major",
+                "after": "Critical"
+              }
+            ]
+          },
+          "모듈": {
+            "regressed": [
+              {
+                "item_id": "A04",
+                "run": 1,
+                "before": "네트워크",
+                "after": "네트워크 / 클라이언트 안정성"
+              },
+              {
+                "item_id": "A04",
+                "run": 2,
+                "before": "네트워크",
+                "after": "네트워크 / 클라이언트 안정성"
+              },
+              {
+                "item_id": "A06",
+                "run": 1,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              },
+              {
+                "item_id": "A06",
+                "run": 2,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              },
+              {
+                "item_id": "A07",
+                "run": 1,
+                "before": "계정·로그인",
+                "after": "계정·로그인 / 보안·어뷰징"
+              },
+              {
+                "item_id": "A12",
+                "run": 1,
+                "before": "그래픽·사운드, UI·텍스트",
+                "after": "그래픽·사운드 / UI·텍스트 / 네트워크"
+              },
+              {
+                "item_id": "A13",
+                "run": 1,
+                "before": "클라이언트 안정성",
+                "after": "클라이언트 안정성 / 게임플레이·밸런스"
+              },
+              {
+                "item_id": "A13",
+                "run": 2,
+                "before": "클라이언트 안정성",
+                "after": "클라이언트 안정성 / 게임플레이·밸런스"
+              },
+              {
+                "item_id": "A15",
+                "run": 1,
+                "before": "UI·텍스트",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A15",
+                "run": 2,
+                "before": "UI·텍스트",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "B03",
+                "run": 1,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              },
+              {
+                "item_id": "B03",
+                "run": 2,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              },
+              {
+                "item_id": "B05",
+                "run": 1,
+                "before": "콘텐츠 진행",
+                "after": "콘텐츠 진행 / 게임플레이·밸런스"
+              },
+              {
+                "item_id": "B05",
+                "run": 2,
+                "before": "콘텐츠 진행",
+                "after": "콘텐츠 진행 / 게임플레이·밸런스"
+              },
+              {
+                "item_id": "B15",
+                "run": 1,
+                "before": "계정·로그인",
+                "after": "계정·로그인 / 플랫폼 호환성"
+              },
+              {
+                "item_id": "B15",
+                "run": 2,
+                "before": "계정·로그인/결제·재화",
+                "after": "계정·로그인 / 플랫폼 호환성"
+              },
+              {
+                "item_id": "B18",
+                "run": 1,
+                "before": "UI·텍스트",
+                "after": "그래픽·사운드 / 플랫폼 호환성"
+              },
+              {
+                "item_id": "B18",
+                "run": 2,
+                "before": "UI·텍스트",
+                "after": "그래픽·사운드 / 플랫폼 호환성"
+              },
+              {
+                "item_id": "B19",
+                "run": 2,
+                "before": "UI·텍스트",
+                "after": "게임플레이·밸런스"
+              },
+              {
+                "item_id": "S03",
+                "run": 1,
+                "before": "게임플레이·밸런스",
+                "after": "게임플레이·밸런스 / 플랫폼 호환성"
+              },
+              {
+                "item_id": "S03",
+                "run": 2,
+                "before": "게임플레이·밸런스",
+                "after": "게임플레이·밸런스 / 플랫폼 호환성"
+              },
+              {
+                "item_id": "S04",
+                "run": 1,
+                "before": "게임플레이·밸런스",
+                "after": "게임플레이·밸런스 / 보안·어뷰징"
+              },
+              {
+                "item_id": "S04",
+                "run": 2,
+                "before": "게임플레이·밸런스",
+                "after": "게임플레이·밸런스 / 보안·어뷰징"
+              },
+              {
+                "item_id": "S12",
+                "run": 1,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              },
+              {
+                "item_id": "S12",
+                "run": 2,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              },
+              {
+                "item_id": "S16",
+                "run": 1,
+                "before": "네트워크",
+                "after": "네트워크 / 보안·어뷰징"
+              },
+              {
+                "item_id": "S16",
+                "run": 2,
+                "before": "네트워크",
+                "after": "네트워크 / 보안·어뷰징"
+              },
+              {
+                "item_id": "S17",
+                "run": 2,
+                "before": "결제·재화",
+                "after": "결제·재화 / 보안·어뷰징"
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "A10",
+                "run": 2,
+                "before": "플랫폼 호환성",
+                "after": "클라이언트 안정성"
+              },
+              {
+                "item_id": "A12",
+                "run": 2,
+                "before": "그래픽·사운드/콘텐츠 진행",
+                "after": "그래픽·사운드 / UI·텍스트"
+              },
+              {
+                "item_id": "A18",
+                "run": 1,
+                "before": "콘텐츠 진행",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "A18",
+                "run": 2,
+                "before": "콘텐츠 진행",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "S07",
+                "run": 1,
+                "before": "UI·텍스트",
+                "after": "그래픽·사운드"
+              },
+              {
+                "item_id": "S07",
+                "run": 2,
+                "before": "UI·텍스트",
+                "after": "그래픽·사운드"
+              },
+              {
+                "item_id": "S10b",
+                "run": 1,
+                "before": "결제·재화",
+                "after": "게임플레이·밸런스"
+              },
+              {
+                "item_id": "S10b",
+                "run": 2,
+                "before": "결제·재화",
+                "after": "게임플레이·밸런스"
+              },
+              {
+                "item_id": "S19",
+                "run": 1,
+                "before": "콘텐츠 진행",
+                "after": "해당 없음"
+              },
+              {
+                "item_id": "S19",
+                "run": 2,
+                "before": "콘텐츠 진행",
+                "after": "해당 없음"
+              }
+            ]
+          },
+          "재현 정보": {
+            "regressed": [
+              {
+                "item_id": "A02",
+                "run": 2,
+                "before": "부족",
+                "after": "충분"
+              },
+              {
+                "item_id": "A03",
+                "run": 1,
+                "before": "부족",
+                "after": "충분"
+              },
+              {
+                "item_id": "A03",
+                "run": 2,
+                "before": "부족",
+                "after": "충분"
+              },
+              {
+                "item_id": "A04",
+                "run": 1,
+                "before": "부족",
+                "after": "충분"
+              },
+              {
+                "item_id": "A04",
+                "run": 2,
+                "before": "부족",
+                "after": "충분"
+              },
+              {
+                "item_id": "A10",
+                "run": 1,
+                "before": "부족",
+                "after": "충분"
+              },
+              {
+                "item_id": "A10",
+                "run": 2,
+                "before": "부족",
+                "after": "충분"
+              },
+              {
+                "item_id": "S05",
+                "run": 2,
+                "before": "충분",
+                "after": "부족"
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "A09",
+                "run": 1,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "A09",
+                "run": 2,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "A15",
+                "run": 2,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "A18",
+                "run": 1,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "A18",
+                "run": 2,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "A19",
+                "run": 2,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "S10",
+                "run": 2,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "S19",
+                "run": 1,
+                "before": "충분",
+                "after": "부족"
+              },
+              {
+                "item_id": "S19",
+                "run": 2,
+                "before": "충분",
+                "after": "부족"
+              }
+            ]
+          },
+          "발생 빈도": {
+            "regressed": [
+              {
+                "item_id": "A01",
+                "run": 1,
+                "before": "1회",
+                "after": "항상"
+              },
+              {
+                "item_id": "A04",
+                "run": 1,
+                "before": "간헐적",
+                "after": "항상"
+              },
+              {
+                "item_id": "A04",
+                "run": 2,
+                "before": "간헐적",
+                "after": "항상"
+              },
+              {
+                "item_id": "A14",
+                "run": 2,
+                "before": "1회",
+                "after": "항상"
+              },
+              {
+                "item_id": "A15",
+                "run": 1,
+                "before": "미기재",
+                "after": "항상"
+              },
+              {
+                "item_id": "B06",
+                "run": 1,
+                "before": "항상",
+                "after": "간헐적"
+              },
+              {
+                "item_id": "B06",
+                "run": 2,
+                "before": "항상",
+                "after": "간헐적"
+              },
+              {
+                "item_id": "B14",
+                "run": 1,
+                "before": "항상",
+                "after": "간헐적"
+              },
+              {
+                "item_id": "B14",
+                "run": 2,
+                "before": "항상",
+                "after": "간헐적"
+              },
+              {
+                "item_id": "B15",
+                "run": 1,
+                "before": "1회",
+                "after": "항상"
+              },
+              {
+                "item_id": "B15",
+                "run": 2,
+                "before": "1회",
+                "after": "항상"
+              },
+              {
+                "item_id": "S01",
+                "run": 1,
+                "before": "간헐적",
+                "after": "항상"
+              },
+              {
+                "item_id": "S10",
+                "run": 1,
+                "before": "미기재",
+                "after": "항상"
+              },
+              {
+                "item_id": "S10",
+                "run": 2,
+                "before": "미기재",
+                "after": "1회"
+              },
+              {
+                "item_id": "S11",
+                "run": 1,
+                "before": "1회",
+                "after": "항상"
+              },
+              {
+                "item_id": "S11",
+                "run": 2,
+                "before": "1회",
+                "after": "항상"
+              },
+              {
+                "item_id": "S14",
+                "run": 1,
+                "before": "1회",
+                "after": "항상"
+              },
+              {
+                "item_id": "S14",
+                "run": 2,
+                "before": "1회",
+                "after": "항상"
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "A15",
+                "run": 2,
+                "before": "1회",
+                "after": "미기재"
+              },
+              {
+                "item_id": "A18",
+                "run": 2,
+                "before": "1회",
+                "after": "미기재"
+              },
+              {
+                "item_id": "B13",
+                "run": 1,
+                "before": "간헐적",
+                "after": "미기재"
+              },
+              {
+                "item_id": "B13",
+                "run": 2,
+                "before": "간헐적",
+                "after": "미기재"
+              },
+              {
+                "item_id": "S04",
+                "run": 1,
+                "before": "간헐적",
+                "after": "항상"
+              },
+              {
+                "item_id": "S04",
+                "run": 2,
+                "before": "간헐적",
+                "after": "항상"
+              },
+              {
+                "item_id": "S13",
+                "run": 2,
+                "before": "항상",
+                "after": "1회"
+              },
+              {
+                "item_id": "S15",
+                "run": 1,
+                "before": "항상",
+                "after": "간헐적"
+              },
+              {
+                "item_id": "S15",
+                "run": 2,
+                "before": "항상",
+                "after": "간헐적"
+              }
+            ]
+          },
+          "처리": {
+            "regressed": [
+              {
+                "item_id": "A02",
+                "run": 2,
+                "before": "정보 요청 후 보류",
+                "after": "등록(재현 대기)"
+              },
+              {
+                "item_id": "A04",
+                "run": 1,
+                "before": "정보 요청 후 보류",
+                "after": "등록(재현 대기)"
+              },
+              {
+                "item_id": "A04",
+                "run": 2,
+                "before": "정보 요청 후 보류",
+                "after": "등록(재현 대기)"
+              },
+              {
+                "item_id": "A09",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "CS 응대"
+              },
+              {
+                "item_id": "A10",
+                "run": 2,
+                "before": "정보 요청 후 보류",
+                "after": "등록(재현 대기)"
+              },
+              {
+                "item_id": "A16",
+                "run": 2,
+                "before": "폐기",
+                "after": "CS 응대"
+              },
+              {
+                "item_id": "A17",
+                "run": 2,
+                "before": "폐기",
+                "after": "정보 요청 후 보류"
+              },
+              {
+                "item_id": "B17",
+                "run": 2,
+                "before": "개발 배정",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S02",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S02",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S05",
+                "run": 2,
+                "before": "개발 배정",
+                "after": "CS 응대"
+              },
+              {
+                "item_id": "S13",
+                "run": 2,
+                "before": "긴급 사인 요청",
+                "after": "CS 응대"
+              },
+              {
+                "item_id": "S14",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S14",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S17",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "정보 요청 후 보류"
+              },
+              {
+                "item_id": "S17",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "정보 요청 후 보류"
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "B08",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "개발 배정"
+              },
+              {
+                "item_id": "B08",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "개발 배정"
+              },
+              {
+                "item_id": "B09",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "개발 배정"
+              },
+              {
+                "item_id": "B09",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "개발 배정"
+              },
+              {
+                "item_id": "B11",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "개발 배정"
+              },
+              {
+                "item_id": "B15",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S04",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S04",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S04b",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S04b",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S07",
+                "run": 1,
+                "before": "CS 응대",
+                "after": "등록(재현 대기)"
+              },
+              {
+                "item_id": "S07",
+                "run": 2,
+                "before": "CS 응대",
+                "after": "등록(재현 대기)"
+              },
+              {
+                "item_id": "S10b",
+                "run": 2,
+                "before": "CS 응대",
+                "after": "등록(재현 대기)"
+              },
+              {
+                "item_id": "S11",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S11",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S16",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              }
+            ]
+          },
+          "6칸 정답": {
+            "regressed": [
+              {
+                "item_id": "A01",
+                "run": 1
+              },
+              {
+                "item_id": "A06",
+                "run": 1
+              },
+              {
+                "item_id": "A06",
+                "run": 2
+              },
+              {
+                "item_id": "A16",
+                "run": 2
+              },
+              {
+                "item_id": "A17",
+                "run": 2
+              },
+              {
+                "item_id": "B03",
+                "run": 1
+              },
+              {
+                "item_id": "B03",
+                "run": 2
+              },
+              {
+                "item_id": "B05",
+                "run": 1
+              },
+              {
+                "item_id": "B05",
+                "run": 2
+              },
+              {
+                "item_id": "B14",
+                "run": 1
+              },
+              {
+                "item_id": "B14",
+                "run": 2
+              },
+              {
+                "item_id": "B15",
+                "run": 2
+              },
+              {
+                "item_id": "S01",
+                "run": 1
+              }
+            ],
+            "fixed": [
+              {
+                "item_id": "B08",
+                "run": 1
+              },
+              {
+                "item_id": "B08",
+                "run": 2
+              },
+              {
+                "item_id": "B11",
+                "run": 2
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "m2/qwen2.5:7b": [
+      {
+        "seeds": {
+          "1": 1,
+          "2": 2
+        },
+        "passed": true,
+        "checks": [
+          {
+            "name": "호출 성공률(%)",
+            "kind": "절대",
+            "baseline": null,
+            "candidate": 100.0,
+            "limit": "≥ 100.0",
+            "passed": true
+          },
+          {
+            "name": "날조 응답",
+            "kind": "절대",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "≤ 0",
+            "passed": true
+          },
+          {
+            "name": "출력 언어 위반(R7)",
+            "kind": "절대",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "≤ 0",
+            "passed": true
+          },
+          {
+            "name": "허용 값 위반(R6)",
+            "kind": "절대",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "≤ 0",
+            "passed": true
+          },
+          {
+            "name": "X-1 Critical 미상신",
+            "kind": "회귀",
+            "baseline": 8,
+            "candidate": 5,
+            "limit": "증가 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "과잉 상신",
+            "kind": "회귀",
+            "baseline": 8,
+            "candidate": 8,
+            "limit": "증가 ≤ 4",
+            "passed": true
+          },
+          {
+            "name": "형식 STRICT(응답 수)",
+            "kind": "회귀",
+            "baseline": 126,
+            "candidate": 126,
+            "limit": "하락 ≤ 4",
+            "passed": true
+          },
+          {
+            "name": "형식 PARSABLE(응답 수)",
+            "kind": "회귀",
+            "baseline": 126,
+            "candidate": 126,
+            "limit": "하락 ≤ 4",
+            "passed": true
+          },
+          {
+            "name": "처리 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 85,
+            "candidate": 88,
+            "limit": "하락 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "분류 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 85,
+            "candidate": 85,
+            "limit": "하락 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "우선순위 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 77,
+            "candidate": 80,
+            "limit": "하락 ≤ 2",
+            "passed": true
+          },
+          {
+            "name": "모듈 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 89,
+            "candidate": 89,
+            "limit": "하락 ≤ 6",
+            "passed": true
+          },
+          {
+            "name": "재현 정보 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 106,
+            "candidate": 106,
+            "limit": "하락 ≤ 6",
+            "passed": true
+          },
+          {
+            "name": "발생 빈도 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 60,
+            "candidate": 60,
+            "limit": "하락 ≤ 6",
+            "passed": true
+          },
+          {
+            "name": "6칸 모두 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 27,
+            "candidate": 27,
+            "limit": "하락 ≤ 6",
+            "passed": true
+          },
+          {
+            "name": "처리 문항 단위 회귀(응답 수)",
+            "kind": "회귀",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "≤ 4",
+            "passed": true
+          },
+          {
+            "name": "분류 문항 단위 회귀(응답 수)",
+            "kind": "회귀",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "≤ 4",
+            "passed": true
+          },
+          {
+            "name": "X-2 결함 폐기",
+            "kind": "기준선 대비",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "증가 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "X-3 경계 건 확정 처리",
+            "kind": "기준선 대비",
+            "baseline": 4,
+            "candidate": 4,
+            "limit": "증가 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "평균 지연(초)",
+            "kind": "절대",
+            "baseline": 1.698,
+            "candidate": 2.278,
+            "limit": "≤ 10.0",
+            "passed": true
+          }
+        ],
+        "baseline": {
+          "n": 126,
+          "success": 126,
+          "strict": 126,
+          "parsable": 126,
+          "fields_ok": {
+            "분류": 85,
+            "우선순위": 77,
+            "모듈": 89,
+            "재현 정보": 106,
+            "발생 빈도": 60,
+            "처리": 85,
+            "6칸 정답": 27
+          },
+          "x1": 8,
+          "x2": 0,
+          "x3": 4,
+          "over": 8,
+          "halluc": 0,
+          "lang": 0,
+          "enum": 0,
+          "latency": 1.698
+        },
+        "candidate": {
+          "n": 126,
+          "success": 126,
+          "strict": 126,
+          "parsable": 126,
+          "fields_ok": {
+            "분류": 85,
+            "우선순위": 80,
+            "모듈": 89,
+            "재현 정보": 106,
+            "발생 빈도": 60,
+            "처리": 88,
+            "6칸 정답": 27
+          },
+          "x1": 5,
+          "x2": 0,
+          "x3": 4,
+          "over": 8,
+          "halluc": 0,
+          "lang": 0,
+          "enum": 0,
+          "latency": 2.278
+        },
+        "item_changes": {
+          "분류": {
+            "regressed": [],
+            "fixed": []
+          },
+          "우선순위": {
+            "regressed": [],
+            "fixed": [
+              {
+                "item_id": "S04",
+                "run": 2,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S04b",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S16",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              }
+            ]
+          },
+          "모듈": {
+            "regressed": [],
+            "fixed": []
+          },
+          "재현 정보": {
+            "regressed": [],
+            "fixed": []
+          },
+          "발생 빈도": {
+            "regressed": [],
+            "fixed": []
+          },
+          "처리": {
+            "regressed": [],
+            "fixed": [
+              {
+                "item_id": "S04",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S04b",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S16",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              }
+            ]
+          },
+          "6칸 정답": {
+            "regressed": [],
+            "fixed": []
+          }
+        }
+      },
+      {
+        "seeds": {
+          "1": 11,
+          "2": 12
+        },
+        "passed": true,
+        "checks": [
+          {
+            "name": "호출 성공률(%)",
+            "kind": "절대",
+            "baseline": null,
+            "candidate": 100.0,
+            "limit": "≥ 100.0",
+            "passed": true
+          },
+          {
+            "name": "날조 응답",
+            "kind": "절대",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "≤ 0",
+            "passed": true
+          },
+          {
+            "name": "출력 언어 위반(R7)",
+            "kind": "절대",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "≤ 0",
+            "passed": true
+          },
+          {
+            "name": "허용 값 위반(R6)",
+            "kind": "절대",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "≤ 0",
+            "passed": true
+          },
+          {
+            "name": "X-1 Critical 미상신",
+            "kind": "회귀",
+            "baseline": 7,
+            "candidate": 5,
+            "limit": "증가 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "과잉 상신",
+            "kind": "회귀",
+            "baseline": 10,
+            "candidate": 10,
+            "limit": "증가 ≤ 4",
+            "passed": true
+          },
+          {
+            "name": "형식 STRICT(응답 수)",
+            "kind": "회귀",
+            "baseline": 126,
+            "candidate": 126,
+            "limit": "하락 ≤ 4",
+            "passed": true
+          },
+          {
+            "name": "형식 PARSABLE(응답 수)",
+            "kind": "회귀",
+            "baseline": 126,
+            "candidate": 126,
+            "limit": "하락 ≤ 4",
+            "passed": true
+          },
+          {
+            "name": "처리 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 86,
+            "candidate": 88,
+            "limit": "하락 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "분류 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 87,
+            "candidate": 87,
+            "limit": "하락 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "우선순위 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 77,
+            "candidate": 79,
+            "limit": "하락 ≤ 2",
+            "passed": true
+          },
+          {
+            "name": "모듈 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 91,
+            "candidate": 91,
+            "limit": "하락 ≤ 6",
+            "passed": true
+          },
+          {
+            "name": "재현 정보 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 103,
+            "candidate": 103,
+            "limit": "하락 ≤ 6",
+            "passed": true
+          },
+          {
+            "name": "발생 빈도 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 59,
+            "candidate": 59,
+            "limit": "하락 ≤ 6",
+            "passed": true
+          },
+          {
+            "name": "6칸 모두 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 24,
+            "candidate": 24,
+            "limit": "하락 ≤ 6",
+            "passed": true
+          },
+          {
+            "name": "처리 문항 단위 회귀(응답 수)",
+            "kind": "회귀",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "≤ 4",
+            "passed": true
+          },
+          {
+            "name": "분류 문항 단위 회귀(응답 수)",
+            "kind": "회귀",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "≤ 4",
+            "passed": true
+          },
+          {
+            "name": "X-2 결함 폐기",
+            "kind": "기준선 대비",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "증가 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "X-3 경계 건 확정 처리",
+            "kind": "기준선 대비",
+            "baseline": 4,
+            "candidate": 4,
+            "limit": "증가 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "평균 지연(초)",
+            "kind": "절대",
+            "baseline": 1.682,
+            "candidate": 2.267,
+            "limit": "≤ 10.0",
+            "passed": true
+          }
+        ],
+        "baseline": {
+          "n": 126,
+          "success": 126,
+          "strict": 126,
+          "parsable": 126,
+          "fields_ok": {
+            "분류": 87,
+            "우선순위": 77,
+            "모듈": 91,
+            "재현 정보": 103,
+            "발생 빈도": 59,
+            "처리": 86,
+            "6칸 정답": 24
+          },
+          "x1": 7,
+          "x2": 0,
+          "x3": 4,
+          "over": 10,
+          "halluc": 0,
+          "lang": 0,
+          "enum": 0,
+          "latency": 1.682
+        },
+        "candidate": {
+          "n": 126,
+          "success": 126,
+          "strict": 126,
+          "parsable": 126,
+          "fields_ok": {
+            "분류": 87,
+            "우선순위": 79,
+            "모듈": 91,
+            "재현 정보": 103,
+            "발생 빈도": 59,
+            "처리": 88,
+            "6칸 정답": 24
+          },
+          "x1": 5,
+          "x2": 0,
+          "x3": 4,
+          "over": 10,
+          "halluc": 0,
+          "lang": 0,
+          "enum": 0,
+          "latency": 2.267
+        },
+        "item_changes": {
+          "분류": {
+            "regressed": [],
+            "fixed": []
+          },
+          "우선순위": {
+            "regressed": [],
+            "fixed": [
+              {
+                "item_id": "S04b",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S04b",
+                "run": 2,
+                "before": "Major",
+                "after": "Critical"
+              }
+            ]
+          },
+          "모듈": {
+            "regressed": [],
+            "fixed": []
+          },
+          "재현 정보": {
+            "regressed": [],
+            "fixed": []
+          },
+          "발생 빈도": {
+            "regressed": [],
+            "fixed": []
+          },
+          "처리": {
+            "regressed": [],
+            "fixed": [
+              {
+                "item_id": "S04b",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S04b",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              }
+            ]
+          },
+          "6칸 정답": {
+            "regressed": [],
+            "fixed": []
+          }
+        }
+      },
+      {
+        "seeds": {
+          "1": 21,
+          "2": 22
+        },
+        "passed": true,
+        "checks": [
+          {
+            "name": "호출 성공률(%)",
+            "kind": "절대",
+            "baseline": null,
+            "candidate": 100.0,
+            "limit": "≥ 100.0",
+            "passed": true
+          },
+          {
+            "name": "날조 응답",
+            "kind": "절대",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "≤ 0",
+            "passed": true
+          },
+          {
+            "name": "출력 언어 위반(R7)",
+            "kind": "절대",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "≤ 0",
+            "passed": true
+          },
+          {
+            "name": "허용 값 위반(R6)",
+            "kind": "절대",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "≤ 0",
+            "passed": true
+          },
+          {
+            "name": "X-1 Critical 미상신",
+            "kind": "회귀",
+            "baseline": 10,
+            "candidate": 7,
+            "limit": "증가 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "과잉 상신",
+            "kind": "회귀",
+            "baseline": 8,
+            "candidate": 8,
+            "limit": "증가 ≤ 4",
+            "passed": true
+          },
+          {
+            "name": "형식 STRICT(응답 수)",
+            "kind": "회귀",
+            "baseline": 126,
+            "candidate": 126,
+            "limit": "하락 ≤ 4",
+            "passed": true
+          },
+          {
+            "name": "형식 PARSABLE(응답 수)",
+            "kind": "회귀",
+            "baseline": 126,
+            "candidate": 126,
+            "limit": "하락 ≤ 4",
+            "passed": true
+          },
+          {
+            "name": "처리 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 81,
+            "candidate": 84,
+            "limit": "하락 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "분류 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 81,
+            "candidate": 81,
+            "limit": "하락 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "우선순위 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 74,
+            "candidate": 77,
+            "limit": "하락 ≤ 2",
+            "passed": true
+          },
+          {
+            "name": "모듈 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 89,
+            "candidate": 89,
+            "limit": "하락 ≤ 6",
+            "passed": true
+          },
+          {
+            "name": "재현 정보 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 106,
+            "candidate": 106,
+            "limit": "하락 ≤ 6",
+            "passed": true
+          },
+          {
+            "name": "발생 빈도 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 63,
+            "candidate": 63,
+            "limit": "하락 ≤ 6",
+            "passed": true
+          },
+          {
+            "name": "6칸 모두 정답(응답 수)",
+            "kind": "회귀",
+            "baseline": 24,
+            "candidate": 24,
+            "limit": "하락 ≤ 6",
+            "passed": true
+          },
+          {
+            "name": "처리 문항 단위 회귀(응답 수)",
+            "kind": "회귀",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "≤ 4",
+            "passed": true
+          },
+          {
+            "name": "분류 문항 단위 회귀(응답 수)",
+            "kind": "회귀",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "≤ 4",
+            "passed": true
+          },
+          {
+            "name": "X-2 결함 폐기",
+            "kind": "기준선 대비",
+            "baseline": 0,
+            "candidate": 0,
+            "limit": "증가 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "X-3 경계 건 확정 처리",
+            "kind": "기준선 대비",
+            "baseline": 6,
+            "candidate": 6,
+            "limit": "증가 ≤ 0",
+            "passed": true
+          },
+          {
+            "name": "평균 지연(초)",
+            "kind": "절대",
+            "baseline": 1.705,
+            "candidate": 2.261,
+            "limit": "≤ 10.0",
+            "passed": true
+          }
+        ],
+        "baseline": {
+          "n": 126,
+          "success": 126,
+          "strict": 126,
+          "parsable": 126,
+          "fields_ok": {
+            "분류": 81,
+            "우선순위": 74,
+            "모듈": 89,
+            "재현 정보": 106,
+            "발생 빈도": 63,
+            "처리": 81,
+            "6칸 정답": 24
+          },
+          "x1": 10,
+          "x2": 0,
+          "x3": 6,
+          "over": 8,
+          "halluc": 0,
+          "lang": 0,
+          "enum": 0,
+          "latency": 1.705
+        },
+        "candidate": {
+          "n": 126,
+          "success": 126,
+          "strict": 126,
+          "parsable": 126,
+          "fields_ok": {
+            "분류": 81,
+            "우선순위": 77,
+            "모듈": 89,
+            "재현 정보": 106,
+            "발생 빈도": 63,
+            "처리": 84,
+            "6칸 정답": 24
+          },
+          "x1": 7,
+          "x2": 0,
+          "x3": 6,
+          "over": 8,
+          "halluc": 0,
+          "lang": 0,
+          "enum": 0,
+          "latency": 2.261
+        },
+        "item_changes": {
+          "분류": {
+            "regressed": [],
+            "fixed": []
+          },
+          "우선순위": {
+            "regressed": [],
+            "fixed": [
+              {
+                "item_id": "S04b",
+                "run": 1,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S04b",
+                "run": 2,
+                "before": "Major",
+                "after": "Critical"
+              },
+              {
+                "item_id": "S16",
+                "run": 2,
+                "before": "Major",
+                "after": "Critical"
+              }
+            ]
+          },
+          "모듈": {
+            "regressed": [],
+            "fixed": []
+          },
+          "재현 정보": {
+            "regressed": [],
+            "fixed": []
+          },
+          "발생 빈도": {
+            "regressed": [],
+            "fixed": []
+          },
+          "처리": {
+            "regressed": [],
+            "fixed": [
+              {
+                "item_id": "S04b",
+                "run": 1,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S04b",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              },
+              {
+                "item_id": "S16",
+                "run": 2,
+                "before": "등록(재현 대기)",
+                "after": "긴급 사인 요청"
+              }
+            ]
+          },
+          "6칸 정답": {
+            "regressed": [],
+            "fixed": []
+          }
+        }
+      }
+    ]
+  }
+}
