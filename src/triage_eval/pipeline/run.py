@@ -7,10 +7,11 @@
     uv run triage-run --seed 1 --split test --final         # 평가용(test) — 최종 측정 때만
     uv run triage-run --seed 1 --dataset v14                # (v1.4) 개발용 63건
     uv run triage-run --seed 1 --dataset v14 --split final --final   # (v1.4) 최종 평가용 25건 — 방법 선택 후 1회만
+    uv run triage-run --seed 1 --dataset v14 --method m2    # (v1.4) 방법 M2 (m0·m1·m2·m1m2, 설계 의도 12)
 
 출력:
     data/results/v13/history/v13_<split>_<시각>.json   실행 기록 (항상 새 파일)
-    data/results/v14/history/v14_<split>_<시각>.json   --dataset v14 실행 기록
+    data/results/v14/history/v14_<split>_<방법>_<시각>.json   --dataset v14 실행 기록
 
 채점: uv run triage-score
 
@@ -85,6 +86,13 @@
      빈 실행 기록이 남으면 "실행은 했는데 결과가 없음"과 "실행하지 않음"이 구분되지 않기 때문이다.
    - 실행 기록은 평가셋별 폴더(v13/history, v14/history)에 따로 남긴다. v1.3 게이트·모델 선정 도구는
      v13 폴더만 보므로, v1.4 실행 기록이 섞여 v1.3 판정이 바뀌는 일이 없다.
+12. (v1.4) --method 로 방법을 고른다(methods.py, report/method_comparison_v14_plan.md). 기본값 m0은 기존과 같다.
+   - m1·m1m2: 판정 예시 블록을 시스템 프롬프트 뒤에 넣는다. 형식 재요청·폐기 확인·Critical 확인 질문도 같은 앞부분을 쓴다.
+   - m2·m1m2: 형식 재요청 뒤, 폐기 확인 앞에 Critical 체크리스트를 1회 묻는다(critical_check). 순서를 이렇게 둔 것은
+     형식이 고쳐진 판단을 보고 묻기 위해서이고, 폐기 확인·후처리 안전장치는 모든 방법에서 같은 위치에 두기 위해서다.
+   - m0이 아닌 방법은 v14 평가셋에서만 실행한다. v1.3 실행 기록 폴더에는 m0 실행만 남아 v1.3 게이트가 흔들리지 않는다.
+   - 실행 기록 run_config 에 method 와 방법 구성 지문(method_assets_sha256)을 남긴다. 비교 도구(compare.py)는
+     방법 말고 다른 조건이 같은지 확인할 때 이 값을 쓴다.
 """
 
 import argparse
@@ -102,6 +110,7 @@ from triage_eval.common.paths import ROOT
 from triage_eval.common.preflight import snapshot as preflight_snapshot
 from triage_eval.pipeline.contract import (ENUMS_V2, FORBIDDEN_SCRIPTS, LINE_PATTERNS, MODULES, NO_MODULE, OUTPUT_LANG,
                                            enum_errors, language_errors, parse_v2, replace_field, score_format_v2)
+from triage_eval.pipeline import methods
 from triage_eval.pipeline.guardrail import GUARDRAIL_VERSION, apply_record
 from triage_eval.pipeline.prompt import (DISCARD_CHECK_CHOICES, PROMPT_VERSION, SYSTEM_PROMPT_V2,
                                          build_discard_check_prompt, build_prompt, build_retry_prompt)
@@ -211,9 +220,9 @@ def unload_model(client, model: str) -> None:
         pass
 
 
-def generate_with_retry(client, model: str, item: dict, options: dict, retry: bool = True) -> dict:
+def generate_with_retry(client, model: str, item: dict, options: dict, retry: bool = True, examples: str = "") -> dict:
     """설계 의도 6 — 1회 생성하고, R6·R7 위반이면 틀린 필드만 1회 다시 요청한다."""
-    first = generate_once(client, model, build_prompt(item), options)
+    first = generate_once(client, model, build_prompt(item, examples), options)
     if not first["success"]:
         return {**first, "attempts": [], "retried": False}
     fmt1 = score_format_v2(first["response_text"])
@@ -230,7 +239,7 @@ def generate_with_retry(client, model: str, item: dict, options: dict, retry: bo
     if not fields:   # 위반이 필드 밖(필드 라벨이 아닌 줄 등)에 있으면 고칠 필드가 없다
         return {**first, "attempts": attempts, "retried": False}
     retry_opts = {**options, "num_predict": RETRY_POLICY["num_predict"]}
-    retry_prompt = build_retry_prompt(item, first["response_text"], errors, recheck, lang_errs)
+    retry_prompt = build_retry_prompt(item, first["response_text"], errors, recheck, lang_errs, examples=examples)
     second = generate_once(client, model, retry_prompt, retry_opts, schema=retry_schema(fields))
     pattern_fallback = False
     if not second["success"] and lang_errs:
@@ -260,13 +269,13 @@ DISCARD_CHECK_SCHEMA = {"type": "object", "properties": {"판정": {"type": "str
                         "required": ["판정"]}
 
 
-def discard_check(client, model: str, item: dict, res: dict, options: dict) -> dict:
+def discard_check(client, model: str, item: dict, res: dict, options: dict, examples: str = "") -> dict:
     """설계 의도 7 — 폐기 직전 확인. 대상이 아니면 res 를 그대로 돌려준다."""
     pred = parse_v2(res.get("response_text", ""))
     if not res.get("success") or pred.get("처리") != "폐기" or pred.get("분류") == "중복 의심":
         return {**res, "discard_checked": False}
     opts = {**options, "num_predict": DISCARD_CHECK_POLICY["num_predict"]}
-    ans = generate_once(client, model, build_discard_check_prompt(item), opts, schema=DISCARD_CHECK_SCHEMA)
+    ans = generate_once(client, model, build_discard_check_prompt(item, examples), opts, schema=DISCARD_CHECK_SCHEMA)
     verdict = parse_retry(ans["response_text"]).get("판정") if ans["success"] else None
     held = verdict == "이상 현상 제보"
     text = replace_field(res["response_text"], "처리", DISCARD_CHECK_POLICY["on_report"]) if held else res["response_text"]
@@ -277,10 +286,34 @@ def discard_check(client, model: str, item: dict, res: dict, options: dict) -> d
             "attempts": attempts, "discard_checked": True, "discard_held": held}
 
 
-def generate_triage(client, model: str, item: dict, options: dict, retry: bool = True, check: bool = True) -> dict:
-    """1회 생성 → 형식 재요청(설계 의도 6) → 폐기 확인(설계 의도 7). 후처리 안전장치는 main 에서 적용한다."""
-    res = generate_with_retry(client, model, item, options, retry=retry)
-    return discard_check(client, model, item, res, options) if check else {**res, "discard_checked": False}
+def critical_check(client, model: str, item: dict, res: dict, options: dict, examples: str = "") -> dict:
+    """설계 의도 12 — Critical 체크리스트(M2). 분류가 결함일 때만 묻고, 올리기만 한다(methods.decide_upgrade)."""
+    pred = parse_v2(res.get("response_text", ""))
+    if not res.get("success") or not methods.should_ask(pred):
+        return {**res, "critical_checked": False}
+    opts = {**options, "num_predict": methods.CHECKLIST_POLICY["num_predict"]}
+    prompt = methods.build_checklist_prompt(build_prompt(item, examples), res["response_text"])
+    ans = generate_once(client, model, prompt, opts, schema=methods.CHECKLIST_SCHEMA)
+    answers = parse_retry(ans["response_text"]) if ans["success"] else {}
+    upgraded, reason = methods.decide_upgrade(pred, answers)
+    text = methods.apply_upgrade(res["response_text"]) if upgraded else res["response_text"]
+    attempts = res.get("attempts", []) + [{"kind": "critical_check", "response_text": ans["response_text"],
+                                          "answers": answers, "upgraded": upgraded, "reason": reason,
+                                          "elapsed_sec": ans["elapsed_sec"], "error_message": ans["error_message"]}]
+    return {**res, "response_text": text, "elapsed_sec": round(res["elapsed_sec"] + ans["elapsed_sec"], 3),
+            "attempts": attempts, "critical_checked": True, "critical_upgraded": upgraded}
+
+
+def generate_triage(client, model: str, item: dict, options: dict, retry: bool = True, check: bool = True,
+                    method: str = "m0") -> dict:
+    """1회 생성 → 형식 재요청(설계 의도 6) → (M2) Critical 체크리스트 → 폐기 확인(설계 의도 7).
+    후처리 안전장치는 main 에서 적용한다. method 는 설계 의도 12."""
+    use_examples, use_checklist = methods.METHODS[method]
+    examples = methods.examples_block() if use_examples else ""
+    res = generate_with_retry(client, model, item, options, retry=retry, examples=examples)
+    if use_checklist:
+        res = critical_check(client, model, item, res, options, examples)
+    return discard_check(client, model, item, res, options, examples) if check else {**res, "discard_checked": False}
 
 
 def check_split_guard(split: str, final: bool) -> str | None:
@@ -299,6 +332,7 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="평가셋 실행 (출력 형식 v2)")
     p.add_argument("--dataset", choices=["v13", "v14"], default="v13", help="평가셋 (기본: v13, 설계 의도 11)")
     p.add_argument("--split", choices=["dev", "test", "final", "all"], default="dev")
+    p.add_argument("--method", choices=list(methods.METHODS), default="m0", help="방법 (기본: m0, 설계 의도 12)")
     p.add_argument("--set", dest="set_name", choices=["representative", "focused", "all"], default="all")
     p.add_argument("--model", action="append", help="실행할 모델 (여러 번 지정 가능, 기본: qwen2.5:7b)")
     p.add_argument("--seed", type=int, default=None, help="seed 고정 모드 (1회차 N, 2회차 N+1)")
@@ -315,6 +349,9 @@ def main(argv: list[str] | None = None) -> int:
         print(blocked)
         return 2
 
+    if args.method != "m0" and args.dataset != "v14":
+        print("m0이 아닌 방법은 v14 평가셋에서만 실행합니다 (설계 의도 12). --dataset v14 를 함께 주세요.")
+        return 2
     dataset_path, out_dir = (DATASET, OUT_DIR) if args.dataset == "v13" else (DATASET_V14, OUT_DIR_V14)
     dataset = json.loads(dataset_path.read_text(encoding="utf-8"))
     items = select_items(dataset, args.split, args.set_name)
@@ -347,6 +384,9 @@ def main(argv: list[str] | None = None) -> int:
         "discard_check_policy": None if args.no_discard_check else DISCARD_CHECK_POLICY,
         "system_prompt_sha256": sha256_text(SYSTEM_PROMPT_V2),
         "think": THINK,
+        "method": args.method,
+        "method_assets_sha256": methods.assets_sha256(args.method),
+        "critical_check_policy": methods.CHECKLIST_POLICY if methods.METHODS[args.method][1] else None,
         "dataset_sha256": hashlib.sha256(json.dumps(dataset, ensure_ascii=False, sort_keys=True).encode()).hexdigest(),
         "item_ids": [i["id"] for i in items],
         "model_digests": get_model_digests(client, models),
@@ -366,7 +406,7 @@ def main(argv: list[str] | None = None) -> int:
             opts = options_for(args.seed, run_idx)
             for n, item in enumerate(items, start=1):
                 res = generate_triage(client, model, item, opts, retry=not args.no_retry,
-                                      check=not args.no_discard_check)
+                                      check=not args.no_discard_check, method=args.method)
                 near_limit = (res.get("prompt_eval_count") or 0) + OPTIONS_V2["num_predict"] > OPTIONS_V2["num_ctx"]
                 record = {
                     "eval_id": f"{model.replace(':', '_')}_{item['id']}_run{run_idx}",
@@ -381,6 +421,8 @@ def main(argv: list[str] | None = None) -> int:
                 status = "성공" if res["success"] else f"실패 - {res['error_message']}"
                 if res.get("retried"):
                     status += f" · 형식 재요청({'채택' if res['retry_adopted'] else '미채택'})"
+                if res.get("critical_checked"):
+                    status += f" · Critical 확인({'Critical로 올림' if res['critical_upgraded'] else '유지'})"
                 if res.get("discard_checked"):
                     status += f" · 폐기 확인({'보류로 변경' if res['discard_held'] else '폐기 유지'})"
                 print(f"[{model}] [Run {run_idx}] ({n}/{len(items)}) {item['id']}: {status} "
@@ -396,7 +438,8 @@ def main(argv: list[str] | None = None) -> int:
         "results": results,
     }
     out_dir.mkdir(parents=True, exist_ok=True)
-    out = out_dir / f"{args.dataset}_{args.split}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+    stem = f"{args.dataset}_{args.split}" + ("" if args.dataset == "v13" else f"_{args.method}")
+    out = out_dir / f"{stem}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
     out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
     near = sum(r["context_near_limit"] for r in results)
@@ -409,6 +452,9 @@ def main(argv: list[str] | None = None) -> int:
     if not args.no_discard_check:
         checked = [r for r in results if r.get("discard_checked")]
         print(f"  폐기 확인 {len(checked)}건 (보류로 변경 {sum(r['discard_held'] for r in checked)}건)")
+    crit_checked = [r for r in results if r.get("critical_checked")]
+    if crit_checked:
+        print(f"  Critical 확인 {len(crit_checked)}건 (Critical로 올림 {sum(r['critical_upgraded'] for r in crit_checked)}건)")
     if not args.no_guardrail:
         print(f"  후처리 안전장치({GUARDRAIL_VERSION}) 적용 {len(fixed)}건")
     if near:

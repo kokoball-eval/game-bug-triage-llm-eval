@@ -42,6 +42,13 @@
 - 동작 동일성 확인: 저장된 v1.3 실행 기록 27개를 변경 전후 코드로 다시 채점해 채점 결과 JSON 27개가 모두 같고, 보고서는 실행 기록 경로 표기 외에 같음
 - 테스트 218 → 225개
 
+### 추가 (6단계: 방법 실행·비교 도구)
+- `src/triage_eval/pipeline/methods.py` — M1 판정 예시(확정 문서 `docs/method/m1_examples.md`를 실행 시 읽음, CRLF 체크아웃에서도 같은 문자열), M2 Critical 체크리스트(6문항 JSON 스키마, 올리기만, 재현 정보 부족 시 서버 장애만 예외, 허용 값 밖 판단은 변경 안 함)
+- `run.py` — `--method m0|m1|m2|m1m2`(기본 m0). m0 외 방법은 v14 평가셋에서만 실행. 실행 기록에 `method`·`method_assets_sha256`·`critical_check_policy`. v1.4 실행 기록 이름에 방법 포함(`v14_dev_m2_<시각>.json`)
+- `src/triage_eval/pipeline/compare.py` (`uv run triage-compare`) — `method_selection_v14.toml`로 실험 A(방법)·B(모델) 판정. arm = 방법/모델. 개발용·v1.4·seed 구성·비교 외 조건 일치를 먼저 확인하고, 어긋나면 판정 거부(종료 코드 2). M1·M2가 모두 채택 대상이면 M1+M2 측정 안내
+- `prompt.py` — 프롬프트 조립 함수에 예시 블록 선택 인자(기본 빈 문자열이라 m0 프롬프트는 그대로, 테스트로 확인)
+- 테스트 226 → 259개 (예시·평가셋 표현 겹침 15% 미만, 체크리스트 규칙 9가지, 가짜 모델로 채택·기준 유지·'예' 편향 탈락·조건 불일치 거부)
+
 ### 추가 (5단계: 방법 비교 사전 등록)
 - `report/method_comparison_v14_plan.md` — 실험 A(모델 고정, M0·M1·M2·조건부 M1+M2)와 실험 B(방법 고정, qwen2.5:7b vs gemma4:12b)의 계획. 측정 전 커밋
   - M1: 판정 예시 4개(few-shot, [`docs/method/m1_examples.md`](docs/method/m1_examples.md)) — 등급 눈금(해당 없음·판단보류) 겨냥

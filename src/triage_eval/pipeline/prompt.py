@@ -20,6 +20,10 @@
 7. 폐기 확인 질문(build_discard_check_prompt)은 시스템 프롬프트의 [분류] 규칙에 있는 '무관' 정의를 그대로 쓴다.
    평가셋 문항에 맞춘 예시(특정 증상 이름)를 넣지 않는다. 개발용 문항 하나를 맞히려고 질문을 고치면
    평가용 문항에서 같은 효과가 난다는 보장이 없다.
+8. (v1.4) 프롬프트 조립 함수는 examples(판정 예시 블록, methods.py M1)를 선택 인자로 받는다. 기본값은 빈 문자열이라
+   M0(기존 방법)의 프롬프트는 한 글자도 바뀌지 않는다. 예시는 시스템 프롬프트와 [리포트] 사이에 들어가고,
+   형식 재요청·폐기 확인·Critical 확인 질문도 같은 앞부분을 쓴다. 첫 응답과 뒤따르는 질문의 맥락이 같아야
+   방법 사이의 차이가 예시 유무 하나로만 생긴다.
 """
 
 from triage_eval.pipeline.contract import ENUMS_V2, LANG_NAMES, MODULES, NO_MODULE, OUTPUT_LANG
@@ -100,12 +104,14 @@ def build_input(item: dict) -> str:
     return "\n".join(lines)
 
 
-def build_prompt(item: dict) -> str:
-    return f"{SYSTEM_PROMPT_V2}\n[리포트]\n{build_input(item)}"
+def build_prompt(item: dict, examples: str = "") -> str:
+    """설계 의도 8 — examples 가 비어 있으면 v2.3 그대로."""
+    return f"{SYSTEM_PROMPT_V2}{examples}\n[리포트]\n{build_input(item)}"
 
 
 def build_retry_prompt(item: dict, previous: str, errors: list[tuple[str, str | None]],
-                       recheck: tuple[str, ...] = (), lang_errors: list[tuple[str, str]] = ()) -> str:
+                       recheck: tuple[str, ...] = (), lang_errors: list[tuple[str, str]] = (),
+                       examples: str = "") -> str:
     """형식 위반 필드만 1회 다시 요청하는 프롬프트 (설계 의도 5·6).
 
     errors      허용 값 밖인 선택지 필드 (R6)
@@ -126,15 +132,15 @@ def build_retry_prompt(item: dict, previous: str, errors: list[tuple[str, str | 
     fields = [f for f, _ in errors] + list(recheck) + [f for f, _ in lang_errors]
     lines.append(f"위 필드({', '.join(fields)})만 다시 정해 JSON으로 출력하세요. 키는 필드명입니다. "
                  "선택지가 있는 필드의 값은 허용 값 중 하나입니다. 다른 필드는 출력하지 마세요.")
-    return build_prompt(item) + "\n".join(lines)
+    return build_prompt(item, examples) + "\n".join(lines)
 
 
 DISCARD_CHECK_CHOICES = ["이상 현상 제보", "무관"]
 
 
-def build_discard_check_prompt(item: dict) -> str:
+def build_discard_check_prompt(item: dict, examples: str = "") -> str:
     """폐기 직전 확인 질문 (설계 의도 7, 판정 기준서 H-9). 답은 run.py 가 JSON 스키마로 제한한다."""
-    return build_prompt(item) + "\n".join([
+    return build_prompt(item, examples) + "\n".join([
         "",
         "[확인 질문]",
         "위 리포트를 폐기하기 전에 확인합니다. 이 글이 게임이나 기기를 이용하면서 겪은 이상 현상을 알리고 있으면 "
