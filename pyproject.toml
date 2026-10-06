@@ -1,7 +1,7 @@
 [project]
 name = "game-bug-triage-eval"
 version = "0.1.0"
-description = "게임 버그 리포트 1차 트리아지를 로컬 LLM에 맡길 때, 그 판단을 평가셋·회귀 게이트·사전 등록 비교로 검증하는 LLM 평가 체계"
+description = "LLM에게 1차 트리아지를 맡길 때, 그 판단을 평가셋·회귀 게이트·사전 등록 비교로 검증하는 평가 체계 (검증 사례: 게임 버그 리포트)"
 requires-python = ">=3.12"
 dependencies = [
     "ollama>=0.6.2",
