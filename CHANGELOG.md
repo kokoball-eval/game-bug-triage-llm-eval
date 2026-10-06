@@ -12,7 +12,8 @@
 - README — 상단 요약과 2절을 현재 구성(v1.4)과 결과 중심으로 바꾸고, v1.0 모델 선정 내용은 3절 "출발점"으로 옮김(수치 변경 없음). 6절을 "안전장치와 한계"로 바꿔 v1.0 가드레일 설계가 현재 어떻게 구현됐는지와 v1.4 기준 남은 한계를 추가. 테스트 표에 v1.3·v1.4 테스트를 추가하고, 현재 채택 구성 실행 명령을 추가하고, 로드맵에서 v1.5를 다음 작업으로 표시
 - CHANGELOG — v1.4 절을 작업 단계 순서로 정렬, 버전 비교 링크(v1.0·v1.3·v1.4) 추가
 - `pyproject.toml` 프로젝트 설명, 패키지 설명문을 현재 구성에 맞춤 (동작 변경 없음)
-- 프로젝트 이름을 "LLM 트리아지 평가 체계"로 변경 — 평가 방법이 특정 도메인에 묶이지 않는 구조임을 드러내고, 지금까지의 검증 사례가 게임 라이브 서비스 버그 리포트라는 점은 README 첫 줄과 한계에 명시. 저장소 주소(`game-bug-triage-llm-eval`)와 패키지 이름은 기존 링크 보존을 위해 유지
+- 프로젝트 이름을 "LLM 트리아지 평가 체계"로 변경 — 평가 방법이 특정 도메인에 묶이지 않는 구조임을 드러내고, 지금까지의 검증 사례가 게임 라이브 서비스 버그 리포트라는 점은 README 첫 줄과 한계에 명시. 패키지 이름(`game-bug-triage-eval`)은 내부 실행 환경에만 쓰여 유지
+- 저장소 이름을 `game-bug-triage-llm-eval`에서 `llm-triage-eval`로 변경. README·CHANGELOG의 저장소 주소를 새 주소로 교체 (GitHub가 기존 주소를 새 주소로 연결하므로 기존 링크도 계속 동작)
 
 ---
 
@@ -267,9 +268,9 @@
 - 결론: **Qwen2.5-7B 채택.** Llama-3.1-8B는 단문 리포트(Q08)에서 없는 결함과 PC 사양을 지어내 탈락
 - 상세: [`report/final_selection.md`](report/final_selection.md)
 
-[v1.4]: https://github.com/kokoball-eval/game-bug-triage-llm-eval/compare/v1.3...v1.4
-[v1.3]: https://github.com/kokoball-eval/game-bug-triage-llm-eval/compare/v1.2...v1.3
-[v1.2]: https://github.com/kokoball-eval/game-bug-triage-llm-eval/compare/v1.1.1...v1.2
-[v1.1.1]: https://github.com/kokoball-eval/game-bug-triage-llm-eval/compare/v1.1...v1.1.1
-[v1.1]: https://github.com/kokoball-eval/game-bug-triage-llm-eval/compare/v1.0-submission...v1.1
-[v1.0]: https://github.com/kokoball-eval/game-bug-triage-llm-eval/tree/v1.0-submission
+[v1.4]: https://github.com/kokoball-eval/llm-triage-eval/compare/v1.3...v1.4
+[v1.3]: https://github.com/kokoball-eval/llm-triage-eval/compare/v1.2...v1.3
+[v1.2]: https://github.com/kokoball-eval/llm-triage-eval/compare/v1.1.1...v1.2
+[v1.1.1]: https://github.com/kokoball-eval/llm-triage-eval/compare/v1.1...v1.1.1
+[v1.1]: https://github.com/kokoball-eval/llm-triage-eval/compare/v1.0-submission...v1.1
+[v1.0]: https://github.com/kokoball-eval/llm-triage-eval/tree/v1.0-submission

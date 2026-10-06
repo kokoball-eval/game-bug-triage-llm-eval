@@ -9,7 +9,7 @@
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Package Manager: uv](https://img.shields.io/badge/uv-Fast%20Packaging-DE5FE9?logo=astral)](https://github.com/astral-sh/uv)
 [![Inference Engine: Ollama](https://img.shields.io/badge/Ollama-Local%20LLM-000000?logo=ollama)](https://ollama.ai/)
-[![tests](https://github.com/kokoball-eval/game-bug-triage-llm-eval/actions/workflows/tests.yml/badge.svg)](https://github.com/kokoball-eval/game-bug-triage-llm-eval/actions/workflows/tests.yml)
+[![tests](https://github.com/kokoball-eval/llm-triage-eval/actions/workflows/tests.yml/badge.svg)](https://github.com/kokoball-eval/llm-triage-eval/actions/workflows/tests.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 > **30초 요약**
@@ -273,8 +273,8 @@ ollama pull llama3.1:8b     # v1.0 벤치마크 재현용 대조군
 ### 2) 클론 및 가상환경 동기화
 
 ```powershell
-git clone https://github.com/kokoball-eval/game-bug-triage-llm-eval.git
-cd game-bug-triage-llm-eval
+git clone https://github.com/kokoball-eval/llm-triage-eval.git
+cd llm-triage-eval
 uv sync
 ```
 
@@ -495,7 +495,7 @@ uv run triage-score --dataset v14
 <summary>전체 트리 펼치기</summary>
 
 ```text
-game-bug-triage-llm-eval/
+llm-triage-eval/
 ├── .github/workflows/tests.yml   # (v1.1.1) push 시 pytest 자동 실행 (GitHub Actions)
 ├── .gitattributes                # 줄바꿈(EOL) 정규화 규칙
 ├── .python-version               # Python 3.12 고정
