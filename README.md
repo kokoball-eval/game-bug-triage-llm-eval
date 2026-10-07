@@ -396,6 +396,7 @@ uv run pytest -v     # 테스트별 결과 표시
 | `tests/test_pipeline_screen.py`, `test_pipeline_selection.py` | (v1.4) 후보 사전 점검 판정(판정 불가 HOLD 포함), 모델 교체 판정 규칙 |
 | `tests/test_pipeline_methods.py` | (v1.4) 판정 예시와 평가셋 표현 겹침, Critical 체크리스트 규칙, 기존 방법(M0) 프롬프트 불변 |
 | `tests/test_pipeline_compare.py` | (v1.4) 방법·모델 비교 판정, '예' 편향 체크리스트 탈락, 비교 조건 불일치 거부 |
+| `tests/test_pipeline_gate_v14.py` | (v1.5) 채택 구성 게이트 — 기준선이 실험 A 기록과 같은지, 재현된 실행은 PASS·이전 방법(M0)과 지연 증가는 FAIL, seed 누락·최종 평가용·구성 혼합·digest 불일치 거부, 가짜 모델로 실행 → 게이트 |
 
 * README 수치를 재현하는 테스트가 있어서, 채점·집계 코드를 고쳤을 때 **문서 수치가 더는 재현되지 않으면 테스트가 실패**합니다.
 * 테스트를 추가하면서 경계값 버그 1건을 발견해 수정했습니다. 정확히 허용폭(+20%)만큼 느려진 경우 부동소수점 오차로 FAIL이 나던 문제입니다(`test_exactly_at_tolerance_passes`).
@@ -471,7 +472,13 @@ uv run triage-score --dataset v14
 ```
 
 * `triage-run`의 기본값(`--dataset v13 --method m0`)은 이전 버전의 실행 기록과 같은 결과가 나오도록 그대로 두었습니다. 현재 채택 구성은 위처럼 옵션을 명시해 실행합니다.
-* `triage-gate`는 v1.3 평가셋 실행만 판정합니다. 채택 구성(v1.4 평가셋 + M2)을 기준선으로 하는 회귀 게이트는 v1.5에서 추가합니다.
+* **(v1.5) 채택 구성 회귀 게이트** — 위 실행을 seed 1·11·21로 하고 게이트에 넣습니다. seed 3개가 모두 통과해야 PASS입니다.
+
+```powershell
+uv run triage-gate --dataset v14 --candidate <seed1.json> --candidate <seed11.json> --candidate <seed21.json>
+```
+
+  기준선은 M2 채택의 근거가 된 v1.4 실험 A 실행 기록(`data/results/v14/baseline/`)이고, 합격 기준은 [`gate_criteria_v14.toml`](gate_criteria_v14.toml)입니다. 기준 값은 v1.4 방법 선택 기준과 같고, 평균 지연 증가 20% 이하를 더했습니다. X-2·X-3은 기준선(M2)도 개발용에서 0건이 아니어서 "기준선보다 늘지 않을 것"으로 판정합니다. 결과: `data/results/v14/gate_result_v14.json`, `report/regression_gate_v14.md`
 
 ---
 
@@ -516,6 +523,7 @@ llm-triage-eval/
 ├── pyproject.toml                # uv 기반 의존성 명세 (ollama, openai / 개발용 pytest)
 ├── gate_criteria.toml            # (v1.1) 회귀 게이트 합격 기준
 ├── gate_criteria_v13.toml        # (v1.3) 평가셋 회귀 게이트 합격 기준 (응답 수 기준 허용폭)
+├── gate_criteria_v14.toml        # (v1.5) 채택 구성 회귀 게이트 합격 기준 (seed 3개)
 ├── model_selection_v14.toml      # (v1.4) 모델 교체 판정 기준 (지연 절대 기준, seed 수)
 ├── method_selection_v14.toml     # (v1.4) 방법·모델 비교 채택 기준 (측정 전 커밋)
 ├── uv.lock                       # 의존성 잠금 파일 (재현 가능한 환경 구성)
@@ -553,7 +561,7 @@ llm-triage-eval/
 │       │   └── v1.2_seed1_local_eval_results.json # (v1.2) 기본 기준선 — seed=1, 깨끗한 환경
 │       ├── history/                     # 실행 기록 (run_eval.py 실행마다 생성, compare_runs.py 기본 후보)
 │       ├── v13/                         # (v1.3) 평가셋 실행 기록(history/), 고정 기준선(baseline/), 채점 결과(score_*.json), 게이트 판정(gate_result_v13.json)
-│       └── v14/                         # (v1.4) 사전 점검(screening/), 모델 선택 판정, v1.4 평가셋 실행 기록(history/), 비교 판정(compare_*.json)
+│       └── v14/                         # (v1.4) 사전 점검(screening/), 모델 선택 판정, v1.4 평가셋 실행 기록(history/), 비교 판정(compare_*.json), (v1.5) 채택 구성 고정 기준선(baseline/)·게이트 판정(gate_result_v14.json)
 ├── report/
 │   ├── model_comparison.md      # 로컬 2종 vs Cloud 상세 정량/정성 분석서
 │   ├── final_selection.md       # Qwen2.5 최종 선정 사유 및 배포 가드레일
@@ -595,6 +603,7 @@ llm-triage-eval/
 │       ├── guardrail.py          # 후처리 안전장치 g2 — [처리] 규칙 보정 (정답 라벨 미사용)
 │       ├── score.py              # 정답 대조 채점 (칸별 정답률·위험 건·과잉 상신·날조)   → triage-score
 │       ├── gate.py               # 평가셋 회귀 게이트 판정                               → triage-gate
+│       ├── gate_v14.py           # (v1.5) 채택 구성 회귀 게이트 (seed 3개)             → triage-gate --dataset v14
 │       ├── screen.py             # (v1.4) 후보 모델 사전 점검                            → triage-screen
 │       ├── selection.py          # (v1.4) 모델 교체 판정 (seed 3개)                      → triage-select
 │       └── compare.py            # (v1.4) 방법·모델 비교 판정 (사전 등록 기준)            → triage-compare
@@ -619,7 +628,8 @@ llm-triage-eval/
     ├── test_pipeline_screen.py   # (v1.4) 후보 사전 점검 판정
     ├── test_pipeline_selection.py # (v1.4) 모델 교체 판정 규칙
     ├── test_pipeline_methods.py  # (v1.4) M1 예시·M2 체크리스트 규칙, M0 프롬프트 불변
-    └── test_pipeline_compare.py  # (v1.4) 방법·모델 비교 판정, 비교 조건 불일치 거부
+    ├── test_pipeline_compare.py  # (v1.4) 방법·모델 비교 판정, 비교 조건 불일치 거부
+    └── test_pipeline_gate_v14.py # (v1.5) 채택 구성 게이트 판정·판정 거부·가짜 모델 전 과정
 ```
 
 </details>
@@ -662,7 +672,7 @@ v1.3에서 판정 체계를 실무 방식(우선순위·재현 정보·처리)�
 * **모델 비교가 현재 모델에 맞춘 프롬프트 위에서 이루어짐** — 다른 모델이 불리한 조건일 수 있습니다 ([KL-004](docs/issue_log.md#kl-004))
 * **최종 평가용 세트의 위험 건 문항이 적음** — Critical 10응답(5문항), 사람 확인 2응답(1문항)이라 개발용 결과와 함께 봐야 합니다
 * **정답 라벨의 신뢰도를 아직 재지 않음** — 라벨은 검토를 거쳐 확정했지만, 다른 채점자와의 일치율은 v1.5에서 측정합니다
-* **채택 구성용 회귀 게이트가 아직 없음** — v1.5의 첫 작업으로 추가합니다
+* **채택 구성용 회귀 게이트의 기준선 재현 점검 전** — 게이트(`triage-gate --dataset v14`)는 추가했고, 같은 구성을 다시 실행해 PASS·문항 단위 변화 0건이 나오는지 확인하는 점검을 진행합니다
 * **검증한 도메인이 하나뿐** — 평가 체계는 트리아지 일반을 겨냥하지만, 실제로 검증한 것은 게임 버그 리포트뿐입니다. 판정 기준과 출력 형식의 선택지(`src/triage_eval/pipeline/contract.py`, `prompt.py`)도 게임 도메인에 맞춰져 있습니다 (→ [7절 도메인 확장](#7-고도화-로드맵))
 
 ---

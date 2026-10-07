@@ -1,0 +1,63 @@
+# ─────────────────────────────────────────────────────────────
+# 채택 구성 회귀 게이트 합격 기준 (v1.5) — 평가셋 aether_raid_v14 개발용 63건, 방법 M2, 출력 형식 v2
+#
+# src/triage_eval/pipeline/gate_v14.py(uv run triage-gate --dataset v14)가 이 파일을 읽어,
+# v1.4에서 채택한 구성(qwen2.5:7b + Critical 체크리스트 M2)보다 후보가 나빠졌는지 seed 3개로 판정한다.
+# v1.3 게이트(gate_criteria_v13.toml)·v1.4 방법 선택 기준(method_selection_v14.toml)과는 별개 파일이다.
+#
+# 기준 값은 method_selection_v14.toml(측정 전 확정, 2026-10-04)을 그대로 따른다. 다른 점은 두 가지다.
+#   1. "개선해야 채택" 규칙이 없다. 게이트는 나빠지지 않았는지만 본다.
+#   2. 평균 지연 증가율(20%, v1.3 게이트와 같은 값)을 더한다. 의도하지 않은 지연 증가를 잡기 위해서다.
+# 기준선 재현 점검(같은 구성을 다시 실행해 게이트에 넣는 확인) 전에 확정했다. 결과를 본 뒤 바꾸지 않는다.
+# ─────────────────────────────────────────────────────────────
+
+[meta]
+version = "1.5"
+dataset = "v14"
+split = "dev"                 # 최종 평가용(final) 25건은 게이트에 쓰지 않는다
+seeds = [1, 11, 21]           # 3개 모두 통과해야 PASS (seed 하나로는 효과와 우연을 구분할 수 없다, KL-002)
+repeat = 2                    # seed당 63건 × 2회 = 126응답
+target_model = "qwen2.5:7b"
+# 고정 기준선 — v1.4 실험 A의 M2 실행(seed 1·11·21) 사본. M2 채택의 근거가 된 측정이다. 덮어쓰지 않는다.
+baseline = [
+    "data/results/v14/baseline/v14_dev_m2_seed1_baseline.json",
+    "data/results/v14/baseline/v14_dev_m2_seed11_baseline.json",
+    "data/results/v14/baseline/v14_dev_m2_seed21_baseline.json",
+]
+
+# ── 절대 기준 ────────────────────────────────────────────────
+# 기준선과 상관없이 후보가 단독으로 지켜야 하는 바닥선 (method_selection_v14.toml 과 같은 값)
+[absolute]
+success_rate_min = 100.0
+hallucination_max = 0
+language_violation_max = 0    # R7
+enum_violation_max = 0        # R6
+latency_max_sec = 10.0        # 1건 평균. 형식 재요청·체크리스트·폐기 확인 시간 포함
+
+# ── 기준선 대비 상한 ─────────────────────────────────────────
+# 기준선(M2)도 개발용 63건에서 X-3이 0건이 아니므로, 0건이 아니라 "늘지 않을 것"으로 판정한다.
+# 0건 기준은 최종 측정과 v1.5 라우팅 목표에서 따로 판정한다.
+[relative_to_baseline]
+x2_miss_increase_max = 0
+x3_miss_increase_max = 0
+
+# ── 회귀 기준 ────────────────────────────────────────────────
+# seed당 126응답 기준 (gate_criteria_v13.toml 64응답 허용폭의 2배, 원칙상 0인 항목은 0)
+[regression]
+x1_miss_increase_max = 0
+over_escalation_increase_max = 4
+format_drop_max_responses = 4
+latency_increase_max_pct = 20.0       # v1.3 게이트와 같은 값
+
+[regression.field_drop_max_responses]
+"처리" = 0
+"분류" = 0
+"우선순위" = 2
+"모듈" = 6
+"재현 정보" = 6
+"발생 빈도" = 6
+"6칸 정답" = 6
+
+[regression.item_regression_max_responses]
+"처리" = 4
+"분류" = 4

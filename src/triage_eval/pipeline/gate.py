@@ -8,6 +8,8 @@ gate_criteria_v13.toml 의 합격 기준으로 판정한다.
     uv run triage-gate                                   # 고정 기준선 vs 가장 최근 개발용 실행
     uv run triage-gate --candidate <실행 기록.json>
     uv run triage-gate --model llama3.1:8b              # 대조군 확인용
+    uv run triage-gate --dataset v14 --candidate <seed1> --candidate <seed11> --candidate <seed21>
+                                                         # (v1.5) 채택 구성 게이트 → gate_v14.py
 
 종료 코드
 ---------
@@ -30,6 +32,7 @@ gate_criteria_v13.toml 의 합격 기준으로 판정한다.
 5. 문항 단위 회귀(기준선 정답 → 후보 오답)를 칸마다 센다. 합격 기준에 넣지 않은 칸도 목록으로 남겨,
    정답률이 유지된 채 문항이 뒤바뀌는 변화를 사람이 볼 수 있게 한다.
 6. 기준 파일에 모르는 섹션·키가 있으면 판정하지 않는다. 오타로 기준이 조용히 꺼진 채 PASS가 나는 것을 막는다(v1.1.1 ISSUE-003).
+7. (v1.5) --dataset v14 는 채택 구성 게이트(gate_v14.py)로 넘긴다. 기본값 v13은 이전과 똑같이 동작한다.
 """
 
 import argparse
@@ -284,16 +287,29 @@ def run(base_path: Path, cand_path: Path, models: list[str], crit: dict, write: 
 
 
 def main(argv: list[str] | None = None) -> int:
-    p = argparse.ArgumentParser(description="v1.3 회귀 게이트")
-    p.add_argument("--baseline", type=Path, default=None)
-    p.add_argument("--candidate", type=Path, default=None)
-    p.add_argument("--model", action="append", help="대상 모델 (기본: 기준 파일의 target_models)")
-    p.add_argument("--criteria", type=Path, default=CRITERIA)
+    p = argparse.ArgumentParser(description="회귀 게이트 (v13: v1.3 평가셋 · v14: 채택 구성)")
+    p.add_argument("--dataset", choices=["v13", "v14"], default="v13", help="평가셋 (기본: v13, 설계 의도 7)")
+    p.add_argument("--baseline", type=Path, action="append", help="기준선 (v13: 1개, v14: seed 수만큼. 기본: 기준 파일 값)")
+    p.add_argument("--candidate", type=Path, action="append", help="후보 (v13: 1개, 기본 가장 최근 실행 · v14: seed 수만큼)")
+    p.add_argument("--model", action="append", help="대상 모델 (v13 전용, 기본: 기준 파일의 target_models)")
+    p.add_argument("--criteria", type=Path, default=None)
     args = p.parse_args(argv)
+    if args.dataset == "v14":
+        from triage_eval.pipeline import gate_v14
+        try:
+            if not args.candidate:
+                raise GateError("--candidate 로 seed마다 후보 실행 기록을 지정하세요 (seed 1·11·21)")
+            crit = gate_v14.load_criteria(args.criteria or gate_v14.CRITERIA)
+            return gate_v14.run(args.candidate, crit, args.baseline)
+        except GateError as e:
+            print(f"판정 불가: {e}")
+            return 2
     try:
-        crit = load_criteria(args.criteria)
-        base_path = args.baseline or ROOT / crit["meta"]["baseline"]
-        cand_path = args.candidate or latest_candidate(base_path)
+        if len(args.baseline or []) > 1 or len(args.candidate or []) > 1:
+            raise GateError("v1.3 게이트는 기준선·후보를 1개씩만 받습니다")
+        crit = load_criteria(args.criteria or CRITERIA)
+        base_path = args.baseline[0] if args.baseline else ROOT / crit["meta"]["baseline"]
+        cand_path = args.candidate[0] if args.candidate else latest_candidate(base_path)
         return run(base_path, cand_path, args.model or crit["meta"]["target_models"], crit)
     except GateError as e:
         print(f"판정 불가: {e}")
