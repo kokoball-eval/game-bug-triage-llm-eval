@@ -20,6 +20,9 @@ compare_runs.py 가 두 실행의 환경 차이를 함께 보여준다.
    "측정할 수 없음"(nvidia-smi 없음 등)과 "문제 있음"을 구분해, 측정 불가는 경고로 치지 않는다.
 2. 함수마다 외부 명령·OS 호출을 한 곳에 모아 두고, 판정 로직(evaluate)은 순수 함수로 분리했다.
    CI(리눅스, GPU 없음)에서도 판정 로직을 테스트할 수 있게 하기 위해서다.
+3. (v1.5) VRAM 경고가 났는데 Ollama에 올라가 있는 모델이 있으면, 남은 모델 때문일 수 있다는 안내를 덧붙인다.
+   Ollama가 모델 크기를 실제보다 작게 보고하는 모델(gemma4 계열, docs/issue_log.md OBS-003)이 남아 있으면
+   그 차이가 다른 프로그램의 사용량으로 계산된다(ISSUE-011). 경고 여부와 개수는 바꾸지 않고 문장만 덧붙인다.
 """
 
 import ctypes
@@ -83,8 +86,13 @@ def evaluate(gpu_used: float | None, loaded: list[dict], ac_power: bool | None) 
     other_vram = None if gpu_used is None else round(max(gpu_used - ollama_vram, 0.0), 1)
 
     if other_vram is not None and other_vram >= OTHER_VRAM_WARN_MIB:
-        warnings.append(f"다른 프로그램이 VRAM {other_vram:,.0f} MiB를 쓰고 있습니다 "
-                        "(게임·영상·브라우저 등). 지연·속도 측정이 오염될 수 있습니다.")
+        msg = (f"다른 프로그램이 VRAM {other_vram:,.0f} MiB를 쓰고 있습니다 "
+               "(게임·영상·브라우저 등). 지연·속도 측정이 오염될 수 있습니다.")
+        if loaded:   # 설계 의도 3
+            names = ", ".join(m["model"] for m in loaded)
+            msg += (f" Ollama에 남아 있는 모델({names})의 크기가 실제보다 작게 보고된 것일 수 있습니다."
+                    " `ollama stop <모델>`로 내린 뒤 다시 실행하세요.")
+        warnings.append(msg)
     if loaded:
         names = ", ".join(m["model"] for m in loaded)
         notes.append(f"Ollama에 이미 올라가 있는 모델: {names} (워밍업 로딩 시간만 짧아지며 본 통계에는 영향 없음)")

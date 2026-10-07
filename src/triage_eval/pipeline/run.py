@@ -93,6 +93,11 @@
    - m0이 아닌 방법은 v14 평가셋에서만 실행한다. v1.3 실행 기록 폴더에는 m0 실행만 남아 v1.3 게이트가 흔들리지 않는다.
    - 실행 기록 run_config 에 method 와 방법 구성 지문(method_assets_sha256)을 남긴다. 비교 도구(compare.py)는
      방법 말고 다른 조건이 같은지 확인할 때 이 값을 쓴다.
+13. (v1.5) 모든 응답을 받은 뒤 사용한 모델을 모두 메모리에서 내린다. Ollama는 마지막 모델을 기본 5분간 유지하는데,
+   남은 모델이 다음 실행의 측정 환경 점검에서 "다른 프로그램의 VRAM 사용"으로 잡혀 --strict-env 가 실행을
+   거부했다(docs/issue_log.md ISSUE-011). 응답을 다 받은 뒤에 내리므로 응답 내용에는 영향이 없고,
+   run_config 에 항목을 더하지 않아 기존 실행 기록과의 비교 조건도 바뀌지 않는다.
+   실행을 중간에 멈춘 경우는 내리지 않는다. 그때는 측정 환경 점검의 안내대로 ollama stop 으로 내린다.
 """
 
 import argparse
@@ -427,6 +432,8 @@ def main(argv: list[str] | None = None) -> int:
                     status += f" · 폐기 확인({'보류로 변경' if res['discard_held'] else '폐기 유지'})"
                 print(f"[{model}] [Run {run_idx}] ({n}/{len(items)}) {item['id']}: {status} "
                       f"({res['elapsed_sec']}s, 입력 {res.get('prompt_eval_count')} 토큰)")
+    for model in models:
+        unload_model(client, model)  # 설계 의도 13
 
     payload = {
         "metadata": {

@@ -116,7 +116,7 @@ def test_pipeline_end_to_end_with_fake_model(tmp_path, monkeypatch):
 
     class FakeClient:
         def generate(self, model, prompt, options=None, think=None, keep_alive=None):
-            if keep_alive == 0:  # 설계 의도 9 — 모델마다 실행 전에 내린다
+            if keep_alive == 0:  # 설계 의도 9·13 — 실행 전과 마지막 응답 뒤에 내린다
                 unloaded.append(model)
                 return {}
             assert think is False  # 설계 의도 8
@@ -135,7 +135,7 @@ def test_pipeline_end_to_end_with_fake_model(tmp_path, monkeypatch):
     monkeypatch.setattr(pipeline_run, "preflight_snapshot", lambda c: {"warnings": [], "notes": []})
     monkeypatch.setattr(pipeline_run, "OUT_DIR", tmp_path / "history")
     assert pipeline_run.main(["--seed", "1", "--model", "fake", "--repeat", "1"]) == 0
-    assert unloaded == ["fake"]
+    assert unloaded == ["fake", "fake"]   # 실행 전 1번 + 끝난 뒤 1번 (ISSUE-011)
     log = next((tmp_path / "history").glob("v13_dev_*.json"))
     assert json.loads(log.read_text(encoding="utf-8"))["metadata"]["run_config"]["think"] is False
     assert pipeline_score.main(["--log", str(log), "--no-report"]) == 0

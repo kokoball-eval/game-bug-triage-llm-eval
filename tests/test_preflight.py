@@ -30,6 +30,16 @@ def test_ollama_own_models_are_not_counted_as_other_program():
     assert any("qwen2.5:7b" in n for n in env["notes"])
 
 
+def test_leftover_model_hint_on_vram_warning():
+    """ISSUE-011 — 남은 모델의 크기가 작게 보고되면 다른 프로그램으로 잡힌다. 경고는 그대로 하나이고 안내만 덧붙인다."""
+    env = evaluate(gpu_used=6762.0, loaded=[{"model": "gemma4:12b", "vram_mib": 886.0}], ac_power=True)
+    assert len(env["warnings"]) == 1
+    assert "gemma4:12b" in env["warnings"][0] and "ollama stop" in env["warnings"][0]
+    # Ollama에 올라간 모델이 없으면 안내를 붙이지 않는다
+    env = evaluate(gpu_used=OTHER_VRAM_WARN_MIB + 500, loaded=[], ac_power=True)
+    assert "ollama stop" not in env["warnings"][0]
+
+
 def test_battery_power_is_warned():
     env = evaluate(gpu_used=300.0, loaded=[], ac_power=False)
     assert any("배터리" in w for w in env["warnings"])

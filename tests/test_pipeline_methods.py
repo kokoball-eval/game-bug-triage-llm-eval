@@ -206,3 +206,24 @@ def test_v14_m2_end_to_end(monkeypatch, tmp_path):
     cfg = json.loads(log.read_text(encoding="utf-8"))["metadata"]["run_config"]
     assert cfg["method"] == "m2" and cfg["method_assets_sha256"] == m.assets_sha256("m2")
     assert cfg["critical_check_policy"]["rule"] == "upgrade_only"
+
+
+class UnloadRecordingClient(FakeClient):
+    """모델을 내리는 호출(keep_alive=0)과 일반 호출의 순서를 기록한다."""
+
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self.calls = []
+
+    def generate(self, model, prompt, options=None, think=None, keep_alive=None, format=None):
+        self.calls.append(("unload" if keep_alive == 0 else "generate", model))
+        return super().generate(model, prompt, options, think, keep_alive, format)
+
+
+def test_run_unloads_every_model_after_last_response(monkeypatch, tmp_path):
+    """run.py 설계 의도 13 (ISSUE-011) — 마지막 응답 뒤에 사용한 모델을 모두 내린다."""
+    client = UnloadRecordingClient()
+    run_fake(monkeypatch, tmp_path, "m2", 1, client=client, models=("fake-a", "fake-b"))
+    last_generate = max(i for i, (kind, _) in enumerate(client.calls) if kind == "generate")
+    tail = client.calls[last_generate + 1:]
+    assert tail == [("unload", "fake-a"), ("unload", "fake-b")]
