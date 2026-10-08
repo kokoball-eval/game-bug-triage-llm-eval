@@ -478,7 +478,7 @@ uv run triage-score --dataset v14
 uv run triage-gate --dataset v14 --candidate <seed1.json> --candidate <seed11.json> --candidate <seed21.json>
 ```
 
-  기준선은 M2 채택의 근거가 된 v1.4 실험 A 실행 기록(`data/results/v14/baseline/`)이고, 합격 기준은 [`gate_criteria_v14.toml`](gate_criteria_v14.toml)입니다. 기준 값은 v1.4 방법 선택 기준과 같고, 평균 지연 증가 20% 이하를 더했습니다. X-2·X-3은 기준선(M2)도 개발용에서 0건이 아니어서 "기준선보다 늘지 않을 것"으로 판정합니다. 실행 도중 모델이 다시 로드된 실행은 같은 seed로 재현되지 않으므로 판정하지 않습니다([OBS-005](docs/issue_log.md#obs-005)). 결과: `data/results/v14/gate_result_v14.json`, `report/regression_gate_v14.md`
+  기준선은 M2 채택의 근거가 된 v1.4 실험 A 실행 기록(`data/results/v14/baseline/`)이고, 합격 기준은 [`gate_criteria_v14.toml`](gate_criteria_v14.toml)입니다. 기준 값은 v1.4 방법 선택 기준과 같고, 평균 지연 증가 20% 이하를 더했습니다. X-2·X-3은 기준선(M2)도 개발용에서 0건이 아니어서 "기준선보다 늘지 않을 것"으로 판정합니다. 실행 도중 모델이 다시 로드된 실행은 같은 seed로 재현되지 않으므로 판정하지 않습니다([OBS-005](docs/issue_log.md#obs-005)). 기준선 재현 점검(같은 구성을 다시 실행해 게이트에 넣는 확인)에서 seed 3개 모두 응답 126/126이 기준선과 같았고, PASS·문항 단위 변화 0건이었습니다([`report/regression_gate_v14.md`](report/regression_gate_v14.md)). 결과: `data/results/v14/gate_result_v14.json`, `report/regression_gate_v14.md`
 
 ---
 
@@ -672,7 +672,6 @@ v1.3에서 판정 체계를 실무 방식(우선순위·재현 정보·처리)�
 * **모델 비교가 현재 모델에 맞춘 프롬프트 위에서 이루어짐** — 다른 모델이 불리한 조건일 수 있습니다 ([KL-004](docs/issue_log.md#kl-004))
 * **최종 평가용 세트의 위험 건 문항이 적음** — Critical 10응답(5문항), 사람 확인 2응답(1문항)이라 개발용 결과와 함께 봐야 합니다
 * **정답 라벨의 신뢰도를 아직 재지 않음** — 라벨은 검토를 거쳐 확정했지만, 다른 채점자와의 일치율은 v1.5에서 측정합니다
-* **채택 구성용 회귀 게이트의 기준선 재현 점검 전** — 게이트(`triage-gate --dataset v14`)는 추가했고, 같은 구성을 다시 실행해 PASS·문항 단위 변화 0건이 나오는지 확인하는 점검을 진행합니다
 * **검증한 도메인이 하나뿐** — 평가 체계는 트리아지 일반을 겨냥하지만, 실제로 검증한 것은 게임 버그 리포트뿐입니다. 판정 기준과 출력 형식의 선택지(`src/triage_eval/pipeline/contract.py`, `prompt.py`)도 게임 도메인에 맞춰져 있습니다 (→ [7절 도메인 확장](#7-고도화-로드맵))
 
 ---

@@ -1,0 +1,806 @@
+{
+  "verdict": "PASS",
+  "target_model": "qwen2.5:7b",
+  "notes": [],
+  "baseline": [
+    "data/results/v14/baseline/v14_dev_m2_seed1_baseline.json",
+    "data/results/v14/baseline/v14_dev_m2_seed11_baseline.json",
+    "data/results/v14/baseline/v14_dev_m2_seed21_baseline.json"
+  ],
+  "candidate": [
+    "data/results/v14/history/v14_dev_m2_20261007_113808.json",
+    "data/results/v14/history/v14_dev_m2_20261008_212316.json",
+    "data/results/v14/history/v14_dev_m2_20261008_212807.json"
+  ],
+  "item_change_totals": {
+    "분류": {
+      "regressed": 0,
+      "fixed": 0
+    },
+    "우선순위": {
+      "regressed": 0,
+      "fixed": 0
+    },
+    "모듈": {
+      "regressed": 0,
+      "fixed": 0
+    },
+    "재현 정보": {
+      "regressed": 0,
+      "fixed": 0
+    },
+    "발생 빈도": {
+      "regressed": 0,
+      "fixed": 0
+    },
+    "처리": {
+      "regressed": 0,
+      "fixed": 0
+    },
+    "6칸 정답": {
+      "regressed": 0,
+      "fixed": 0
+    }
+  },
+  "per_seed": [
+    {
+      "seeds": {
+        "1": 1,
+        "2": 2
+      },
+      "passed": true,
+      "checks": [
+        {
+          "name": "호출 성공률(%)",
+          "kind": "절대",
+          "baseline": null,
+          "candidate": 100.0,
+          "limit": "≥ 100.0",
+          "passed": true
+        },
+        {
+          "name": "날조 응답",
+          "kind": "절대",
+          "baseline": 0,
+          "candidate": 0,
+          "limit": "≤ 0",
+          "passed": true
+        },
+        {
+          "name": "출력 언어 위반(R7)",
+          "kind": "절대",
+          "baseline": 0,
+          "candidate": 0,
+          "limit": "≤ 0",
+          "passed": true
+        },
+        {
+          "name": "허용 값 위반(R6)",
+          "kind": "절대",
+          "baseline": 0,
+          "candidate": 0,
+          "limit": "≤ 0",
+          "passed": true
+        },
+        {
+          "name": "X-1 Critical 미상신",
+          "kind": "회귀",
+          "baseline": 5,
+          "candidate": 5,
+          "limit": "증가 ≤ 0",
+          "passed": true
+        },
+        {
+          "name": "과잉 상신",
+          "kind": "회귀",
+          "baseline": 8,
+          "candidate": 8,
+          "limit": "증가 ≤ 4",
+          "passed": true
+        },
+        {
+          "name": "형식 STRICT(응답 수)",
+          "kind": "회귀",
+          "baseline": 126,
+          "candidate": 126,
+          "limit": "하락 ≤ 4",
+          "passed": true
+        },
+        {
+          "name": "형식 PARSABLE(응답 수)",
+          "kind": "회귀",
+          "baseline": 126,
+          "candidate": 126,
+          "limit": "하락 ≤ 4",
+          "passed": true
+        },
+        {
+          "name": "평균 지연(초)",
+          "kind": "회귀",
+          "baseline": 2.278,
+          "candidate": 2.293,
+          "limit": "증가 ≤ 20.0% (실제 +0.66%)",
+          "passed": true
+        },
+        {
+          "name": "처리 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 88,
+          "candidate": 88,
+          "limit": "하락 ≤ 0",
+          "passed": true
+        },
+        {
+          "name": "분류 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 85,
+          "candidate": 85,
+          "limit": "하락 ≤ 0",
+          "passed": true
+        },
+        {
+          "name": "우선순위 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 80,
+          "candidate": 80,
+          "limit": "하락 ≤ 2",
+          "passed": true
+        },
+        {
+          "name": "모듈 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 89,
+          "candidate": 89,
+          "limit": "하락 ≤ 6",
+          "passed": true
+        },
+        {
+          "name": "재현 정보 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 106,
+          "candidate": 106,
+          "limit": "하락 ≤ 6",
+          "passed": true
+        },
+        {
+          "name": "발생 빈도 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 60,
+          "candidate": 60,
+          "limit": "하락 ≤ 6",
+          "passed": true
+        },
+        {
+          "name": "6칸 모두 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 27,
+          "candidate": 27,
+          "limit": "하락 ≤ 6",
+          "passed": true
+        },
+        {
+          "name": "처리 문항 단위 회귀(응답 수)",
+          "kind": "회귀",
+          "baseline": 0,
+          "candidate": 0,
+          "limit": "≤ 4",
+          "passed": true
+        },
+        {
+          "name": "분류 문항 단위 회귀(응답 수)",
+          "kind": "회귀",
+          "baseline": 0,
+          "candidate": 0,
+          "limit": "≤ 4",
+          "passed": true
+        },
+        {
+          "name": "X-2 결함 폐기",
+          "kind": "기준선 대비",
+          "baseline": 0,
+          "candidate": 0,
+          "limit": "증가 ≤ 0",
+          "passed": true
+        },
+        {
+          "name": "X-3 경계 건 확정 처리",
+          "kind": "기준선 대비",
+          "baseline": 4,
+          "candidate": 4,
+          "limit": "증가 ≤ 0",
+          "passed": true
+        },
+        {
+          "name": "평균 지연(초)",
+          "kind": "절대",
+          "baseline": 2.278,
+          "candidate": 2.293,
+          "limit": "≤ 10.0",
+          "passed": true
+        }
+      ],
+      "baseline": {
+        "n": 126,
+        "success": 126,
+        "strict": 126,
+        "parsable": 126,
+        "fields_ok": {
+          "분류": 85,
+          "우선순위": 80,
+          "모듈": 89,
+          "재현 정보": 106,
+          "발생 빈도": 60,
+          "처리": 88,
+          "6칸 정답": 27
+        },
+        "x1": 5,
+        "x2": 0,
+        "x3": 4,
+        "over": 8,
+        "halluc": 0,
+        "lang": 0,
+        "enum": 0,
+        "latency": 2.278
+      },
+      "candidate": {
+        "n": 126,
+        "success": 126,
+        "strict": 126,
+        "parsable": 126,
+        "fields_ok": {
+          "분류": 85,
+          "우선순위": 80,
+          "모듈": 89,
+          "재현 정보": 106,
+          "발생 빈도": 60,
+          "처리": 88,
+          "6칸 정답": 27
+        },
+        "x1": 5,
+        "x2": 0,
+        "x3": 4,
+        "over": 8,
+        "halluc": 0,
+        "lang": 0,
+        "enum": 0,
+        "latency": 2.293
+      },
+      "item_changes": {
+        "분류": {
+          "regressed": [],
+          "fixed": []
+        },
+        "우선순위": {
+          "regressed": [],
+          "fixed": []
+        },
+        "모듈": {
+          "regressed": [],
+          "fixed": []
+        },
+        "재현 정보": {
+          "regressed": [],
+          "fixed": []
+        },
+        "발생 빈도": {
+          "regressed": [],
+          "fixed": []
+        },
+        "처리": {
+          "regressed": [],
+          "fixed": []
+        },
+        "6칸 정답": {
+          "regressed": [],
+          "fixed": []
+        }
+      }
+    },
+    {
+      "seeds": {
+        "1": 11,
+        "2": 12
+      },
+      "passed": true,
+      "checks": [
+        {
+          "name": "호출 성공률(%)",
+          "kind": "절대",
+          "baseline": null,
+          "candidate": 100.0,
+          "limit": "≥ 100.0",
+          "passed": true
+        },
+        {
+          "name": "날조 응답",
+          "kind": "절대",
+          "baseline": 0,
+          "candidate": 0,
+          "limit": "≤ 0",
+          "passed": true
+        },
+        {
+          "name": "출력 언어 위반(R7)",
+          "kind": "절대",
+          "baseline": 0,
+          "candidate": 0,
+          "limit": "≤ 0",
+          "passed": true
+        },
+        {
+          "name": "허용 값 위반(R6)",
+          "kind": "절대",
+          "baseline": 0,
+          "candidate": 0,
+          "limit": "≤ 0",
+          "passed": true
+        },
+        {
+          "name": "X-1 Critical 미상신",
+          "kind": "회귀",
+          "baseline": 5,
+          "candidate": 5,
+          "limit": "증가 ≤ 0",
+          "passed": true
+        },
+        {
+          "name": "과잉 상신",
+          "kind": "회귀",
+          "baseline": 10,
+          "candidate": 10,
+          "limit": "증가 ≤ 4",
+          "passed": true
+        },
+        {
+          "name": "형식 STRICT(응답 수)",
+          "kind": "회귀",
+          "baseline": 126,
+          "candidate": 126,
+          "limit": "하락 ≤ 4",
+          "passed": true
+        },
+        {
+          "name": "형식 PARSABLE(응답 수)",
+          "kind": "회귀",
+          "baseline": 126,
+          "candidate": 126,
+          "limit": "하락 ≤ 4",
+          "passed": true
+        },
+        {
+          "name": "평균 지연(초)",
+          "kind": "회귀",
+          "baseline": 2.267,
+          "candidate": 2.275,
+          "limit": "증가 ≤ 20.0% (실제 +0.35%)",
+          "passed": true
+        },
+        {
+          "name": "처리 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 88,
+          "candidate": 88,
+          "limit": "하락 ≤ 0",
+          "passed": true
+        },
+        {
+          "name": "분류 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 87,
+          "candidate": 87,
+          "limit": "하락 ≤ 0",
+          "passed": true
+        },
+        {
+          "name": "우선순위 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 79,
+          "candidate": 79,
+          "limit": "하락 ≤ 2",
+          "passed": true
+        },
+        {
+          "name": "모듈 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 91,
+          "candidate": 91,
+          "limit": "하락 ≤ 6",
+          "passed": true
+        },
+        {
+          "name": "재현 정보 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 103,
+          "candidate": 103,
+          "limit": "하락 ≤ 6",
+          "passed": true
+        },
+        {
+          "name": "발생 빈도 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 59,
+          "candidate": 59,
+          "limit": "하락 ≤ 6",
+          "passed": true
+        },
+        {
+          "name": "6칸 모두 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 24,
+          "candidate": 24,
+          "limit": "하락 ≤ 6",
+          "passed": true
+        },
+        {
+          "name": "처리 문항 단위 회귀(응답 수)",
+          "kind": "회귀",
+          "baseline": 0,
+          "candidate": 0,
+          "limit": "≤ 4",
+          "passed": true
+        },
+        {
+          "name": "분류 문항 단위 회귀(응답 수)",
+          "kind": "회귀",
+          "baseline": 0,
+          "candidate": 0,
+          "limit": "≤ 4",
+          "passed": true
+        },
+        {
+          "name": "X-2 결함 폐기",
+          "kind": "기준선 대비",
+          "baseline": 0,
+          "candidate": 0,
+          "limit": "증가 ≤ 0",
+          "passed": true
+        },
+        {
+          "name": "X-3 경계 건 확정 처리",
+          "kind": "기준선 대비",
+          "baseline": 4,
+          "candidate": 4,
+          "limit": "증가 ≤ 0",
+          "passed": true
+        },
+        {
+          "name": "평균 지연(초)",
+          "kind": "절대",
+          "baseline": 2.267,
+          "candidate": 2.275,
+          "limit": "≤ 10.0",
+          "passed": true
+        }
+      ],
+      "baseline": {
+        "n": 126,
+        "success": 126,
+        "strict": 126,
+        "parsable": 126,
+        "fields_ok": {
+          "분류": 87,
+          "우선순위": 79,
+          "모듈": 91,
+          "재현 정보": 103,
+          "발생 빈도": 59,
+          "처리": 88,
+          "6칸 정답": 24
+        },
+        "x1": 5,
+        "x2": 0,
+        "x3": 4,
+        "over": 10,
+        "halluc": 0,
+        "lang": 0,
+        "enum": 0,
+        "latency": 2.267
+      },
+      "candidate": {
+        "n": 126,
+        "success": 126,
+        "strict": 126,
+        "parsable": 126,
+        "fields_ok": {
+          "분류": 87,
+          "우선순위": 79,
+          "모듈": 91,
+          "재현 정보": 103,
+          "발생 빈도": 59,
+          "처리": 88,
+          "6칸 정답": 24
+        },
+        "x1": 5,
+        "x2": 0,
+        "x3": 4,
+        "over": 10,
+        "halluc": 0,
+        "lang": 0,
+        "enum": 0,
+        "latency": 2.275
+      },
+      "item_changes": {
+        "분류": {
+          "regressed": [],
+          "fixed": []
+        },
+        "우선순위": {
+          "regressed": [],
+          "fixed": []
+        },
+        "모듈": {
+          "regressed": [],
+          "fixed": []
+        },
+        "재현 정보": {
+          "regressed": [],
+          "fixed": []
+        },
+        "발생 빈도": {
+          "regressed": [],
+          "fixed": []
+        },
+        "처리": {
+          "regressed": [],
+          "fixed": []
+        },
+        "6칸 정답": {
+          "regressed": [],
+          "fixed": []
+        }
+      }
+    },
+    {
+      "seeds": {
+        "1": 21,
+        "2": 22
+      },
+      "passed": true,
+      "checks": [
+        {
+          "name": "호출 성공률(%)",
+          "kind": "절대",
+          "baseline": null,
+          "candidate": 100.0,
+          "limit": "≥ 100.0",
+          "passed": true
+        },
+        {
+          "name": "날조 응답",
+          "kind": "절대",
+          "baseline": 0,
+          "candidate": 0,
+          "limit": "≤ 0",
+          "passed": true
+        },
+        {
+          "name": "출력 언어 위반(R7)",
+          "kind": "절대",
+          "baseline": 0,
+          "candidate": 0,
+          "limit": "≤ 0",
+          "passed": true
+        },
+        {
+          "name": "허용 값 위반(R6)",
+          "kind": "절대",
+          "baseline": 0,
+          "candidate": 0,
+          "limit": "≤ 0",
+          "passed": true
+        },
+        {
+          "name": "X-1 Critical 미상신",
+          "kind": "회귀",
+          "baseline": 7,
+          "candidate": 7,
+          "limit": "증가 ≤ 0",
+          "passed": true
+        },
+        {
+          "name": "과잉 상신",
+          "kind": "회귀",
+          "baseline": 8,
+          "candidate": 8,
+          "limit": "증가 ≤ 4",
+          "passed": true
+        },
+        {
+          "name": "형식 STRICT(응답 수)",
+          "kind": "회귀",
+          "baseline": 126,
+          "candidate": 126,
+          "limit": "하락 ≤ 4",
+          "passed": true
+        },
+        {
+          "name": "형식 PARSABLE(응답 수)",
+          "kind": "회귀",
+          "baseline": 126,
+          "candidate": 126,
+          "limit": "하락 ≤ 4",
+          "passed": true
+        },
+        {
+          "name": "평균 지연(초)",
+          "kind": "회귀",
+          "baseline": 2.261,
+          "candidate": 2.265,
+          "limit": "증가 ≤ 20.0% (실제 +0.18%)",
+          "passed": true
+        },
+        {
+          "name": "처리 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 84,
+          "candidate": 84,
+          "limit": "하락 ≤ 0",
+          "passed": true
+        },
+        {
+          "name": "분류 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 81,
+          "candidate": 81,
+          "limit": "하락 ≤ 0",
+          "passed": true
+        },
+        {
+          "name": "우선순위 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 77,
+          "candidate": 77,
+          "limit": "하락 ≤ 2",
+          "passed": true
+        },
+        {
+          "name": "모듈 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 89,
+          "candidate": 89,
+          "limit": "하락 ≤ 6",
+          "passed": true
+        },
+        {
+          "name": "재현 정보 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 106,
+          "candidate": 106,
+          "limit": "하락 ≤ 6",
+          "passed": true
+        },
+        {
+          "name": "발생 빈도 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 63,
+          "candidate": 63,
+          "limit": "하락 ≤ 6",
+          "passed": true
+        },
+        {
+          "name": "6칸 모두 정답(응답 수)",
+          "kind": "회귀",
+          "baseline": 24,
+          "candidate": 24,
+          "limit": "하락 ≤ 6",
+          "passed": true
+        },
+        {
+          "name": "처리 문항 단위 회귀(응답 수)",
+          "kind": "회귀",
+          "baseline": 0,
+          "candidate": 0,
+          "limit": "≤ 4",
+          "passed": true
+        },
+        {
+          "name": "분류 문항 단위 회귀(응답 수)",
+          "kind": "회귀",
+          "baseline": 0,
+          "candidate": 0,
+          "limit": "≤ 4",
+          "passed": true
+        },
+        {
+          "name": "X-2 결함 폐기",
+          "kind": "기준선 대비",
+          "baseline": 0,
+          "candidate": 0,
+          "limit": "증가 ≤ 0",
+          "passed": true
+        },
+        {
+          "name": "X-3 경계 건 확정 처리",
+          "kind": "기준선 대비",
+          "baseline": 6,
+          "candidate": 6,
+          "limit": "증가 ≤ 0",
+          "passed": true
+        },
+        {
+          "name": "평균 지연(초)",
+          "kind": "절대",
+          "baseline": 2.261,
+          "candidate": 2.265,
+          "limit": "≤ 10.0",
+          "passed": true
+        }
+      ],
+      "baseline": {
+        "n": 126,
+        "success": 126,
+        "strict": 126,
+        "parsable": 126,
+        "fields_ok": {
+          "분류": 81,
+          "우선순위": 77,
+          "모듈": 89,
+          "재현 정보": 106,
+          "발생 빈도": 63,
+          "처리": 84,
+          "6칸 정답": 24
+        },
+        "x1": 7,
+        "x2": 0,
+        "x3": 6,
+        "over": 8,
+        "halluc": 0,
+        "lang": 0,
+        "enum": 0,
+        "latency": 2.261
+      },
+      "candidate": {
+        "n": 126,
+        "success": 126,
+        "strict": 126,
+        "parsable": 126,
+        "fields_ok": {
+          "분류": 81,
+          "우선순위": 77,
+          "모듈": 89,
+          "재현 정보": 106,
+          "발생 빈도": 63,
+          "처리": 84,
+          "6칸 정답": 24
+        },
+        "x1": 7,
+        "x2": 0,
+        "x3": 6,
+        "over": 8,
+        "halluc": 0,
+        "lang": 0,
+        "enum": 0,
+        "latency": 2.265
+      },
+      "item_changes": {
+        "분류": {
+          "regressed": [],
+          "fixed": []
+        },
+        "우선순위": {
+          "regressed": [],
+          "fixed": []
+        },
+        "모듈": {
+          "regressed": [],
+          "fixed": []
+        },
+        "재현 정보": {
+          "regressed": [],
+          "fixed": []
+        },
+        "발생 빈도": {
+          "regressed": [],
+          "fixed": []
+        },
+        "처리": {
+          "regressed": [],
+          "fixed": []
+        },
+        "6칸 정답": {
+          "regressed": [],
+          "fixed": []
+        }
+      }
+    }
+  ]
+}
