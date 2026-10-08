@@ -30,6 +30,12 @@ gate_criteria_v14.toml 의 합격 기준으로 "나빠지지 않았는가"를 �
    (seed마다 다른 구성이면 무엇을 판정했는지 알 수 없다). 하나라도 어긋나면 판정하지 않는다(종료 코드 2).
    프롬프트·방법·안전장치·재요청·폐기 확인은 기준선과 달라도 된다. 게이트가 판정하려는 변경이기 때문이며, 차이는 결과에 적는다.
 6. 기준 파일에 모르는 섹션·키가 있거나 필요한 키가 없으면 판정하지 않는다(v1.1.1 ISSUE-003).
+7. 실행 도중 모델이 다시 로드된 실행(워밍업을 뺀 응답의 로드 시간이 RELOAD_SEC 초과)은 측정 환경 오염으로 보고
+   판정하지 않는다. 다시 로드되면 같은 seed라도 그 뒤 응답이 재현되지 않으므로(docs/issue_log.md OBS-005), FAIL로
+   판정하면 변경의 효과와 환경 탓을 구분할 수 없다. 정상 응답의 로드 시간은 0.01초 미만이고, 다시 로드되면 수 초가
+   걸린다(OBS-005 실측 8.2·16.4초). 이 확인은 품질 기준이 아니라 "비교해도 되는가"의 조건이라 기준 파일에 두지 않는다.
+   실행 기록에는 각 문항의 첫 호출 로드 시간만 남으므로, 형식 재요청·체크리스트·폐기 확인 호출에서 다시 로드된 경우는
+   이 확인으로 잡지 못한다.
 """
 
 import json
@@ -53,6 +59,7 @@ KNOWN = {
     "regression": {"x1_miss_increase_max", "over_escalation_increase_max", "format_drop_max_responses",
                    "latency_increase_max_pct", "field_drop_max_responses", "item_regression_max_responses"},
 }
+RELOAD_SEC = 1.0   # 설계 의도 7
 SAME_DATA = (("dataset_sha256", "평가셋"), ("item_ids", "문항 구성"), ("options", "생성 옵션"), ("repeat_count", "반복 횟수"))
 CHANGE_NOTES = (("prompt_version", "프롬프트 버전"), ("system_prompt_sha256", "프롬프트"), ("method", "방법"),
                 ("method_assets_sha256", "방법 구성(예시·질문)"), ("guardrail_version", "후처리 안전장치"),
@@ -83,7 +90,7 @@ def load_criteria(path: Path) -> dict:
 
 def by_seed(logs: list[tuple[Path, dict]], name: str, crit: dict) -> dict[int, tuple[Path, dict]]:
     """설계 의도 5 — 실행 기록을 seed로 묶는다. 개발용이 아니거나 seed가 기준 파일과 다르면 GateError."""
-    meta, out, problems = crit["meta"], {}, []
+    meta, out, problems, dirty = crit["meta"], {}, [], []
     for path, log in logs:
         md = log["metadata"]
         if md.get("dataset_version") != "v1.4":
@@ -94,6 +101,10 @@ def by_seed(logs: list[tuple[Path, dict]], name: str, crit: dict) -> dict[int, t
             problems.append(f"{name} {g.rel(path)} 에 {meta['target_model']} 결과가 없습니다")
         if md["run_config"].get("repeat_count") != meta["repeat"]:
             problems.append(f"{name} {g.rel(path)} 의 반복 횟수가 기준 파일({meta['repeat']})과 다릅니다")
+        reloads = [r for r in log["results"] if r["model"] == meta["target_model"] and (r.get("load_duration_sec") or 0) > RELOAD_SEC]
+        if reloads:   # 설계 의도 7
+            where = ", ".join(f"{r['run_index']}회차 {r['item_id']}(로드 {r['load_duration_sec']}초)" for r in reloads)
+            dirty.append(f"{g.rel(path)} [{where}]")
         seed = cmp.seed_of(log)
         if seed is None:
             problems.append(f"{name} {g.rel(path)} 이 seed 고정 모드가 아닙니다")
@@ -101,6 +112,9 @@ def by_seed(logs: list[tuple[Path, dict]], name: str, crit: dict) -> dict[int, t
             problems.append(f"{name} seed {seed} 실행이 중복되었습니다")
         else:
             out[seed] = (path, log)
+    if dirty:
+        raise g.GateError(f"측정 환경 오염 → {name} 실행 도중 모델이 다시 로드됨: " + "; ".join(dirty)
+                          + ". 그 뒤 응답은 같은 seed로 재현되지 않습니다(OBS-005). 다른 Ollama 사용을 끄고 다시 실행하세요.")
     missing = [s for s in meta["seeds"] if s not in out]
     extra = [s for s in out if s not in meta["seeds"]]
     if missing or extra:

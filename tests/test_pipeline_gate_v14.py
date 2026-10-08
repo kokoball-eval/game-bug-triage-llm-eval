@@ -138,6 +138,21 @@ def test_different_model_digest_is_refused(tmp_path, crit):
         gv.run([write(tmp_path, "d.json", log)] + EXP_B[1:], crit, write=False)
 
 
+def test_stored_runs_have_no_mid_run_reload(crit):
+    """기준선·실험 B 실행에는 실행 도중 다시 로드된 응답이 없다 (설계 의도 7의 전제)."""
+    for p in EXP_A_M2 + EXP_B:
+        assert all((r.get("load_duration_sec") or 0) <= gv.RELOAD_SEC for r in g.load_log(p)["results"])
+
+
+def test_mid_run_reload_is_refused(tmp_path, crit):
+    """설계 의도 7 (OBS-005) — 실행 도중 모델이 다시 로드된 후보는 FAIL이 아니라 판정 불가."""
+    log = g.load_log(EXP_B[1])
+    hit = next(r for r in log["results"] if r["model"] == "qwen2.5:7b" and r["run_index"] == 2 and r["item_id"] == "A20")
+    hit["load_duration_sec"] = 16.438
+    with pytest.raises(g.GateError, match="측정 환경 오염"):
+        gv.run([EXP_B[0], write(tmp_path, "reload.json", log), EXP_B[2]], crit, write=False)
+
+
 def test_cli_dispatch(tmp_path):
     """triage-gate --dataset v14 는 게이트 v14로, 기본값은 v1.3 게이트 그대로 (gate.py 설계 의도 7)."""
     assert g.main(["--dataset", "v14", "--candidate", str(EXP_B[0])]) == 2          # seed 누락

@@ -478,7 +478,7 @@ uv run triage-score --dataset v14
 uv run triage-gate --dataset v14 --candidate <seed1.json> --candidate <seed11.json> --candidate <seed21.json>
 ```
 
-  기준선은 M2 채택의 근거가 된 v1.4 실험 A 실행 기록(`data/results/v14/baseline/`)이고, 합격 기준은 [`gate_criteria_v14.toml`](gate_criteria_v14.toml)입니다. 기준 값은 v1.4 방법 선택 기준과 같고, 평균 지연 증가 20% 이하를 더했습니다. X-2·X-3은 기준선(M2)도 개발용에서 0건이 아니어서 "기준선보다 늘지 않을 것"으로 판정합니다. 결과: `data/results/v14/gate_result_v14.json`, `report/regression_gate_v14.md`
+  기준선은 M2 채택의 근거가 된 v1.4 실험 A 실행 기록(`data/results/v14/baseline/`)이고, 합격 기준은 [`gate_criteria_v14.toml`](gate_criteria_v14.toml)입니다. 기준 값은 v1.4 방법 선택 기준과 같고, 평균 지연 증가 20% 이하를 더했습니다. X-2·X-3은 기준선(M2)도 개발용에서 0건이 아니어서 "기준선보다 늘지 않을 것"으로 판정합니다. 실행 도중 모델이 다시 로드된 실행은 같은 seed로 재현되지 않으므로 판정하지 않습니다([OBS-005](docs/issue_log.md#obs-005)). 결과: `data/results/v14/gate_result_v14.json`, `report/regression_gate_v14.md`
 
 ---
 
