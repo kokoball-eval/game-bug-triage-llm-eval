@@ -8,6 +8,14 @@
 
 ## [Unreleased]
 
+### 추가 (v1.5 1단계: 라벨 일치율 측정 계획, 판정 수집 전 확정)
+- `report/label_agreement_v15_plan.md`, `label_agreement_v15.toml` — 프로젝트에 참여하지 않은 게임 QA 2명(시니어급·주니어급)이 정답 라벨을 보지 않고 개발용 63건의 6칸을 판정. 칸별 허용 답 일치율·κ, Critical 인식률의 판단 기준과 결과에 따른 처리를 판정 수집 전에 확정
+- `docs/label_agreement/rater_guide.md` — 채점자용 안내서. 판정 기준서 v1.4의 규칙을 그대로 옮기고 근거 출처와 평가 문항 번호를 뺌
+- `tools/label_agreement/build_sheets.py` — 판정 시트(엑셀, 드롭다운) 생성. 모델 입력과 같은 내용만 넣고, 문항을 고정 seed로 섞어 Q01~Q63으로 번호를 다시 붙임. 대응표 `data/label_agreement/blind_map_v15.json`
+- `tools/label_agreement/render_guide.py` — 안내서 PDF 생성 (배포용, `dist/`는 저장소에 넣지 않음)
+- 개발 의존성에 `openpyxl` 추가 (판정 시트 생성·읽기)
+- 테스트 280 → 287개 (대응표 재현, 시트에 정답·근거·원래 번호 없음, 선택지 = 출력 형식 허용 값, 안내서에 평가 문항 번호 없음·기준서 규칙 빠짐없음)
+
 ### 수정 (v1.5 사전 작업)
 - `run.py` — 모든 응답을 받은 뒤 사용한 모델을 모두 메모리에서 내림(설계 의도 13). 다음 실행의 측정 환경 점검이 남은 모델 때문에 실행을 거부하던 문제 해결 ([ISSUE-011](docs/issue_log.md#issue-011)). 응답 내용과 실행 기록 설정 항목은 변경 없음
 - `preflight.py` — VRAM 경고 시 Ollama에 올라가 있는 모델이 있으면 `ollama stop` 안내를 덧붙임(경고 개수·판정은 변경 없음)

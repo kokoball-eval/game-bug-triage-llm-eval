@@ -17,3 +17,5 @@ Thumbs.db
 
 # 제출물이 아닌 작업 보조 산출물 (검토표 등)
 Claude outputs/
+# 생성물 (채점자 배포용 시트·안내서 PDF 등, 원본은 tools/ 에서 다시 만든다)
+dist/
