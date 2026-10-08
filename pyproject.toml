@@ -17,6 +17,7 @@ triage-gate = "triage_eval.pipeline.gate:main"
 triage-screen = "triage_eval.pipeline.screen:main"
 triage-select = "triage_eval.pipeline.selection:main"
 triage-compare = "triage_eval.pipeline.compare:main"
+triage-agreement = "triage_eval.pipeline.agreement:main"
 # v1.0 모델 선정 벤치마크 (동결)
 bench-run = "triage_eval.bench_v1.run_eval:main"
 bench-gate = "triage_eval.bench_v1.compare_runs:main"

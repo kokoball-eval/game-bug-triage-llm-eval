@@ -24,19 +24,19 @@ blind_map = "data/label_agreement/blind_map_v15.json"
 #            0.61은 Landis·Koch(1977) 구간에서 "상당한 일치"가 시작되는 값이다.
 # 처리·분류·우선순위는 게이트에서 하락을 0~2로 엄하게 보는 칸이라 라벨도 엄하게 본다.
 # 모듈·재현 정보·발생 빈도는 틀려도 뒤 단계(재배정·재현)에서 바로잡을 수 있는 칸이라 일치율만 본다.
-[field.처리]
+[field."처리"]
 allowed_rate_min = 85.0
 kappa_min = 0.61
 
-[field.분류]
+[field."분류"]
 allowed_rate_min = 85.0
 kappa_min = 0.61
 
-[field.우선순위]
+[field."우선순위"]
 allowed_rate_min = 85.0
 kappa_min = 0.61
 
-[field.모듈]
+[field."모듈"]
 allowed_rate_min = 75.0
 
 [field."재현 정보"]
